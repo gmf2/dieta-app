@@ -1,4 +1,4 @@
-/* Mi Dieta - app local, sin conexión. Datos en localStorage del dispositivo. */
+/* Kalia - app local, sin conexión. Datos en localStorage del dispositivo. */
 (function () {
   'use strict';
 
@@ -10,17 +10,31 @@
     'Actividad moderada', 'Actividad alta', 'Actividad alta', 'Actividad muy alta'];
   var PHOTO_IDS = { d1:1, d2:1, d3:1, d4:1, c1:1, c2:1, c3:1, c4:1, n1:1, n2:1, n3:1, n4:1,
     'r-oct-d':1, 'r-oct-c':1, 'r-oct-n':1 };
-
-
   var ICONS = {
-    perfil: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
-    hoy: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M6 3v18M15 3c3 0 5 3 5 7s-2 5-5 5v6"/></svg>',
-    recetas: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
     bowl: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>',
     pot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M8 6c1-2 7-2 8 0"/></svg>',
     plate: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>'
   };
   var SLOT_ICON = { desayuno: 'bowl', comida: 'pot', cena: 'plate' };
+  var PLURAL_IRREG = { yogur: 'yogures', 'calabacín': 'calabacines', 'porción': 'porciones', puerro: 'puerros',
+    'medio aguacate': 'medios aguacates', 'patata mediana': 'patatas medianas', 'boniato mediano': 'boniatos medianos' };
+
+  function plural(label, n) {
+    if (n === 1) return label;
+    if (PLURAL_IRREG[label]) return PLURAL_IRREG[label];
+    if (/s$/.test(label)) return label;
+    if (/[aeiouáéíóú]$/.test(label)) return label + 's';
+    return label + 'es';
+  }
+  function household(name, grams) {
+    var ing = ING[name];
+    if (!ing || !ing.ug) return '';
+    var n = Math.round((grams / ing.ug) * 2) / 2;
+    if (n < 0.5) n = 0.5;
+    var num = (n % 1 === 0) ? String(n) : String(n).replace('.', ',');
+    return num + ' ' + plural(ing.u, n);
+  }
+
   function load(key, fallback) {
     try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : JSON.parse(JSON.stringify(fallback)); }
     catch (e) { return JSON.parse(JSON.stringify(fallback)); }
@@ -30,6 +44,8 @@
   var profile = load('dieta.perfil.v1', DEFAULT_PROFILE);
   var picks = load('dieta.picks.v1', DEFAULT_PICKS);
   var checkins = load('dieta.revisiones.v1', []);
+  var registro = load('dieta.registro.v1', {});
+  var objetivos = load('dieta.objetivos.v1', {});
   var month = new Date().getMonth();
 
   function activityFactor(days) {
@@ -46,26 +62,32 @@
              target: Math.round(target / 10) * 10, floored: floored, floor: floor };
   }
   function round5(n) { return Math.max(5, Math.round(n / 5) * 5); }
-  function findOption(id) {
-    return MEALS.concat(RECIPES).find(function (o) { return o.id === id; });
-  }
+  function findOption(id) { return MEALS.concat(RECIPES).find(function (o) { return o.id === id; }); }
   function slotTarget(r, slot) { return Math.round(r.target * SLOT_SHARE[slot] / 10) * 10; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function photoFor(o) { return PHOTO_IDS[o.id] ? 'assets/' + o.id + '.jpg' : null; }
+  function todayIso() { return new Date().toISOString().slice(0, 10); }
+  function fmtDate(iso) { return iso.slice(5).split('-').reverse().join('/'); }
 
+  /* Ingredientes: nombre + medida casera | gramos + kcal (valores USDA) */
   function ingredientHTML(option, targetKcal) {
     var factor = targetKcal / option.kcal;
     var rows = option.components.map(function (c) {
-      return '<div class="ing-row"><span>' + esc(c.name) + '</span><b>' + round5(c.grams * factor) + ' g</b></div>';
+      var g = round5(c.grams * factor);
+      var kcal = Math.round(ING[c.name].k * g / 100);
+      return '<div class="ing-row"><div><div class="ing-name">' + esc(c.name) + '</div>' +
+        '<div class="ing-sub">' + household(c.name, g) + '</div></div>' +
+        '<div class="ing-right"><b>' + g + ' g</b><span>' + kcal + ' kcal</span></div></div>';
     }).join('');
     return '<div class="ing">' + rows +
       '<div class="cap">Cantidades ajustadas a tu objetivo (' + Math.round(targetKcal / 10) * 10 +
-      ' kcal en esta comida, aprox.).</div></div>';
+      ' kcal en esta comida, aprox.). Calorías calculadas con valores de composición del USDA.</div></div>';
   }
 
   /* ---------- Hero ---------- */
   function renderHero() {
     var r = compute(profile);
+    objetivos[todayIso().slice(0, 7)] = r.target; save('dieta.objetivos.v1', objetivos);
     document.getElementById('ringNum').textContent = r.target;
     document.getElementById('ringFill').style.strokeDashoffset = (251.3 * 0.25).toFixed(1);
     var colors = { desayuno: '#ffd166', comida: '#ff9f5a', cena: '#a7f3d0' };
@@ -76,9 +98,10 @@
   }
 
   /* ---------- Perfil ---------- */
-  function sliderField(label, key, min, max, unit) {
-    return '<div class="field"><div class="f-top"><span>' + label + '</span><span class="f-val" id="v-' + key + '">' +
-      profile[key] + ' ' + unit + '</span></div>' +
+  function numField(label, key, min, max, unit) {
+    return '<div class="field"><div class="f-top"><span>' + label + '</span>' +
+      '<span class="num-wrap"><input class="num-input" type="number" inputmode="numeric" pattern="[0-9]*" min="' + min + '" max="' + max +
+      '" value="' + profile[key] + '" data-key="' + key + '" data-unit="' + unit + '"><span class="num-unit">' + unit + '</span></span></div>' +
       '<input type="range" min="' + min + '" max="' + max + '" value="' + profile[key] + '" data-key="' + key + '" data-unit="' + unit + '"></div>';
   }
   function segField(key, options) {
@@ -87,43 +110,21 @@
     }).join('') + '</div>';
   }
 
-  function chartSVG() {
-    if (checkins.length < 2) return '';
-    var data = checkins.slice(-12);
-    var w = 320, h = 110, pad = 24;
-    var vals = data.map(function (c) { return c.peso; });
-    var min = Math.min.apply(null, vals) - 1, max = Math.max.apply(null, vals) + 1;
-    var pts = data.map(function (c, i) {
-      var x = pad + (w - 2 * pad) * (data.length === 1 ? 0 : i / (data.length - 1));
-      var y = h - pad - (h - 2 * pad) * ((c.peso - min) / (max - min || 1));
-      return [x, y];
-    });
-    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
-    var dots = pts.map(function (p, i) {
-      return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4" fill="#16a34a"/>' +
-        '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] - 9).toFixed(1) + '" font-size="9" font-weight="700" fill="#15803d" text-anchor="middle">' + data[i].peso + '</text>';
-    }).join('');
-    var labels = '<text x="' + pad + '" y="' + (h - 6) + '" font-size="8.5" fill="#6b7d70">' + data[0].fecha.slice(5).split('-').reverse().join('/') + '</text>' +
-      '<text x="' + (w - pad) + '" y="' + (h - 6) + '" font-size="8.5" fill="#6b7d70" text-anchor="end">' + data[data.length - 1].fecha.slice(5).split('-').reverse().join('/') + '</text>';
-    return '<div class="chart-wrap"><svg viewBox="0 0 ' + w + ' ' + h + '" width="100%">' +
-      '<path d="' + line + '" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>' + dots + labels + '</svg></div>';
-  }
-
   function renderPerfil() {
     var r = compute(profile);
-    var today = new Date(), todayIso = today.toISOString().slice(0, 10);
+    var today = new Date(), tIso = todayIso();
     var last = checkins[checkins.length - 1];
     var daysSince = last ? Math.floor((today - new Date(last.fecha)) / 86400000) : null;
     var nextIn = daysSince == null ? null : Math.max(0, 14 - daysSince);
 
     var html = '';
-    html += '<div class="card"><h2>Tus datos</h2><div class="sub">Cambia lo que necesites; todo se recalcula solo.</div>' +
-      sliderField('Peso', 'peso', 40, 150, 'kg') +
-      sliderField('Altura', 'altura', 140, 210, 'cm') +
-      sliderField('Edad', 'edad', 16, 90, 'años') +
+    html += '<div class="card"><h2>Tus datos</h2><div class="sub">Escríbelos a mano o usa la barra; todo se recalcula solo.</div>' +
+      numField('Peso', 'peso', 40, 150, 'kg') +
+      numField('Altura', 'altura', 140, 210, 'cm') +
+      numField('Edad', 'edad', 16, 90, 'años') +
       '<div class="f-top" style="font-size:.88rem;font-weight:600;margin-bottom:6px"><span>Sexo (para la fórmula)</span></div>' +
       segField('sexo', [{ v: 'hombre', l: 'Hombre' }, { v: 'mujer', l: 'Mujer' }]) +
-      sliderField('Días de deporte a la semana', 'deporte', 0, 7, profile.deporte === 1 ? 'día' : 'días') +
+      numField('Días de deporte a la semana', 'deporte', 0, 7, 'días') +
       '<div class="f-top" style="font-size:.88rem;font-weight:600;margin-bottom:6px"><span>Tu objetivo</span></div>' +
       segField('objetivo', [{ v: 'perder', l: 'Perder grasa' }, { v: 'mantener', l: 'Mantener' }, { v: 'ganar', l: 'Ganar músculo' }]) +
       '</div>';
@@ -131,16 +132,27 @@
     html += '<div class="card"><h2>Tu objetivo de calorías</h2><div class="sub">Fórmula de Mifflin-St Jeor + tu actividad + tu objetivo.</div>' +
       '<div class="fact"><span>Metabolismo basal (TMB)</span><b>' + r.bmr + ' kcal</b></div>' +
       '<div class="fact"><span>Gasto con actividad (' + ACTIVITY_LABEL[profile.deporte].toLowerCase() + ')</span><b>' + r.tdee + ' kcal</b></div>' +
-      '<div class="fact"><span>Objetivo diario (' + GOAL_LABEL[profile.objetivo].toLowerCase() + ')</span><b>' + r.target + ' kcal</b></div>' +
-      (r.floored ? '<div class="note">Con ese objetivo saldrían menos de ' + r.floor + ' kcal, así que lo he dejado en ' + r.floor + '. Bajar más no es recomendable sin supervisión.</div>' : '') +
-      '<div class="note green">Ajuste por objetivo: -500 kcal para perder, +300 para ganar. Es orientación general, no consejo médico.</div></div>';
+      '<div class="fact"><span>Objetivo diario (' + GOAL_LABEL[profile.objetivo].toLowerCase() + ')</span><b>' + r.target + ' kcal</b></div>';
 
-    html += '<div class="card"><h2>Revisión quincenal</h2><div class="sub">Anota tu peso cada dos semanas para ver tu evolución.</div>' +
+    if (profile.objetivo !== 'mantener') {
+      var diff = GOAL_ADJUST[profile.objetivo];
+      var kgWeek = Math.abs(diff * 7 / 7700);
+      html += '<div class="note green"><b>Resumen de tu meta:</b> ' +
+        (diff < 0 ? 'unas <b>' + Math.abs(diff) + ' kcal menos</b> al día que para mantenerte' :
+                    'unas <b>' + diff + ' kcal más</b> al día que para mantenerte') +
+        ', lo que sale a unas <b>' + String(kgWeek.toFixed(2)).replace('.', ',') + ' kg por semana</b> ' +
+        (diff < 0 ? 'de menos' : 'de más') + '. Estimación aproximada (7700 kcal ≈ 1 kg); el ritmo real varía.</div>';
+    } else {
+      html += '<div class="note green">Objetivo de mantenimiento: comes lo que gastas, sin déficit ni superávit.</div>';
+    }
+    if (r.floored) html += '<div class="note">Con ese objetivo saldrían menos de ' + r.floor + ' kcal, así que lo he dejado en ' + r.floor + '. Bajar más no es recomendable sin supervisión.</div>';
+    html += '<div class="note green">Ajuste por objetivo: -500 kcal para perder, +300 para ganar. Es orientación general, no consejo médico.</div></div>';
+
+    html += '<div class="card"><h2>Revisión quincenal</h2><div class="sub">Cada revisión guarda TODO: peso, altura, edad, deporte, objetivo y tus calorías calculadas. El historial está en Progreso.</div>' +
       '<button class="btn primary" id="btnCheckin">' +
-      (last && last.fecha === todayIso ? 'Actualizar revisión de hoy (' + profile.peso + ' kg)' : 'Anotar revisión de hoy (' + profile.peso + ' kg)') + '</button>' +
-      (last ? '<div class="muted mt8">Última revisión: ' + last.fecha.split('-').reverse().join('/') + ' con ' + last.peso + ' kg' +
+      (last && last.fecha === tIso ? 'Actualizar revisión de hoy (' + profile.peso + ' kg)' : 'Anotar revisión de hoy (' + profile.peso + ' kg)') + '</button>' +
+      (last ? '<div class="muted mt8">Última revisión: ' + fmtDate(last.fecha) + ' con ' + last.peso + ' kg' +
         (nextIn != null ? (nextIn === 0 ? ' · ya toca la siguiente' : ' · la siguiente en unos ' + nextIn + ' días') : '') + '.</div>' : '') +
-      chartSVG() +
       (checkins.length ? '<button class="btn ghost" id="btnUndoCheckin">Borrar la última revisión</button>' : '') + '</div>';
 
     document.getElementById('tab-perfil').innerHTML = html;
@@ -149,6 +161,8 @@
   /* ---------- Hoy ---------- */
   function renderHoy() {
     var r = compute(profile);
+    var tIso = todayIso();
+    var dayLog = registro[tIso] || {};
     var html = '<div class="card"><h2>Tu dieta de hoy</h2>' +
       '<div class="sub">Elige una opción en cada comida. Las cantidades se ajustan solas para sumar tu objetivo de ' + r.target + ' kcal.</div></div>';
 
@@ -159,6 +173,7 @@
       if (monthRecipe) options = options.concat([monthRecipe]);
       if (!findOption(picks[slot]) || findOption(picks[slot]).slot !== slot) picks[slot] = options[0].id;
       var selected = findOption(picks[slot]) || options[0];
+      var done = !!dayLog[slot];
 
       html += '<div class="slot-head">' + ICONS[SLOT_ICON[slot]] + '<h3>' + SLOT_LABEL[slot] + '</h3>' +
         '<span class="kcal">' + target + ' kcal</span></div>';
@@ -168,12 +183,14 @@
         return '<button class="meal-card' + (o.id === selected.id ? ' selected' : '') + '" data-slot="' + slot + '" data-id="' + o.id + '">' +
           '<span class="check">✓</span>' +
           (ph ? '<img src="' + ph + '" alt="' + esc(o.name) + '" loading="lazy">'
-              : '<div class="svg-cover">' + ICONS[SLOT_ICON[slot]] + '</div>') +
+              : '<div class="svg-cover">' + ICONS[SLOT_ICON[o.slot]] + '</div>') +
           '<div class="m-body"><div class="m-name">' + esc(o.name) + '</div>' +
           (isRecipe ? '<div class="m-tag recipe-of">Receta de ' + MONTHS[month] + '</div>' : '<div class="m-tag">Clásico</div>') +
           '</div></button>';
       }).join('') + '</div>';
       html += ingredientHTML(selected, target);
+      html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
+        (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + dayLog[slot] + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
     });
 
     html += '<div class="card mt12"><div class="fact"><span>Desayuno</span><b>' + slotTarget(r, 'desayuno') + ' kcal</b></div>' +
@@ -190,7 +207,7 @@
     var r = compute(profile);
     var recipes = RECIPES.filter(function (x) { return x.month === month; });
     var html = '<div class="card"><h2>Recetas de temporada</h2>' +
-      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta.</div></div>';
+      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta. Saciantes y ligeras: mucho volumen, fibra y proteína.</div></div>';
     html += '<div class="month-nav"><button id="mPrev">← Anterior</button><h2>' + MONTHS[month] + '</h2><button id="mNext">Siguiente →</button></div>';
 
     recipes.forEach(function (rec) {
@@ -212,19 +229,130 @@
     document.getElementById('tab-recetas').innerHTML = html;
   }
 
-  function renderAll() { renderHero(); renderPerfil(); renderHoy(); renderRecetas(); }
+  /* ---------- Historial por mes ---------- */
+  function renderHistorial() {
+    var now = new Date();
+    var html = '<div class="card"><h2>Historial por mes</h2>' +
+      '<div class="sub">Las recetas que te tocaron cada mes, tu objetivo y lo que has ido marcando como hecho.</div></div>';
+    for (var i = 0; i < 6; i++) {
+      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      var m = d.getMonth(), key = d.getFullYear() + '-' + String(m + 1).padStart(2, '0');
+      var recipes = RECIPES.filter(function (x) { return x.month === m; });
+      var goal = objetivos[key];
+      var days = Object.keys(registro).filter(function (k) { return k.slice(0, 7) === key; });
+      var consumed = 0, counted = 0;
+      days.forEach(function (k) {
+        var slots = registro[k], sum = 0, n = 0;
+        ['desayuno', 'comida', 'cena'].forEach(function (s) { if (slots[s]) { sum += slots[s]; n++; } });
+        if (n) { consumed += sum; counted++; }
+      });
+      html += '<div class="card"><div class="hist-head"><h3>' + MONTHS[m].charAt(0).toUpperCase() + MONTHS[m].slice(1) + (i === 0 ? ' <span style="text-transform:none;font-weight:600;color:var(--muted);font-size:.78rem">(este mes)</span>' : '') + '</h3>' +
+        (goal ? '<span class="pill">Objetivo: ' + goal + ' kcal/día</span>' : '<span class="pill">Sin objetivo guardado</span>') + '</div>' +
+        '<div class="hist-recipes">' + recipes.map(function (x) {
+          return '<div class="hist-recipe"><span class="hist-slot">' + SLOT_LABEL[x.slot] + '</span>' + esc(x.name) + '</div>';
+        }).join('') + '</div>' +
+        (counted ? '<div class="muted mt8">Marcadas ' + counted + (counted === 1 ? ' día' : ' días') +
+          ' · media de ' + Math.round(consumed / counted) + ' kcal/día registradas' +
+          (goal ? ' frente a ' + goal + ' de objetivo' : '') + '.</div>'
+               : '<div class="muted mt8">Sin comidas marcadas este mes. Márcalas en la pestaña Hoy.</div>') +
+        '</div>';
+    }
+    document.getElementById('tab-historial').innerHTML = html;
+  }
+
+  /* ---------- Progreso ---------- */
+  function weightChart() {
+    if (checkins.length < 2) return '';
+    var data = checkins.slice(-12);
+    var w = 320, h = 110, pad = 24;
+    var vals = data.map(function (c) { return c.peso; });
+    var min = Math.min.apply(null, vals) - 1, max = Math.max.apply(null, vals) + 1;
+    var pts = data.map(function (c, i) {
+      var x = pad + (w - 2 * pad) * (data.length === 1 ? 0 : i / (data.length - 1));
+      var y = h - pad - (h - 2 * pad) * ((c.peso - min) / (max - min || 1));
+      return [x, y];
+    });
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    var dots = pts.map(function (p, i) {
+      return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4" fill="#16a34a"/>' +
+        '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] - 9).toFixed(1) + '" font-size="9" font-weight="700" fill="#15803d" text-anchor="middle">' + data[i].peso + '</text>';
+    }).join('');
+    return '<div class="chart-wrap"><svg viewBox="0 0 ' + w + ' ' + h + '" width="100%">' +
+      '<path d="' + line + '" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>' + dots + '</svg></div>';
+  }
+
+  function renderProgreso() {
+    var r = compute(profile);
+    var html = '<div class="card"><h2>Tu progreso</h2><div class="sub">Revisiones quincenales completas y calorías marcadas frente a tu objetivo.</div></div>';
+
+    html += '<div class="card"><h2>Revisiones</h2>';
+    if (!checkins.length) {
+      html += '<div class="sub">Aún no hay revisiones. Anota la primera en Perfil.</div>';
+    } else {
+      html += weightChart();
+      html += checkins.slice().reverse().map(function (c, idx) {
+        var prev = checkins[checkins.length - 2 - idx];
+        var delta = prev ? (c.peso - prev.peso) : null;
+        var deltaTxt = delta == null ? '' :
+          (delta === 0 ? ' (=)' : ' (' + (delta > 0 ? '+' : '−') + String(Math.abs(delta)).replace('.', ',') + ' kg)');
+        var det = '';
+        if (c.target) det = '<div class="rev-sub">' + c.target + ' kcal/día · ' + (GOAL_LABEL[c.objetivo] || 'Mantener').toLowerCase() +
+          (c.altura ? ' · ' + c.altura + ' cm' : '') + (c.edad ? ' · ' + c.edad + ' años' : '') +
+          (c.deporte != null ? ' · deporte ' + c.deporte + ' d/sem' : '') + (c.bmr ? ' · TMB ' + c.bmr : '') + '</div>';
+        return '<div class="rev-row"><div><b>' + fmtDate(c.fecha) + '</b> · ' + c.peso + ' kg' + deltaTxt + '</div>' + det + '</div>';
+      }).join('');
+    }
+    html += '</div>';
+
+    var days = Object.keys(registro).sort().slice(-14);
+    html += '<div class="card"><h2>Calorías: objetivo vs real</h2>';
+    if (!days.length) {
+      html += '<div class="sub">Marca comidas como hechas en la pestaña Hoy y aquí verás la comparación con tu objetivo (' + r.target + ' kcal).</div>';
+    } else {
+      var maxV = r.target * 1.25;
+      html += '<div class="bars">' + days.map(function (k) {
+        var slots = registro[k], sum = 0;
+        ['desayuno', 'comida', 'cena'].forEach(function (s) { if (slots[s]) sum += slots[s]; });
+        var pct = Math.min(100, Math.round(sum / maxV * 100));
+        var tpct = Math.round(r.target / maxV * 100);
+        var over = sum > r.target * 1.05;
+        return '<div class="bar-col"><div class="bar-val">' + (sum || '') + '</div>' +
+          '<div class="bar-track"><div class="bar-tline" style="bottom:' + tpct + '%"></div>' +
+          '<div class="bar-fill' + (over ? ' over' : '') + '" style="height:' + pct + '%"></div></div>' +
+          '<div class="bar-lbl">' + k.slice(8) + '</div></div>';
+      }).join('') + '</div><div class="muted mt8">La línea marca tu objetivo (' + r.target + ' kcal). Días: ' + days.length + '.</div>';
+    }
+    html += '</div>';
+
+    document.getElementById('tab-progreso').innerHTML = html;
+  }
+
+  function renderAll() { renderHero(); renderPerfil(); renderHoy(); renderRecetas(); renderHistorial(); renderProgreso(); }
 
   /* ---------- Eventos ---------- */
+  function onProfileChange(key, val) {
+    val = parseInt(val, 10);
+    if (isNaN(val)) return;
+    var lim = { peso: [40, 150], altura: [140, 210], edad: [16, 90], deporte: [0, 7] }[key];
+    if (lim) val = Math.min(lim[1], Math.max(lim[0], val));
+    profile[key] = val;
+    save('dieta.perfil.v1', profile);
+    renderHero();
+    clearTimeout(window.__rt);
+    window.__rt = setTimeout(function () { renderPerfil(); renderHoy(); renderRecetas(); renderHistorial(); renderProgreso(); }, 400);
+  }
+
   document.addEventListener('input', function (e) {
     var key = e.target.getAttribute && e.target.getAttribute('data-key');
     if (!key) return;
-    profile[key] = parseInt(e.target.value, 10);
-    save('dieta.perfil.v1', profile);
-    var unit = e.target.getAttribute('data-unit');
-    document.getElementById('v-' + key).textContent = profile[key] + ' ' + (key === 'deporte' ? (profile.deporte === 1 ? 'día' : 'días') : unit);
-    renderHero();
-    clearTimeout(window.__rt);
-    window.__rt = setTimeout(function () { renderPerfil(); renderHoy(); renderRecetas(); }, 350);
+    onProfileChange(key, e.target.value);
+    if (e.target.type === 'range') {
+      var inp = document.querySelector('.num-input[data-key="' + key + '"]');
+      if (inp) inp.value = e.target.value;
+    } else {
+      var rng = document.querySelector('input[type=range][data-key="' + key + '"]');
+      if (rng) rng.value = e.target.value;
+    }
   });
 
   document.addEventListener('click', function (e) {
@@ -239,8 +367,7 @@
     }
     var seg = t.closest && t.closest('.seg button');
     if (seg) {
-      var key = seg.parentElement.getAttribute('data-seg');
-      profile[key] = seg.getAttribute('data-v');
+      profile[seg.parentElement.getAttribute('data-seg')] = seg.getAttribute('data-v');
       save('dieta.perfil.v1', profile);
       renderAll();
       return;
@@ -250,6 +377,21 @@
       picks[card.getAttribute('data-slot')] = card.getAttribute('data-id');
       save('dieta.picks.v1', picks);
       renderHoy();
+      return;
+    }
+    var doneBtn = t.closest && t.closest('[data-done]');
+    if (doneBtn) {
+      var slot = doneBtn.getAttribute('data-done');
+      var tIso = todayIso();
+      var dayLog = registro[tIso] || {};
+      if (dayLog[slot]) { delete dayLog[slot]; }
+      else {
+        var rr = compute(profile);
+        dayLog[slot] = slotTarget(rr, slot);
+      }
+      registro[tIso] = dayLog;
+      save('dieta.registro.v1', registro);
+      renderHoy(); renderHistorial(); renderProgreso();
       return;
     }
     var use = t.closest && t.closest('[data-use]');
@@ -262,18 +404,21 @@
     if (t.id === 'mPrev') { month = (month + 11) % 12; renderRecetas(); renderHoy(); return; }
     if (t.id === 'mNext') { month = (month + 1) % 12; renderRecetas(); renderHoy(); return; }
     if (t.id === 'btnCheckin') {
-      var todayIso = new Date().toISOString().slice(0, 10);
-      checkins = checkins.filter(function (c) { return c.fecha !== todayIso; });
-      checkins.push({ fecha: todayIso, peso: profile.peso });
+      var iso = todayIso();
+      var rr2 = compute(profile);
+      checkins = checkins.filter(function (c) { return c.fecha !== iso; });
+      checkins.push({ fecha: iso, peso: profile.peso, altura: profile.altura, edad: profile.edad,
+        deporte: profile.deporte, objetivo: profile.objetivo, sexo: profile.sexo,
+        target: rr2.target, bmr: rr2.bmr, tdee: rr2.tdee });
       save('dieta.revisiones.v1', checkins);
-      renderPerfil();
+      renderPerfil(); renderProgreso();
       return;
     }
-    if (t.id === 'btnUndoCheckin') { checkins.pop(); save('dieta.revisiones.v1', checkins); renderPerfil(); return; }
+    if (t.id === 'btnUndoCheckin') { checkins.pop(); save('dieta.revisiones.v1', checkins); renderPerfil(); renderProgreso(); return; }
   });
 
   var initial = (location.hash || '').replace('#', '');
-  if (['perfil', 'hoy', 'recetas'].indexOf(initial) >= 0) {
+  if (['perfil', 'hoy', 'recetas', 'historial', 'progreso'].indexOf(initial) >= 0) {
     document.querySelectorAll('nav.tabs button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === initial); });
     document.querySelectorAll('section.tab').forEach(function (s) { s.classList.remove('active'); });
     document.getElementById('tab-' + initial).classList.add('active');
