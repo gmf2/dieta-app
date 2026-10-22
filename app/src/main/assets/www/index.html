@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi Dieta</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <img class="bg" src="assets/hero.jpg" alt="">
+  <div class="inner">
+    <div class="app-name">Mi Dieta</div>
+    <h1>Tu dieta y calorías, a medida</h1>
+    <div class="ring-row">
+      <svg class="ring" width="96" height="96" viewBox="0 0 96 96">
+        <circle class="track" cx="48" cy="48" r="40" fill="none" stroke-width="9"/>
+        <circle class="fill" id="ringFill" cx="48" cy="48" r="40" fill="none" stroke-width="9"
+          stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="0" transform="rotate(-90 48 48)"/>
+        <text class="num" id="ringNum" x="48" y="47" text-anchor="middle">0</text>
+        <text class="lbl" x="48" y="63" text-anchor="middle">kcal / día</text>
+      </svg>
+      <div class="split" id="heroSplit"></div>
+    </div>
+  </div>
+</header>
+
+<section class="tab" id="tab-perfil"></section>
+<section class="tab active" id="tab-hoy"></section>
+<section class="tab" id="tab-recetas"></section>
+
+<div class="foot">Cálculo orientativo con la fórmula de Mifflin-St Jeor. No es consejo médico.<br>Fotos generadas por IA, son ilustrativas de cada plato. Tus datos solo se guardan en este dispositivo.</div>
+
+<nav class="tabs">
+  <button data-tab="perfil"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Perfil</button>
+  <button data-tab="hoy" class="active"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M6 3v18M15 3c3 0 5 3 5 7s-2 5-5 5v6"/></svg>Hoy</button>
+  <button data-tab="recetas"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Recetas</button>
+</nav>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -7,14 +7,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 /**
- * Envoltorio nativo de la app de dieta: carga la web app alojada
- * (https://files.instinct.com/qa9rxs91z36r-tu-dieta-y-calorias-a-medida)
- * en un WebView a pantalla completa. Necesita conexión a internet.
+ * App de dieta: la web app va incluida dentro del APK (assets/www)
+ * y se carga localmente en un WebView a pantalla completa.
+ * Funciona sin conexión a internet y sin cabeceras externas.
  */
 public class MainActivity extends Activity {
 
-    private static final String APP_URL =
-            "https://files.instinct.com/qa9rxs91z36r-tu-dieta-y-calorias-a-medida";
+    private static final String APP_URL = "file:///android_asset/www/index.html";
 
     private WebView webView;
 
