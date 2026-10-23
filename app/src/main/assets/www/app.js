@@ -54,11 +54,17 @@
   var pendingPhoto = null;
 
   /* Clásicos rotan: 8 por comida, se muestran 4 cada mes (ciclo de 4 meses) */
+  function rotPick(pool, m, n) {
+    var start = (m * 2) % pool.length, out = [];
+    for (var i = 0; i < n; i++) out.push(pool[(start + i) % pool.length]);
+    return out;
+  }
   function classicsFor(m, slot) {
     var pool = MEALS.filter(function (x) { return x.slot === slot; });
-    var start = (m * 2) % pool.length, out = [];
-    for (var i = 0; i < 4; i++) out.push(pool[(start + i) % pool.length]);
-    return out;
+    var quick = pool.filter(function (x) { return x.rapida; });
+    var norm = pool.filter(function (x) { return !x.rapida; });
+    if (quick.length < 2) return rotPick(pool, m, 4);
+    return rotPick(norm, m, 2).concat(rotPick(quick, m, 2));
   }
 
   function activityFactor(days) {
@@ -79,6 +85,10 @@
   function slotTarget(r, slot) { return Math.round(r.target * SLOT_SHARE[slot] / 10) * 10; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function photoFor(o) { return PHOTO_IDS[o.id] ? 'assets/' + o.id + '.jpg' : null; }
+  function quickTag(o) {
+    var tp = (o.tiempo || '').split(' · ');
+    return 'Rápida · ' + (tp[0] === '0 min' ? (tp[1] || 'exprés') : tp[0]);
+  }
   function todayIso() { return new Date().toISOString().slice(0, 10); }
   function fmtDate(iso) { return iso.slice(5).split('-').reverse().join('/'); }
 
@@ -86,7 +96,7 @@
   function ingredientHTML(option, targetKcal) {
     var factor = targetKcal / option.kcal;
     var totalProt = 0;
-    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1 };
+    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1, manzana: 1, pera: 1, 'plátano': 1, mango: 1, filete: 1, loncha: 1, 'patata mediana': 1, yogur: 1, tajada: 1 };
     var rows = option.components.map(function (c) {
       var g = round5(c.grams * factor);
       if (WHOLE[ING[c.name].u]) g = Math.max(1, Math.round(g / ING[c.name].ug)) * ING[c.name].ug;
@@ -103,7 +113,7 @@
   }
 
   function optionProtein(option, targetKcal) {
-    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1 };
+    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1, manzana: 1, pera: 1, 'plátano': 1, mango: 1, filete: 1, loncha: 1, 'patata mediana': 1, yogur: 1, tajada: 1 };
     var factor = targetKcal / option.kcal, tot = 0;
     option.components.forEach(function (c) {
       var g = round5(c.grams * factor);
@@ -220,7 +230,8 @@
           (ph ? '<img src="' + ph + '" alt="' + esc(o.name) + '" loading="lazy">'
               : '<div class="svg-cover">' + ICONS[SLOT_ICON[o.slot]] + '</div>') +
           '<div class="m-body"><div class="m-name">' + esc(o.name) + '</div>' +
-          (isRecipe ? '<div class="m-tag recipe-of">Receta de ' + MONTHS[month] + '</div>' : '<div class="m-tag">Clásico</div>') +
+          (isRecipe ? '<div class="m-tag recipe-of">Receta de ' + MONTHS[month] + '</div>' :
+            (o.rapida ? '<div class="m-tag quick">' + quickTag(o) + '</div>' : '<div class="m-tag">Clásico</div>')) +
           '</div></button>';
       }).join('') + '</div>';
       html += ingredientHTML(selected, target);
@@ -275,46 +286,149 @@
 
   /* ---------- Entrenamiento ---------- */
   var RUTINAS = {
-    gomas: { nombre: 'Gomas (casa)', A: [
-      { n: 'Sentadilla con goma', s: '4 series x 12 reps', p: 'squat' },
-      { n: 'Press de pecho tumbado con goma', s: '3 x 12', p: 'press' },
-      { n: 'Remo con goma', s: '4 x 12', p: 'row' },
-      { n: 'Press de hombros con goma', s: '3 x 12', p: 'press' },
-      { n: 'Puente de glúteo con goma', s: '3 x 15', p: 'bridge' },
-      { n: 'Plancha', s: '3 x 30-45 s', p: 'plank' } ], B: [
-      { n: 'Zancada con goma', s: '3 x 10 por pierna', p: 'lunge' },
-      { n: 'Jalón con goma al pecho', s: '4 x 12', p: 'row' },
-      { n: 'Peso muerto con goma', s: '4 x 12', p: 'hinge' },
-      { n: 'Curl de bíceps con goma', s: '3 x 12', p: 'curl' },
-      { n: 'Elevaciones laterales con goma', s: '3 x 15', p: 'curl' },
-      { n: 'Plancha lateral', s: '3 x 20-30 s por lado', p: 'plank' } ] },
-    mancuernas: { nombre: 'Mancuernas (gym)', A: [
-      { n: 'Sentadilla goblet', s: '4 x 10', p: 'squat' },
-      { n: 'Press banca con mancuernas', s: '4 x 10', p: 'press' },
-      { n: 'Remo con mancuerna a una mano', s: '4 x 10 por brazo', p: 'row' },
-      { n: 'Press militar con mancuernas', s: '3 x 10', p: 'press' },
-      { n: 'Zancadas con mancuernas', s: '3 x 10 por pierna', p: 'lunge' },
-      { n: 'Plancha', s: '3 x 30-45 s', p: 'plank' } ], B: [
-      { n: 'Peso muerto rumano con mancuernas', s: '4 x 10', p: 'hinge' },
-      { n: 'Press en suelo con mancuernas', s: '4 x 12', p: 'press' },
-      { n: 'Remo con mancuernas a dos manos', s: '4 x 10', p: 'row' },
-      { n: 'Elevaciones laterales', s: '3 x 15', p: 'curl' },
-      { n: 'Curl de bíceps', s: '3 x 12', p: 'curl' },
-      { n: 'Puente de glúteo con mancuerna', s: '3 x 12', p: 'bridge' } ] },
-    calistenia: { nombre: 'Calistenia (sin material)', A: [
-      { n: 'Sentadilla al aire', s: '4 x 15', p: 'squat' },
-      { n: 'Flexiones', s: '4 x 8-12', p: 'pushup' },
-      { n: 'Remo invertido en mesa', s: '4 x 10', p: 'row' },
-      { n: 'Zancadas al aire', s: '3 x 12 por pierna', p: 'lunge' },
-      { n: 'Puente de glúteo', s: '3 x 15', p: 'bridge' },
-      { n: 'Plancha', s: '3 x 30-45 s', p: 'plank' } ], B: [
-      { n: 'Sentadilla búlgara con apoyo', s: '3 x 10 por pierna', p: 'lunge' },
-      { n: 'Flexiones declinadas', s: '4 x 8', p: 'pushup' },
-      { n: 'Dominadas (o jalón con toalla)', s: '4 x 5-8', p: 'pullup' },
-      { n: 'Fondos entre sillas', s: '3 x 8-12', p: 'dip' },
-      { n: 'Peso muerto a una pierna', s: '3 x 10 por pierna', p: 'hinge' },
-      { n: 'Superman', s: '3 x 12', p: 'plank' } ] }
+    gomas: { nombre: 'Gomas (casa)',
+      A: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Jalón al pecho con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-pecho' },
+        { n: 'Remo a 2 manos con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-remo-2m' },
+        { n: 'Curl de bíceps a 1 mano con goma', s: '3 x 15', g: 'Bíceps', p: 'curl', img: 'gomas-curl-1m' },
+        { n: 'Flexiones con goma', s: '4 x 12', g: 'Pecho', p: 'pushup', img: 'gomas-flexiones' },
+        { n: 'Press militar a 1 mano con goma', s: '4 x 15', g: 'Hombro', p: 'press', img: 'gomas-press-militar-1m' },
+        { n: 'Plancha', s: '3 x 40 s', g: 'Core', p: 'plank', img: 'core-plancha' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Peso muerto B-stance con goma', s: '4 x 10', g: 'Pierna', p: 'hinge', img: 'gomas-rdl-bstance' },
+        { n: 'Subidas al cajón con goma', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'gomas-subidas-cajon' },
+        { n: 'Sentadilla con goma', s: '4 x 12', g: 'Pierna', p: 'squat', img: 'gomas-sentadilla' },
+        { n: 'Zancada atrás con goma', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'gomas-zancada' },
+        { n: 'Puente de glúteo con goma', s: '3 x 15', g: 'Glúteo', p: 'bridge', img: 'gomas-puente' },
+        { n: 'Gemelos con goma', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'gomas-gemelos' },
+        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Press de pecho a 1 mano con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: 'gomas-press-pecho-1m' },
+        { n: 'Jalón a 1 mano con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-1m' },
+        { n: 'Press militar con goma', s: '4 x 15', g: 'Hombro', p: 'press', img: 'gomas-press-militar' },
+        { n: 'Remo sentado con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-remo-sentado' },
+        { n: 'Curl martillo con goma', s: '3 x 15', g: 'Bíceps', p: 'curl', img: 'gomas-curl-martillo', ss: 1 },
+        { n: 'Extensión de tríceps con goma', s: '3 x 12', g: 'Tríceps', p: 'curl', img: 'gomas-triceps', ss: 1 } ] } ],
+      B: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Jalón agarre estrecho con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-estrecho' },
+        { n: 'Remo a 1 mano con goma', s: '4 x 10 por brazo', g: 'Espalda', p: 'row', img: 'gomas-remo-1m' },
+        { n: 'Curl de bíceps con goma', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'gomas-curl' },
+        { n: 'Flexiones con goma y pausa', s: '4 x 8', g: 'Pecho', p: 'pushup', img: 'gomas-flexiones' },
+        { n: 'Press Arnold con goma', s: '3 x 12', g: 'Hombro', p: 'press', img: 'gomas-press-arnold' },
+        { n: 'Escaladores', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-escaladores' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Peso muerto rumano con goma', s: '4 x 12', g: 'Pierna', p: 'hinge', img: 'gomas-rdl' },
+        { n: 'Sentadilla búlgara con goma', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'gomas-bulgara' },
+        { n: 'Sentadilla con goma y pausa', s: '4 x 10', g: 'Pierna', p: 'squat', img: 'gomas-sentadilla' },
+        { n: 'Zancada lateral con goma', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'gomas-zancada-lateral' },
+        { n: 'Puente de glúteo a 1 pierna con goma', s: '3 x 12 por pierna', g: 'Glúteo', p: 'bridge', img: 'gomas-puente-1p' },
+        { n: 'Gemelos con goma', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'gomas-gemelos' },
+        { n: 'Plancha con toques de hombro', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-plancha-toques' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Press inclinado con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: 'gomas-press-inclinado' },
+        { n: 'Jalón al pecho con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-pecho' },
+        { n: 'Elevaciones laterales con goma', s: '3 x 15', g: 'Hombro', p: 'curl', img: 'gomas-elev-laterales' },
+        { n: 'Face pull con goma', s: '3 x 15', g: 'Espalda', p: 'row', img: 'gomas-face-pull' },
+        { n: 'Curl de bíceps con goma', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'gomas-curl', ss: 1 },
+        { n: 'Extensión tras nuca con goma', s: '3 x 12', g: 'Tríceps', p: 'press', img: 'gomas-triceps-nuca', ss: 1 } ] } ] },
+    mancuernas: { nombre: 'Mancuernas (gym)',
+      A: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Jalón al pecho en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-jalon-pecho' },
+        { n: 'Remo a 2 manos con mancuernas', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-remo-2m' },
+        { n: 'Curl de bíceps a 1 mano', s: '3 x 15', g: 'Bíceps', p: 'curl', img: 'manc-curl-1m' },
+        { n: 'Flexiones sobre mancuernas', s: '4 x 12', g: 'Pecho', p: 'pushup', img: 'manc-flexiones' },
+        { n: 'Press militar a 1 mano', s: '4 x 15', g: 'Hombro', p: 'press', img: 'manc-press-militar-1m' },
+        { n: 'Plancha', s: '3 x 40 s', g: 'Core', p: 'plank', img: 'core-plancha' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Peso muerto B-stance con mancuernas', s: '4 x 10', g: 'Pierna', p: 'hinge', img: 'manc-rdl-bstance' },
+        { n: 'Subidas al cajón con mancuernas', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'manc-subidas-cajon' },
+        { n: 'Sentadilla goblet', s: '4 x 12', g: 'Pierna', p: 'squat', img: 'manc-sentadilla-goblet' },
+        { n: 'Zancada atrás con mancuernas', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'manc-zancada' },
+        { n: 'Puente de glúteo con mancuerna', s: '3 x 15', g: 'Glúteo', p: 'bridge', img: 'manc-puente' },
+        { n: 'Gemelos con mancuernas', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'manc-gemelos' },
+        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Press de pecho a 1 mano con mancuerna', s: '4 x 12', g: 'Pecho', p: 'press', img: 'manc-press-pecho-1m' },
+        { n: 'Jalón a 1 mano en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-jalon-1m' },
+        { n: 'Press militar con mancuernas', s: '4 x 15', g: 'Hombro', p: 'press', img: 'manc-press-militar' },
+        { n: 'Remo sentado en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-remo-sentado' },
+        { n: 'Curl martillo', s: '3 x 15', g: 'Bíceps', p: 'curl', img: 'manc-curl-martillo', ss: 1 },
+        { n: 'Extensión de tríceps a 2 manos', s: '3 x 12', g: 'Tríceps', p: 'press', img: 'manc-triceps', ss: 1 } ] } ],
+      B: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Jalón agarre estrecho en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-jalon-pecho' },
+        { n: 'Remo a 1 mano con mancuerna', s: '4 x 10 por brazo', g: 'Espalda', p: 'row', img: 'manc-remo-1m' },
+        { n: 'Curl de bíceps con mancuernas', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'manc-curl' },
+        { n: 'Flexiones sobre mancuernas con pausa', s: '4 x 8', g: 'Pecho', p: 'pushup', img: 'manc-flexiones' },
+        { n: 'Press Arnold con mancuernas', s: '3 x 12', g: 'Hombro', p: 'press', img: 'manc-press-arnold' },
+        { n: 'Escaladores', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-escaladores' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Peso muerto con mancuernas', s: '4 x 10', g: 'Pierna', p: 'hinge', img: 'manc-rdl' },
+        { n: 'Sentadilla búlgara con mancuernas', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'manc-bulgara' },
+        { n: 'Sentadilla goblet con pausa', s: '4 x 8', g: 'Pierna', p: 'squat', img: 'manc-sentadilla-goblet' },
+        { n: 'Zancada lateral con mancuerna', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'manc-zancada-lateral' },
+        { n: 'Puente de glúteo a 1 pierna con mancuerna', s: '3 x 12 por pierna', g: 'Glúteo', p: 'bridge', img: 'manc-puente-1p' },
+        { n: 'Gemelos con mancuernas', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'manc-gemelos' },
+        { n: 'Plancha con toques de hombro', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-plancha-toques' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Press banca con mancuernas', s: '4 x 10', g: 'Pecho', p: 'press', img: 'manc-press-banca' },
+        { n: 'Remo a 2 manos agarre ancho', s: '4 x 10', g: 'Espalda', p: 'row', img: 'manc-remo-2m-ancho' },
+        { n: 'Elevaciones laterales', s: '3 x 15', g: 'Hombro', p: 'curl', img: 'manc-elev-laterales' },
+        { n: 'Pájaros con mancuernas', s: '3 x 15', g: 'Espalda', p: 'row', img: 'manc-pajaros' },
+        { n: 'Curl concentrado', s: '3 x 10 por brazo', g: 'Bíceps', p: 'curl', img: 'manc-curl-concentrado', ss: 1 },
+        { n: 'Fondos asistidos en banco', s: '3 x 12', g: 'Tríceps', p: 'dip', img: 'manc-fondos-banco', ss: 1 } ] } ] },
+    calistenia: { nombre: 'Calistenia (sin material)',
+      A: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Remo invertido en mesa', s: '4 x 10', g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+        { n: 'Dominadas (o jalón con toalla)', s: '4 x 6', g: 'Espalda', p: 'pullup', img: 'cal-dominadas' },
+        { n: 'Flexiones', s: '4 x 12', g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
+        { n: 'Flexiones pike', s: '3 x 10', g: 'Hombro', p: 'pushup', img: 'cal-pike' },
+        { n: 'Curl con mochila', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'cal-curl-mochila' },
+        { n: 'Plancha', s: '3 x 40 s', g: 'Core', p: 'plank', img: 'core-plancha' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Sentadilla al aire', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+        { n: 'Zancadas al aire', s: '3 x 12 por pierna', g: 'Pierna', p: 'lunge', img: 'cal-zancada' },
+        { n: 'Peso muerto a 1 pierna', s: '3 x 10 por pierna', g: 'Pierna', p: 'hinge', img: 'cal-rdl-1p' },
+        { n: 'Subidas al cajón o escalón', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'cal-subidas-cajon' },
+        { n: 'Puente de glúteo', s: '3 x 15', g: 'Glúteo', p: 'bridge', img: 'cal-puente' },
+        { n: 'Gemelos al aire', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'cal-gemelos' },
+        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Flexiones declinadas', s: '4 x 8', g: 'Pecho', p: 'pushup', img: 'cal-flexiones-declinadas' },
+        { n: 'Remo en mesa a 1 mano', s: '3 x 10 por brazo', g: 'Espalda', p: 'row', img: 'cal-remo-1m' },
+        { n: 'Flexiones pike con pies elevados', s: '3 x 8', g: 'Hombro', p: 'pushup', img: 'cal-pike-elevadas' },
+        { n: 'Dominada negativa', s: '4 x 4', g: 'Espalda', p: 'pullup', img: 'cal-dominada-negativa' },
+        { n: 'Fondos entre sillas', s: '3 x 12', g: 'Tríceps', p: 'dip', img: 'cal-fondos-sillas', ss: 1 },
+        { n: 'Curl con mochila martillo', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'cal-curl-mochila', ss: 1 } ] } ],
+      B: [
+      { id: 'T1', nombre: 'Fullbody Torso', ej: [
+        { n: 'Remo invertido agarre ancho', s: '4 x 8', g: 'Espalda', p: 'row', img: 'cal-remo-ancho' },
+        { n: 'Dominadas (o jalón con toalla)', s: '4 x 6', g: 'Espalda', p: 'pullup', img: 'cal-dominadas' },
+        { n: 'Flexiones arquero', s: '3 x 6 por lado', g: 'Pecho', p: 'pushup', img: 'cal-flexiones-arquero' },
+        { n: 'Flexiones pike', s: '3 x 10', g: 'Hombro', p: 'pushup', img: 'cal-pike' },
+        { n: 'Superman', s: '3 x 12', g: 'Espalda', p: 'plank', img: 'cal-superman' },
+        { n: 'Escaladores', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-escaladores' } ] },
+      { id: 'P', nombre: 'Pierna', ej: [
+        { n: 'Sentadilla búlgara', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'cal-bulgara' },
+        { n: 'Sentadilla con salto', s: '3 x 10', g: 'Pierna', p: 'squat', img: 'cal-sentadilla-salto' },
+        { n: 'Zancada lateral', s: '3 x 10 por pierna', g: 'Pierna', p: 'lunge', img: 'cal-zancada-lateral' },
+        { n: 'Pistol squat asistida', s: '3 x 6 por pierna', g: 'Pierna', p: 'squat', img: 'cal-pistol' },
+        { n: 'Puente de glúteo a 1 pierna', s: '3 x 10 por pierna', g: 'Glúteo', p: 'bridge', img: 'cal-puente-1p' },
+        { n: 'Gemelos al aire', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'cal-gemelos' },
+        { n: 'Plancha con toques de hombro', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-plancha-toques' } ] },
+      { id: 'T2', nombre: 'Fullbody Torso', ej: [
+        { n: 'Flexiones inclinadas', s: '3 x 12', g: 'Pecho', p: 'pushup', img: 'cal-flexiones-inclinadas' },
+        { n: 'Remo invertido en mesa', s: '4 x 10', g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+        { n: 'Flexiones diamante', s: '3 x 8', g: 'Tríceps', p: 'pushup', img: 'cal-flexiones-diamante' },
+        { n: 'Dominadas (o jalón con toalla)', s: '3 x 6', g: 'Espalda', p: 'pullup', img: 'cal-dominadas' },
+        { n: 'Bird-dog', s: '3 x 10 por lado', g: 'Core', p: 'plank', img: 'cal-birddog', ss: 1 },
+        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral', ss: 1 } ] } ] }
   };
+
   function exSVG(p) {
     var P = {
       squat: '<circle cx="50" cy="10" r="6"/><path d="M50 16v18M50 34l-11 9 2 15M50 34l11 9-2 15M50 21l-14 8M50 21l14 8"/>',
@@ -331,23 +445,81 @@
     };
     return '<svg viewBox="0 0 100 70" width="100%" height="100%" fill="none" stroke="#15803d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + (P[p] || P.squat) + '</svg>';
   }
+  var sesiones = load('dieta.sesiones.v1', {});
+  var entrenoActivo = null, tutOpen = false;
+
+  function mondayIso() {
+    var d = new Date();
+    var dow = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - dow);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function exThumb(x) {
+    var svg = '<div class="ex-svg">' + exSVG(x.p) + '</div>';
+    return '<img class="ex-thumb" src="assets/ex-' + x.img + '.jpg" alt="" loading="lazy" onerror="this.outerHTML=this.dataset.fb" data-fb="' + svg.replace(/"/g, '&quot;') + '">';
+  }
   function renderEntreno() {
     var mIdx = new Date().getMonth();
     var rutKey = (mIdx % 2 === 0) ? 'A' : 'B';
     var eq = RUTINAS[equipo] || RUTINAS.gomas;
-    var html = '<div class="card"><h2>Entrenamiento de fuerza</h2>' +
-      '<div class="sub">Rutina full-body para 3 días por semana. Alterna sola cada mes (rutina A / rutina B) para seguir progresando.</div>' +
+    var monday = mondayIso(), monthKey = todayIso().slice(0, 7);
+    var doneKeys = Object.keys(sesiones);
+    var weekDone = doneKeys.filter(function (k) { return k >= monday; }).map(function (k) { return sesiones[k]; });
+    var monthCount = doneKeys.filter(function (k) { return k.slice(0, 7) === monthKey; }).length;
+    var ses = eq[rutKey];
+    var nextSes = ses.find(function (s) { return weekDone.indexOf(rutKey + '-' + s.id) < 0; });
+
+    var html = '<div class="card"><h2>Tu plan de fuerza</h2>' +
+      '<div class="sub">Full body, 3 días por semana (por ejemplo lunes, miércoles y viernes). Dos sesiones de torso y una de pierna, y la rutina cambia sola cada mes.</div>' +
       '<div class="seg" style="margin-top:12px">' + Object.keys(RUTINAS).map(function (k) {
         return '<button data-equipo="' + k + '"' + (k === equipo ? ' class="active"' : '') + '>' + RUTINAS[k].nombre + '</button>';
       }).join('') + '</div></div>';
-    html += '<div class="card"><h2>' + MONTHS[mIdx].charAt(0).toUpperCase() + MONTHS[mIdx].slice(1) + ': rutina ' + rutKey + ' · ' + eq.nombre + '</h2>' +
-      '<div class="sub">Por ejemplo lunes, miércoles y viernes. Descansa 60-90 s entre series.</div>' +
-      eq[rutKey].map(function (x, i) {
-        return '<div class="ex-row"><div class="ex-num">' + (i + 1) + '</div>' +
-          '<div class="ex-svg">' + exSVG(x.p) + '</div>' +
-          '<div class="ex-info"><div class="ex-name">' + x.n + '</div><div class="ex-sets">' + x.s + '</div></div></div>';
-      }).join('') +
-      '<div class="note green" style="margin-top:10px">El mes que viene toca la rutina ' + (rutKey === 'A' ? 'B' : 'A') + ': mismos músculos, ejercicios distintos.</div></div>';
+
+    html += '<div class="card"><div class="hist-head"><h2>' + MONTHS[mIdx].charAt(0).toUpperCase() + MONTHS[mIdx].slice(1) + ': rutina ' + rutKey + '</h2>' +
+      '<span class="pill">' + eq.nombre + '</span></div>' +
+      '<div class="fact"><span>Esta semana</span><b>' + weekDone.length + ' de 3 sesiones</b></div>' +
+      '<div class="fact"><span>Este mes</span><b>' + monthCount + ' / 12</b></div>' +
+      '<div class="prog-track"><div class="prog-fill" style="width:' + Math.min(100, Math.round(monthCount / 12 * 100)) + '%"></div></div></div>';
+
+    ses.forEach(function (s, i) {
+      var key = rutKey + '-' + s.id;
+      var doneThisWeek = weekDone.indexOf(key) >= 0;
+      var isNext = nextSes && nextSes.id === s.id;
+      var active = entrenoActivo === key;
+      var checked = active ? (window.__exChecks || {}) : {};
+      var nChecked = Object.keys(checked).filter(function (k) { return checked[k]; }).length;
+      html += '<div class="card"><div class="hist-head"><h2 class="ex-day">Día ' + (i + 1) + '/3 · ' + s.nombre + '</h2>' +
+        (doneThisWeek ? '<span class="pill done-pill">✓ hecha esta semana</span>' : (isNext ? '<span class="pill orange">Próximo entreno</span>' : '')) + '</div>' +
+        '<div class="sub">' + s.ej.length + ' ejercicios</div>' +
+        '<div class="tut-chips"><span class="chip">TUT 2-1</span><span class="chip">RIR 2</span>' +
+        '<button class="chip link" data-tut>¿Qué es?</button></div>' +
+        (tutOpen ? '<div class="note green" style="margin-top:8px"><b>TUT 2-1:</b> baja el peso en 2 segundos y sube en 1, sin pausas. <b>RIR 2:</b> termina cada serie pudiendo haber hecho unas 2 repeticiones más. Así progresas sin lesionarte.</div>' : '') +
+        s.ej.map(function (x, j) {
+          var row = '<div class="ex-row' + (active && checked[j] ? ' ex-done' : '') + '"' + (active ? ' data-ex-check="' + j + '"' : '') + '>' +
+            (active ? '<div class="ex-check">' + (checked[j] ? '✓' : '') + '</div>' : '<div class="ex-num">' + (j + 1) + '</div>') +
+            exThumb(x) +
+            '<div class="ex-info"><div class="ex-name">' + x.n + '</div>' +
+            '<div class="ex-sets">' + x.s + ' · ' + x.g + '</div></div></div>';
+          if (x.ss && j > 0 && !s.ej[j - 1].ss) row = row; // isolated ss handled below
+          return (x.ss && (j === 0 || !s.ej[j - 1].ss) ? '<div class="ss-label">Superserie: una detrás de otra, descansa al final</div>' : '') + row;
+        }).join('');
+      if (active) {
+        html += '<button class="btn primary" data-complete-session="' + key + '"' + (nChecked < s.ej.length ? ' style="opacity:.55"' : '') + '>Completar sesión (' + nChecked + '/' + s.ej.length + ')</button>' +
+          '<button class="btn ghost" data-cancel-session>Cancelar</button>';
+      } else if (!doneThisWeek) {
+        html += '<button class="btn primary" data-start-session="' + key + '">Empezar entreno</button>';
+      }
+      html += '</div>';
+    });
+
+    var history = doneKeys.sort().reverse().slice(0, 10);
+    if (history.length) {
+      var names = {};
+      Object.keys(RUTINAS).forEach(function (m) { ['A', 'B'].forEach(function (rk) { RUTINAS[m][rk].forEach(function (s) { names[rk + '-' + s.id] = s.nombre; }); }); });
+      html += '<div class="card"><h2>Registro de sesiones</h2>' + history.map(function (k) {
+        return '<div class="rev-row"><b>' + fmtDate(k) + '</b> · ' + (names[sesiones[k]] || 'Sesión') + '</div>';
+      }).join('') + '</div>';
+    }
     document.getElementById('tab-entreno').innerHTML = html;
   }
 
@@ -519,8 +691,35 @@
       window.scrollTo(0, 0);
       return;
     }
+    var eqBtn = t.closest && t.closest('[data-equipo]');
+    if (eqBtn) {
+      equipo = eqBtn.getAttribute('data-equipo');
+      save('dieta.equipo.v1', equipo);
+      renderEntreno();
+      return;
+    }
+    if (t.closest && t.closest('[data-tut]')) { tutOpen = !tutOpen; renderEntreno(); return; }
+    var startS = t.closest && t.closest('[data-start-session]');
+    if (startS) { entrenoActivo = startS.getAttribute('data-start-session'); window.__exChecks = {}; renderEntreno(); return; }
+    var cancelS = t.closest && t.closest('[data-cancel-session]');
+    if (cancelS) { entrenoActivo = null; renderEntreno(); return; }
+    var exChk = t.closest && t.closest('[data-ex-check]');
+    if (exChk) {
+      var j = exChk.getAttribute('data-ex-check');
+      window.__exChecks[j] = !window.__exChecks[j];
+      renderEntreno();
+      return;
+    }
+    var compS = t.closest && t.closest('[data-complete-session]');
+    if (compS) {
+      sesiones[todayIso()] = compS.getAttribute('data-complete-session');
+      save('dieta.sesiones.v1', sesiones);
+      entrenoActivo = null;
+      renderEntreno();
+      return;
+    }
     var seg = t.closest && t.closest('.seg button');
-    if (seg) {
+    if (seg && seg.parentElement.getAttribute('data-seg')) {
       profile[seg.parentElement.getAttribute('data-seg')] = seg.getAttribute('data-v');
       save('dieta.perfil.v1', profile);
       renderAll();
@@ -571,13 +770,6 @@
     if (photoBtn2) {
       pendingPhoto = photoBtn2.getAttribute('data-photo');
       document.getElementById('photoInput').click();
-      return;
-    }
-    var eqBtn = t.closest && t.closest('[data-equipo]');
-    if (eqBtn) {
-      equipo = eqBtn.getAttribute('data-equipo');
-      save('dieta.equipo.v1', equipo);
-      renderEntreno();
       return;
     }
     if (t.id === 'mPrev') { month = (month + 11) % 12; renderRecetas(); renderHoy(); return; }

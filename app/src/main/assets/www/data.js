@@ -89,7 +89,7 @@ const MEALS = [
       { name: 'Copos de avena', grams: 60 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Plátano', grams: 100 }, { name: 'Nueces', grams: 10 } ] },
   { id: 'd3', slot: 'desayuno', name: 'Revuelto con aguacate y jamón', kcal: 460, components: [
       { name: 'Huevos (2 uds.)', grams: 120 }, { name: 'Pan integral', grams: 50 }, { name: 'Aguacate', grams: 60 }, { name: 'Jamón cocido', grams: 50 } ] },
-  { id: 'd4', slot: 'desayuno', name: 'Yogur con muesli', kcal: 425, components: [
+  { id: 'd4', slot: 'desayuno', name: 'Yogur con muesli', kcal: 425, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Yogur griego natural', grams: 250 }, { name: 'Muesli sin azúcar', grams: 40 }, { name: 'Manzana', grams: 120 }, { name: 'Miel', grams: 10 } ] },
   { id: 'c1', slot: 'comida', name: 'Pollo con arroz', kcal: 635, components: [
       { name: 'Pechuga de pollo', grams: 160 }, { name: 'Arroz integral (en crudo)', grams: 70 }, { name: 'Ensalada mixta', grams: 150 }, { name: 'Aceite de oliva', grams: 10 } ] },
@@ -113,7 +113,7 @@ const MEALS = [
       { name: 'Copos de avena', grams: 60 }, { name: 'Yogur griego natural', grams: 200 }, { name: 'Fresas', grams: 150 }, { name: 'Miel', grams: 10 } ] },
   { id: 'd7', slot: 'desayuno', name: 'Tostada de pavo y queso fresco', kcal: 435, components: [
       { name: 'Pan integral', grams: 80 }, { name: 'Pechuga de pavo', grams: 60 }, { name: 'Queso fresco', grams: 50 }, { name: 'Tomate', grams: 50 }, { name: 'Leche o bebida vegetal', grams: 200 } ] },
-  { id: 'd8', slot: 'desayuno', name: 'Bowl de yogur, plátano y nueces', kcal: 455, components: [
+  { id: 'd8', slot: 'desayuno', name: 'Bowl de yogur, plátano y nueces', kcal: 455, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Yogur griego natural', grams: 250 }, { name: 'Plátano', grams: 120 }, { name: 'Nueces', grams: 20 }, { name: 'Miel', grams: 10 } ] },
   { id: 'c5', slot: 'comida', name: 'Ternera guisada con patatas', kcal: 660, components: [
       { name: 'Ternera para guisar', grams: 180 }, { name: 'Patata', grams: 250 }, { name: 'Verduras variadas', grams: 250 }, { name: 'Aceite de oliva', grams: 10 } ] },
@@ -121,7 +121,7 @@ const MEALS = [
       { name: 'Merluza', grams: 200 }, { name: 'Patata', grams: 200 }, { name: 'Verduras salteadas', grams: 200 }, { name: 'Aceite de oliva', grams: 10 } ] },
   { id: 'c7', slot: 'comida', name: 'Pasta con pollo y verduras', kcal: 695, components: [
       { name: 'Pasta (en crudo)', grams: 80 }, { name: 'Pechuga de pollo', grams: 150 }, { name: 'Pimiento y cebolla', grams: 200 }, { name: 'Aceite de oliva', grams: 10 } ] },
-  { id: 'c8', slot: 'comida', name: 'Ensalada de garbanzos y atún', kcal: 545, components: [
+  { id: 'c8', slot: 'comida', name: 'Ensalada de garbanzos y atún', kcal: 545, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Garbanzos cocidos', grams: 200 }, { name: 'Atún', grams: 80 }, { name: 'Tomate', grams: 100 }, { name: 'Ensalada', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ] },
   { id: 'n5', slot: 'cena', name: 'Lubina con verduras', kcal: 490, components: [
       { name: 'Lubina', grams: 200 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Patata', grams: 150 }, { name: 'Aceite de oliva', grams: 10 } ] },
@@ -129,7 +129,27 @@ const MEALS = [
       { name: 'Ternera para guisar', grams: 150 }, { name: 'Arroz (en crudo)', grams: 60 }, { name: 'Verduras salteadas', grams: 250 }, { name: 'Aceite de oliva', grams: 10 } ] },
   { id: 'n7', slot: 'cena', name: 'Revuelto de setas y pavo', kcal: 410, components: [
       { name: 'Setas variadas', grams: 300 }, { name: 'Pavo en dados', grams: 120 }, { name: 'Huevo (1 ud.)', grams: 60 }, { name: 'Aceite de oliva', grams: 10 } ] },
-  { id: 'n8', slot: 'cena', name: 'Requesón con fruta y nueces', kcal: 475, components: [
+  { id: 'n9', slot: 'cena', name: 'Tostas de atún y aguacate', kcal: 370, rapida: true, tiempo: '0 min · sin cocinar', components: [
+      { name: 'Pan integral', grams: 60 }, { name: 'Atún', grams: 80 }, { name: 'Aguacate', grams: 75 }, { name: 'Tomate', grams: 50 } ] },
+  { id: 'n10', slot: 'cena', name: 'Plato de jamón, queso fresco y nueces', kcal: 485, rapida: true, tiempo: '0 min · sin cocinar', components: [
+      { name: 'Jamón cocido', grams: 80 }, { name: 'Queso fresco', grams: 100 }, { name: 'Nueces', grams: 25 }, { name: 'Pan integral', grams: 50 } ] },
+  { id: 'n11', slot: 'cena', name: 'Yogur griego con avena y plátano', kcal: 460, rapida: true, tiempo: '0 min · sin cocinar', components: [
+      { name: 'Yogur griego natural', grams: 250 }, { name: 'Copos de avena', grams: 40 }, { name: 'Plátano', grams: 100 }, { name: 'Miel', grams: 10 } ] },
+  { id: 'n12', slot: 'cena', name: 'Ensalada de lentejas de bote con huevo', kcal: 430, rapida: true, tiempo: '5 min · sin cocinar', components: [
+      { name: 'Lentejas cocidas', grams: 200 }, { name: 'Huevo cocido (1 ud.)', grams: 60 }, { name: 'Tomate', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ] },
+  { id: 'n13', slot: 'cena', name: 'Tortilla exprés de atún', kcal: 400, rapida: true, tiempo: '10 min · sartén', components: [
+      { name: 'Huevos (2 uds.)', grams: 120 }, { name: 'Atún', grams: 80 }, { name: 'Pan integral', grams: 40 }, { name: 'Ensalada', grams: 100 } ] },
+  { id: 'n14', slot: 'cena', name: 'Sándwich de pavo y queso fresco', kcal: 370, rapida: true, tiempo: '5 min · sin cocinar', components: [
+      { name: 'Pan integral', grams: 80 }, { name: 'Pechuga de pavo', grams: 80 }, { name: 'Queso fresco', grams: 50 }, { name: 'Tomate y lechuga', grams: 50 } ] },
+  { id: 'n15', slot: 'cena', name: 'Hummus con crudités y atún', kcal: 370, rapida: true, tiempo: '0 min · sin cocinar', components: [
+      { name: 'Hummus', grams: 80 }, { name: 'Atún', grams: 60 }, { name: 'Zanahoria y apio', grams: 150 }, { name: 'Pan integral', grams: 50 } ] },
+  { id: 'n16', slot: 'cena', name: 'Gazpacho con pavo y huevo', kcal: 435, rapida: true, tiempo: '0 min · sin cocinar', components: [
+      { name: 'Gazpacho casero', grams: 300 }, { name: 'Pavo en dados', grams: 80 }, { name: 'Huevo cocido (1 ud.)', grams: 60 }, { name: 'Pan integral', grams: 40 } ] },
+  { id: 'c9', slot: 'comida', name: 'Ensalada fría de pasta y atún', kcal: 540, rapida: true, tiempo: '12 min · solo hervir pasta', components: [
+      { name: 'Pasta (en crudo)', grams: 80 }, { name: 'Atún', grams: 80 }, { name: 'Tomate', grams: 100 }, { name: 'Maíz dulce', grams: 60 }, { name: 'Aceite de oliva', grams: 10 } ] },
+  { id: 'c10', slot: 'comida', name: 'Tostadas de hummus y pollo asado', kcal: 505, rapida: true, tiempo: '5 min · sin cocinar', components: [
+      { name: 'Pan integral', grams: 80 }, { name: 'Hummus', grams: 60 }, { name: 'Pollo asado', grams: 100 }, { name: 'Tomate y lechuga', grams: 100 } ] } ,
+  { id: 'n8', slot: 'cena', name: 'Requesón con fruta y nueces', kcal: 475, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Requesón', grams: 200 }, { name: 'Fresas', grams: 150 }, { name: 'Nueces', grams: 20 }, { name: 'Pan integral', grams: 40 } ] } 
 ];
 
