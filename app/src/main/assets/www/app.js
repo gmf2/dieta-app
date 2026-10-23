@@ -56,6 +56,7 @@
   var month = new Date().getMonth();
   var fotos = load('dieta.fotos.v1', {});
   var equipo = load('dieta.equipo.v1', 'gomas');
+  var calisNivel = load('dieta.calisnivel.v1', 1);
   var pendingPhoto = null;
 
   /* Clásicos rotan: 8 por comida, se muestran 4 cada mes (ciclo de 4 meses) */
@@ -99,34 +100,24 @@
 
   /* Ingredientes: nombre + medida casera | gramos + kcal (valores USDA) */
   function ingredientHTML(option, targetKcal, dayTarget) {
-    var factor = targetKcal / option.kcal;
     var protSlot = Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
-    var totalProt = 0;
-    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1, manzana: 1, pera: 1, 'plátano': 1, mango: 1, filete: 1, loncha: 1, 'patata mediana': 1, yogur: 1, tajada: 1 };
-    var rows = option.components.map(function (c) {
-      var g = round5(c.grams * factor);
-      if (WHOLE[ING[c.name].u]) g = Math.max(1, Math.round(g / ING[c.name].ug)) * ING[c.name].ug;
-      var kcal = Math.round(ING[c.name].k * g / 100);
-      var prot = Math.round(ING[c.name].p * g / 100);
-      totalProt += prot;
-      return '<div class="ing-row"><div><div class="ing-name">' + esc(c.name) + '</div>' +
-        '<div class="ing-sub">' + household(c.name, g) + '</div></div>' +
+    var plan = computePlan(option, targetKcal, protSlot);
+    var rows = plan.items.map(function (it) {
+      var g = it.grams;
+      var kcal = Math.round(ING[it.name].k * g / 100);
+      var prot = Math.round(ING[it.name].p * g / 100);
+      return '<div class="ing-row"><div><div class="ing-name">' + esc(it.name) + '</div>' +
+        '<div class="ing-sub">' + household(it.name, g) + '</div></div>' +
         '<div class="ing-right"><b>' + g + ' g</b><span>' + kcal + ' kcal · ' + prot + ' g prot</span></div></div>';
     }).join('');
     return '<div class="ing">' + rows +
-      '<div class="cap">Cantidades ajustadas a tu objetivo (' + Math.round(targetKcal / 10) * 10 +
-      ' kcal en esta comida, aprox.; las piezas van enteras). Proteína del plato: ~' + totalProt + ' g de ~' + protSlot + ' g objetivo. Valores de composición del USDA.</div></div>';
+      '<div class="cap">Cantidades calculadas para tu objetivo actual (' + Math.round(targetKcal / 10) * 10 +
+      ' kcal en esta comida, aprox.; las piezas van enteras). Proteína del plato: ~' + plan.protein + ' g de ~' + protSlot + ' g objetivo. Valores de composición del USDA.</div></div>';
   }
 
-  function optionProtein(option, targetKcal) {
-    var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1, manzana: 1, pera: 1, 'plátano': 1, mango: 1, filete: 1, loncha: 1, 'patata mediana': 1, yogur: 1, tajada: 1 };
-    var factor = targetKcal / option.kcal, tot = 0;
-    option.components.forEach(function (c) {
-      var g = round5(c.grams * factor);
-      if (WHOLE[ING[c.name].u]) g = Math.max(1, Math.round(g / ING[c.name].ug)) * ING[c.name].ug;
-      tot += Math.round(ING[c.name].p * g / 100);
-    });
-    return tot;
+  function optionProtein(option, targetKcal, dayTarget) {
+    var protSlot = Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
+    return computePlan(option, targetKcal, protSlot).protein;
   }
 
   /* ---------- Hero ---------- */
@@ -265,7 +256,7 @@
 
     var dayProt = ['desayuno', 'comida', 'cena'].reduce(function (acc, s) {
       var o = findOption(picks[s]);
-      return acc + (o ? optionProtein(o, slotTarget(r, s)) : 0);
+      return acc + (o ? optionProtein(o, slotTarget(r, s), r.target) : 0);
     }, 0);
     var protGoal = proteinGoal(profile);
     html += '<div class="card mt12"><div class="fact"><span>Desayuno</span><b>' + slotTarget(r, 'desayuno') + ' kcal</b></div>' +
@@ -298,7 +289,7 @@
             : '<div class="emoji-cover">' + ICONS[SLOT_ICON[rec.slot]] + '</div>') +
         '<div class="r-body"><span class="pill orange">Sustituye a: ' + SLOT_LABEL[rec.slot].toLowerCase() + '</span>' +
         '<h3 class="mt8">' + esc(rec.name) + '</h3>' +
-        ingredientHTML(rec, target) +
+        ingredientHTML(rec, target, r.target) +
         '<ol class="steps">' + rec.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' +
         (inUse ? '<div class="inuse">✓ Ya está en tu dieta de hoy</div>'
                : '<button class="btn primary small" data-use="' + rec.id + '" data-slot="' + rec.slot + '">Usarla hoy como ' + SLOT_LABEL[rec.slot].toLowerCase() + '</button>') +
@@ -408,30 +399,32 @@
       nombre: 'Calistenia',
       skills: true,
       A: [
-        { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Esta rutina ES el plan hasta que consigas 8 dominadas limpias, 20 flexiones y 15 fondos; con esa base ya puedes trabajar las skills. Los niveles marcan el orden: domina el Nivel 1 antes de tocar el 2.', ej: [
+        { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Esta rutina es el plan hasta tener la base; como referencia orientativa (no un requisito exacto), unas 8 dominadas limpias, 20 flexiones y 15 fondos suelen bastar para empezar las skills con seguridad.', ej: [
           { n: 'Flexiones (de rodillas si hace falta)', s: '3 x 8-12', g: 'Nivel 1 · Pecho', p: 'pushup', img: 'cal-flexiones' },
           { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', g: 'Nivel 1 · Espalda', p: 'row', img: 'cal-remo-mesa' },
           { n: 'Sentadilla al aire', s: '3 x 15', g: 'Nivel 1 · Pierna', p: 'squat', img: 'cal-sentadilla' },
           { n: 'Plancha', s: '3 x 20-30 s', g: 'Nivel 1 · Core', p: 'plank', img: 'core-plancha' },
           { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
           { n: 'Dominadas (cuando empiecen a salir)', s: '4 x 4-6', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Fondos entre sillas o paralelas', s: '3 x 8-12', g: 'Nivel 2 · Pecho · Tríceps', p: 'dip', img: 'skill-fondos' } ] },
-        { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida. Requisito para esta rutina: 8 dominadas limpias. Trabaja solo los ejercicios de tu nivel; cuando te salgan cómodos unas 2 semanas, sube.', ej: [
+          { n: 'Fondos en paralelas (estables)', s: '3 x 8-12', g: 'Nivel 2 · Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', g: 'Nivel 3 · Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', g: 'Nivel 3 · Pecho', p: 'pushup', img: 'cal-flexiones' } ] },
+        { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida. Referencia orientativa para empezarla: unas 8 dominadas limpias (no es una garantía, solo una señal habitual). Trabaja solo los ejercicios del nivel que hayas elegido arriba.', ej: [
           { n: 'Dominadas', s: '4 x 5', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominadas' },
           { n: 'Dominada explosiva al pecho', s: '4 x 4', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
-          { n: 'Fondos en paralelas o entre sillas', s: '3 x 8', g: 'Nivel 1 · Empuje', p: 'dip', img: 'skill-fondos-barra' },
+          { n: 'Fondos en paralelas (estables)', s: '3 x 8', g: 'Nivel 1 · Empuje', p: 'dip', img: 'skill-fondos-barra' },
           { n: 'Transición con goma', s: '3 x 5', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
           { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
           { n: 'Balanceo kipping controlado', s: '3 x 6', g: 'Nivel 3 · Técnica', p: 'pullup', img: 'skill-kipping' },
           { n: 'Primer muscle up (intentos)', s: '5 intentos', g: 'Nivel 3 · Skill', p: 'pullup', img: 'skill-muscleup-transicion' } ] },
-        { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META. Requisito: 5 dominadas limpias. Progresión: colgado activo → tuck → advanced tuck → una pierna → front lever. Aguanta 10-15 s limpios en un nivel antes de subir al siguiente.', ej: [
+        { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META. Referencia orientativa para empezarla: unas 5 dominadas limpias. Progresión habitual: colgado activo → tuck → advanced tuck → una pierna → front lever. Sube de nivel cuando el actual te salga limpio y cómodo (en estáticos, aguantes de unos 10-15 s), no antes.', ej: [
           { n: 'Colgado de barra con escápulas activas', s: '4 x 8 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-dominadas' },
           { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
           { n: 'Subidas a tuck front lever', s: '3 x 4', g: 'Nivel 2 · Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
           { n: 'Advanced tuck (espalda plana)', s: '3 x 8 s', g: 'Nivel 2 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
           { n: 'Front lever a una pierna', s: '3 x 5 s', g: 'Nivel 3 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
           { n: 'Negativa de dominada a front lever', s: '3 x 3', g: 'Nivel 3 · Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' } ] },
-        { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META. Requisito: 15 flexiones limpias. Progresión: lean → frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
+        { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META. Referencia orientativa para empezarla: unas 15 flexiones limpias. Progresión habitual: lean → frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
           { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', g: 'Nivel 1 · Empuje', p: 'plank', img: 'skill-planche-lean' },
           { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', g: 'Nivel 1 · Equilibrio', p: 'plank', img: 'skill-frog-stand' },
           { n: 'Tuck planche hold', s: '3 x 8-10 s', g: 'Nivel 2 · Estático', p: 'plank', img: 'skill-planche-tuck' },
@@ -506,7 +499,19 @@
       '<div class="fact"><span>Este mes</span><b>' + monthCount + ' / 12</b></div>' +
       '<div class="prog-track"><div class="prog-fill" style="width:' + Math.min(100, Math.round(monthCount / 12 * 100)) + '%"></div></div></div>';
 
+    if (eq.skills) {
+      html += '<div class="card"><h2>Tu nivel en barra</h2>' +
+        '<div class="sub">Cada sesión muestra solo los ejercicios del nivel que elijas aquí. Referencia orientativa para subir (no una garantía): que las series del nivel actual te salgan limpias y cómodas unas 2 semanas seguidas; en estáticos, aguantes de unos 10-15 s. Si estás empezando, quédate en la sesión «Básicos de barra» hasta tener la base.</div>' +
+        '<div class="seg" style="margin-top:12px">' +
+        '<button data-calnivel="1"' + (calisNivel === 1 ? ' class="active"' : '') + '>1 · Base</button>' +
+        '<button data-calnivel="2"' + (calisNivel === 2 ? ' class="active"' : '') + '>2 · Intermedio</button>' +
+        '<button data-calnivel="3"' + (calisNivel === 3 ? ' class="active"' : '') + '>3 · Avanzado</button></div></div>';
+    }
+
+    function exLvl(x) { var m = /^Nivel (\d)/.exec(x.g); return m ? parseInt(m[1], 10) : 0; }
+    function sesEx(s) { return eq.skills ? s.ej.filter(function (x) { return exLvl(x) === calisNivel; }) : s.ej; }
     ses.forEach(function (s, i) {
+      var ej = sesEx(s);
       var key = rutKey + '-' + s.id;
       var doneThisWeek = weekDone.indexOf(key) >= 0;
       var isNext = nextSes && nextSes.id === s.id;
@@ -517,24 +522,26 @@
       html += '<div class="card"><div class="hist-head ses-head" data-ses-toggle="' + key + '"><h2 class="ex-day">Día ' + (i + 1) + '/' + ses.length + ' · ' + s.nombre + '</h2>' +
         (doneThisWeek ? '<span class="pill done-pill">✓ hecha esta semana</span>' : (isNext ? '<span class="pill orange">Próximo entreno</span>' : '')) +
         '<span class="ses-chevron' + (open ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>' +
-        '<div class="sub">' + s.ej.length + ' ejercicios</div>' +
+        '<div class="sub">' + ej.length + ' ejercicios' + (eq.skills ? ' · Nivel ' + calisNivel : '') + '</div>' +
         (open ? '<div class="ses-body">' : '<div class="ses-body" hidden>') +
         (eq.skills ? '' :
         '<div class="tut-chips"><span class="chip">TUT 2-1</span><span class="chip">RIR 2</span>' +
         '<button class="chip link" data-tut>¿Qué es?</button></div>' +
         (tutOpen ? '<div class="note green" style="margin-top:8px"><b>TUT 2-1:</b> baja el peso en 2 segundos y sube en 1, sin pausas. <b>RIR 2:</b> termina cada serie pudiendo haber hecho unas 2 repeticiones más. Así progresas sin lesionarte.</div>' : '')) +
         (s.nota ? '<div class="note green" style="margin-top:8px">' + s.nota + '</div>' : '') +
-        s.ej.map(function (x, j) {
+        (eq.skills && ej.length === 0 ? '<div class="note">Esta sesión no tiene ejercicios de Nivel ' + calisNivel + ': es una meta avanzada. Baja al nivel que te toque hoy o sigue con «Básicos de barra».</div>' : '') +
+        ej.map(function (x, j) {
+          var lvlTag = eq.skills ? x.g.replace(/^Nivel \d · /, '') : x.g;
           var row = '<div class="ex-row' + (active && checked[j] ? ' ex-done' : '') + '"' + (active ? ' data-ex-check="' + j + '"' : '') + '>' +
             (active ? '<div class="ex-check">' + (checked[j] ? '✓' : '') + '</div>' : '<div class="ex-num">' + (j + 1) + '</div>') +
             exThumb(x) +
             '<div class="ex-info"><div class="ex-name">' + x.n + '</div>' +
-            '<div class="ex-sets">' + x.s + ' · ' + x.g + '</div></div></div>';
-          if (x.ss && j > 0 && !s.ej[j - 1].ss) row = row; // isolated ss handled below
-          return (x.ss && (j === 0 || !s.ej[j - 1].ss) ? '<div class="ss-label">Superserie: una detrás de otra, descansa al final</div>' : '') + row;
+            '<div class="ex-sets">' + x.s + ' · ' + lvlTag + '</div></div></div>';
+          if (x.ss && j > 0 && !ej[j - 1].ss) row = row; // isolated ss handled below
+          return (x.ss && (j === 0 || !ej[j - 1].ss) ? '<div class="ss-label">Superserie: una detrás de otra, descansa al final</div>' : '') + row;
         }).join('');
       if (active) {
-        html += '<button class="btn primary" data-complete-session="' + key + '"' + (nChecked < s.ej.length ? ' style="opacity:.55"' : '') + '>Completar sesión (' + nChecked + '/' + s.ej.length + ')</button>' +
+        html += '<button class="btn primary" data-complete-session="' + key + '"' + (nChecked < ej.length ? ' style="opacity:.55"' : '') + '>Completar sesión (' + nChecked + '/' + ej.length + ')</button>' +
           '<button class="btn ghost" data-cancel-session>Cancelar</button>';
       } else if (!doneThisWeek) {
         html += '<button class="btn primary" data-start-session="' + key + '">Empezar entreno</button>';
@@ -725,6 +732,13 @@
     if (eqBtn) {
       equipo = eqBtn.getAttribute('data-equipo');
       save('dieta.equipo.v1', equipo);
+      renderEntreno();
+      return;
+    }
+    var cnBtn = t.closest && t.closest('[data-calnivel]');
+    if (cnBtn) {
+      calisNivel = parseInt(cnBtn.getAttribute('data-calnivel'), 10);
+      save('dieta.calisnivel.v1', calisNivel);
       renderEntreno();
       return;
     }
