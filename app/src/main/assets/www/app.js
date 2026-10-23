@@ -16,7 +16,7 @@
   var GOAL_LABEL = { perder: 'Perder grasa', mantener: 'Mantener', ganar: 'Ganar músculo' };
   var ACTIVITY_LABEL = ['Sedentario', 'Actividad ligera', 'Actividad ligera', 'Actividad moderada',
     'Actividad moderada', 'Actividad alta', 'Actividad alta', 'Actividad muy alta'];
-  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n7':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1, 'd6':1, 'd7':1, 'n13':1, 'n6':1, 'n9':1, 'r-jun-d':1, 'r-jun-n':1, 'r-mar-n':1, 'r-sep-d':1 };
+  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n7':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1, 'd6':1, 'd7':1, 'n13':1, 'n6':1, 'r-jun-d':1, 'r-jun-n':1, 'r-mar-n':1, 'r-sep-d':1 };
   var ICONS = {
     bowl: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>',
     pot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M8 6c1-2 7-2 8 0"/></svg>',
@@ -91,6 +91,7 @@
   function slotTarget(r, slot) { return Math.round(r.target * SLOT_SHARE[slot] / 10) * 10; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function photoFor(o) { return PHOTO_IDS[o.id] ? 'assets/' + o.id + '.jpg' : null; }
+  function regKcal(v) { return (v && typeof v === 'object') ? v.kcal : v; }
   function quickTag(o) {
     var tp = (o.tiempo || '').split(' · ');
     return 'Rápida · ' + (tp[0] === '0 min' ? (tp[1] || 'exprés') : tp[0]);
@@ -298,7 +299,7 @@
           ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
       })() : ingredientHTML(selected, target, r.target));
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
-        (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + dayLog[slot] + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
+        (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + regKcal(dayLog[slot]) + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
       html += '</div>';
     });
 
@@ -378,11 +379,29 @@
       var consumed = 0, counted = 0;
       days.forEach(function (k) {
         var slots = registro[k], sum = 0, n = 0;
-        ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) { sum += slots[sl]; n++; } });
+        ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) { sum += regKcal(slots[sl]); n++; } });
         if (n) { consumed += sum; counted++; }
       });
       if (counted) {
         html += '<div class="fact"><span>Comidas marcadas</span><b>' + counted + (counted === 1 ? ' día' : ' días') + ' · media de ' + Math.round(consumed / counted) + ' kcal/día</b></div>';
+        days.sort().reverse().forEach(function (k) {
+          var slots = registro[k];
+          var rows = '';
+          ['desayuno', 'comida', 'cena'].forEach(function (sl) {
+            var v = slots[sl];
+            if (!v) return;
+            if (typeof v === 'object') {
+              rows += '<div class="ing-row"><div><div class="ing-name">' + esc(v.name) + '</div>' +
+                '<div class="ing-sub">' + v.items.map(function (it) { return it.g + ' g ' + it.n; }).join(' · ') + '</div></div>' +
+                '<div class="ing-right"><b>' + v.kcal + ' kcal</b><span>' + v.prot + ' g prot</span></div></div>';
+            } else {
+              rows += '<div class="ing-row"><div><div class="ing-name">' + SLOT_LABEL[sl] + ' marcada</div>' +
+                '<div class="ing-sub">Registro antiguo: solo se guardaron las kcal, sin ingredientes</div></div>' +
+                '<div class="ing-right"><b>' + v + ' kcal</b></div></div>';
+            }
+          });
+          if (rows) html += '<div class="hist-slot-h">' + fmtDate(k) + '</div><div class="ing">' + rows + '</div>';
+        });
       } else {
         html += '<div class="muted">Sin comidas marcadas en este mes.</div>';
       }
@@ -390,6 +409,7 @@
       html += '</div>';
     }
 
+    if (isPast && recipes.length) html += '<div class="hist-slot-h" style="margin:10px 4px 8px">Recetas de ' + MONTHS[viewM] + ' · catálogo base de referencia, no es lo que comiste</div>';
     recipes.forEach(function (rec) {
       var inUse = picks[rec.slot] === rec.id;
       var ph = photoFor(rec);
@@ -824,7 +844,7 @@
       var maxV = r.target * 1.25;
       html += '<div class="bars">' + days.map(function (k) {
         var slots = registro[k], sum = 0;
-        ['desayuno', 'comida', 'cena'].forEach(function (s) { if (slots[s]) sum += slots[s]; });
+        ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) sum += regKcal(slots[sl]); });
         var pct = Math.min(100, Math.round(sum / maxV * 100));
         var tpct = Math.round(r.target / maxV * 100);
         var over = sum > r.target * 1.05;
@@ -955,7 +975,14 @@
       if (dayLog[slot]) { delete dayLog[slot]; }
       else {
         var rr = compute(profile);
-        dayLog[slot] = slotTarget(rr, slot);
+        var dp2 = window.__dayPlans && window.__dayPlans[slot];
+        var opt2 = findOption(picks[slot]);
+        if (dp2 && dp2.plan && opt2) {
+          dayLog[slot] = { kcal: dp2.plan.kcal, prot: dp2.plan.protein, id: opt2.id, name: opt2.name,
+            items: dp2.plan.items.map(function (it) { return { n: it.name, g: it.grams }; }) };
+        } else {
+          dayLog[slot] = slotTarget(rr, slot);
+        }
       }
       registro[tIso] = dayLog;
       save('dieta.registro.v1', registro);

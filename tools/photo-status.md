@@ -68,3 +68,5 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - PENDIENTES platos ahora 14: c4, n8, n10, n11, n12, n15, c10, r-ago-c, r-ago-d, r-ene-n, r-feb-d, r-jul-c, r-mar-d, r-nov-d.
 - Stock cubierto definitivo fase: 10 platos (r-oct-c, d6, d7, n6, n9, n13, r-jun-d, r-jun-n, r-mar-n, r-sep-d).
 - Calistenia: disenar rutina PROPIA contrastada (no transcripcion exacta de pizarras); abreviaturas ambiguas no hace falta preguntar si diseno propio. Pizarras = referencia de estructura/volumen.
+
+- n9: RECHAZADA 13:41 (Main): la tostada Commons es atun CRUDO estilo ceviche, no tostas de atun; preparacion caracteristica distinta. Pasa a pendientes IA.
