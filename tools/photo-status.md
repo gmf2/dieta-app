@@ -88,3 +88,9 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - SUSTITUIDA r-mar-c "Paella de pollo y verduras" (heredada: pixelada/oscura) por IA: paella de pollo y verduras nitida.
 - SUSTITUIDA ex-cal-sentadilla (Commons USAF, sentadilla LASTRADA con mochila) por IA de sentadilla a peso corporal exacta (sin carga), por decision de parent sin necesidad de consultar. Credito Commons eliminado de credits.json (53 entradas); la foto Commons ya no se usa.
 - Estado platos: 0 pendientes salvo nueva revision. Ejercicios pendientes: skill-frontlever-negativa y skill-muscleup-negativo (fallback SVG, decision cerrada).
+
+## 2026-10-24 00:54 CEST - QC tecnico parent: 5 ejercicios retirados a fallback
+- RETIRADAS a fallback SVG (onerror automatico, archivos eliminados) por no superar QC tecnico de postura en revision de parent: skill-frontlever-tuck (tronco diagonal), skill-frontlever-advtuck (caderas bajas/rodillas muy flexionadas), skill-frontlever-subidas (parece elevacion de rodillas colgado), skill-planche-lean (sin inclinacion caracteristica suficiente), skill-dominada-explosiva (solo barbilla cerca de barra, no pecho a barra). Sin nueva ronda de generacion por decision de parent.
+- APROBADA ex-cal-sentadilla (IA peso corporal).
+- El resto de fotos IA de ejercicios instaladas quedan como ILUSTRACION, no demostracion tecnica certificada.
+- Ejercicios pendientes con fallback SVG (7): skill-frontlever-tuck, skill-frontlever-advtuck, skill-frontlever-subidas, skill-planche-lean, skill-dominada-explosiva, skill-frontlever-negativa, skill-muscleup-negativo.
