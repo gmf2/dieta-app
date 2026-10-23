@@ -362,5 +362,26 @@
   "url": "https://unsplash.com/photos/a-bowl-of-beef-and-broccoli-with-white-rice-BA2UZ6w8JfY",
   "query": "beef stir fry rice",
   "note": "stock: salteado de ternera con brocoli y arroz"
+ },
+ "ex-cal-flexiones": {
+  "title": "Girl doing push-ups on a rock.jpg",
+  "artist": "PTPioneer (www.ptpioneer.com)",
+  "license": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Girl_doing_push-ups_on_a_rock.jpg",
+  "query": "push-up"
+ },
+ "ex-cal-sentadilla": {
+  "title": "Stay fit anywhere, anytime (6186146).jpg",
+  "artist": "U.S. Air Force photo by Senior Airman Christopher Sparks",
+  "license": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Stay_fit_anywhere,_anytime_(6186146).jpg",
+  "query": "bodyweight squat"
+ },
+ "ex-skill-pino-flexiones": {
+  "title": "Handstand pushup.jpg",
+  "artist": "U.S. Air Force photo by Senior Airman Stephanie Rubi",
+  "license": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Handstand_pushup.jpg",
+  "query": "handstand pushup"
  }
 }
