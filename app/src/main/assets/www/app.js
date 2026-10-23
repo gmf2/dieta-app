@@ -2,6 +2,12 @@
 (function () {
   'use strict';
 
+  var PHOTO_CREDITS = {};
+  fetch('assets/credits.json').then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
+    PHOTO_CREDITS = j;
+    if (location.hash === '#perfil' || !location.hash) { try { renderPerfil(); } catch (e) {} }
+  }).catch(function () {});
+
   var DEFAULT_PROFILE = { peso: 80, altura: 175, edad: 30, sexo: 'hombre', deporte: 3, objetivo: 'mantener' };
   var DEFAULT_PICKS = { desayuno: 'd1', comida: 'c1', cena: 'n1' };
   var GOAL_ADJUST = { perder: -500, mantener: 0, ganar: 300 };
@@ -10,8 +16,7 @@
   var GOAL_LABEL = { perder: 'Perder grasa', mantener: 'Mantener', ganar: 'Ganar músculo' };
   var ACTIVITY_LABEL = ['Sedentario', 'Actividad ligera', 'Actividad ligera', 'Actividad moderada',
     'Actividad moderada', 'Actividad alta', 'Actividad alta', 'Actividad muy alta'];
-  var PHOTO_IDS = { d1:1, d2:1, d3:1, d4:1, c1:1, c2:1, c3:1, c4:1, n1:1, n2:1, n3:1, n4:1,
-    'r-oct-d':1, 'r-oct-c':1, 'r-oct-n':1 };
+  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n12':1, 'n13':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n6':1, 'n7':1, 'n9':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-c':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1 };
   var ICONS = {
     bowl: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>',
     pot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M8 6c1-2 7-2 8 0"/></svg>',
@@ -156,6 +161,20 @@
     var daysSince = last ? Math.floor((today - new Date(last.fecha)) / 86400000) : null;
     var nextIn = daysSince == null ? null : Math.max(0, 14 - daysSince);
 
+    var html = '';
+    try {
+      var cr = PHOTO_CREDITS || {};
+      var byIds = Object.keys(cr).filter(function (k) { return /CC BY/.test(cr[k].license); });
+      if (Object.keys(cr).length) {
+        html += '<div class="card"><h2>Créditos de fotos</h2>' +
+          '<div class="sub">Fotos de platos de Wikimedia Commons con licencia libre (CC0 / dominio público / CC BY / CC BY-SA) y fotos generadas por IA. Las CC BY / CC BY-SA llevan atribución:</div>' +
+          byIds.map(function (k) {
+            var c = cr[k];
+            return '<div class="rev-row" style="font-size:.72rem"><b>' + (c.title || k) + '</b> — ' + (c.artist || 'desconocido') +
+              ' · <a href="' + c.url + '" target="_blank" rel="noopener">' + c.license + '</a></div>';
+          }).join('') + '</div>';
+      }
+    } catch (e) {}
     var html = '';
     html += '<div class="card"><h2>Tus datos</h2><div class="sub">Escríbelos a mano o usa la barra; todo se recalcula solo.</div>' +
       numField('Peso', 'peso', 40, 150, 'kg') +
@@ -426,8 +445,47 @@
         { n: 'Flexiones diamante', s: '3 x 8', g: 'Tríceps', p: 'pushup', img: 'cal-flexiones-diamante' },
         { n: 'Dominadas (o jalón con toalla)', s: '3 x 6', g: 'Espalda', p: 'pullup', img: 'cal-dominadas' },
         { n: 'Bird-dog', s: '3 x 10 por lado', g: 'Core', p: 'plank', img: 'cal-birddog', ss: 1 },
-        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral', ss: 1 } ] } ] }
+        { n: 'Plancha lateral', s: '3 x 30 s por lado', g: 'Core', p: 'plank', img: 'core-plancha-lateral', ss: 1 } ] } ] },
+    barras: {
+      nombre: 'Barras / skills',
+      skills: true,
+      A: [
+        { id: 'b1', nombre: 'Básicos de barra', nota: 'Base para todo lo demás: antes de ir a por skills necesitas unas 8 dominadas y 15 fondos limpios. Si no te salen las dominadas, haz negativas: sube como puedas y baja en 3-4 segundos.', ej: [
+          { n: 'Dominadas', s: '4 x 6 (o negativas 4 x 4)', g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Fondos en paralelas o entre sillas', s: '3 x 8', g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
+          { n: 'Flexiones', s: '3 x 12', g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Sentadilla al aire', s: '3 x 15', g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Plancha', s: '3 x 30 s', g: 'Core', p: 'plank', img: 'core-plancha' } ] },
+        { id: 'b2', nombre: 'Skill: Muscle up', nota: 'Progresión: 1) 8 dominadas limpias, 2) dominada explosiva al pecho, 3) transición con goma, 4) primer muscle up. Domina cada paso unas 2 semanas antes de subir.', ej: [
+          { n: 'Dominada explosiva al pecho', s: '4 x 5', g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
+          { n: 'Fondos en barra alta (o entre sillas)', s: '3 x 6', g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
+          { n: 'Transición con goma', s: '3 x 5', g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', g: 'Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
+          { n: 'Balanceo kipping controlado', s: '3 x 8', g: 'Técnica', p: 'pullup', img: 'skill-kipping' } ] },
+        { id: 'b3', nombre: 'Skill: Front lever', nota: 'Progresión: tuck → advanced tuck → una pierna → straddle → front lever completo. Aguanta 15 s limpios en un nivel antes de subir al siguiente.', ej: [
+          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 10 s', g: 'Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
+          { n: 'Subidas a tuck front lever', s: '3 x 4', g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
+          { n: 'Negativa de dominada a front lever', s: '3 x 3', g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' },
+          { n: 'Advanced tuck front lever (espalda plana)', s: '3 x 8 s', g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
+          { n: 'Remo en tuck front lever', s: '3 x 4', g: 'Fuerza', p: 'row', img: 'skill-frontlever-remo' } ] },
+        { id: 'b4', nombre: 'Skill: Straddle planche', nota: 'Lo de "straddle" lo tomo como straddle planche: plancha en el suelo/barras con las piernas abiertas. Progresión: frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
+          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', g: 'Empuje estático', p: 'plank', img: 'skill-planche-lean' },
+          { n: 'Frog stand (equilibrio de rana)', s: '4 x 15 s', g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
+          { n: 'Tuck planche hold', s: '3 x 10 s', g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Flexiones pseudo-planche', s: '3 x 6', g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
+          { n: 'Flexiones pike', s: '3 x 8', g: 'Hombro', p: 'pushup', img: 'cal-pike' } ] },
+        { id: 'b5', nombre: 'Skill: Pino (handstand)', nota: 'Progresión: pared → salidas controladas → pino libre 10 s → flexiones en pino. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana.', ej: [
+          { n: 'Pino contra pared (de espaldas a la pared)', s: '4 x 20-30 s', g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Caminata de pared hasta pino', s: '3 x 3', g: 'Técnica', p: 'pushup', img: 'skill-pino-caminata' },
+          { n: 'Pino libre (intentos con salida)', s: '5 intentos', g: 'Equilibrio', p: 'plank', img: 'skill-pino-libre' },
+          { n: 'Flexiones en pino contra pared (o pike)', s: '3 x 5', g: 'Hombro', p: 'pushup', img: 'skill-pino-flexiones' },
+          { n: 'Hollow body hold', s: '3 x 15 s', g: 'Core', p: 'plank', img: 'skill-hollow' } ] }
+      ],
+      B: null
+    }
   };
+  RUTINAS.barras.B = RUTINAS.barras.A;
 
   function exSVG(p) {
     var P = {
@@ -447,6 +505,7 @@
   }
   var sesiones = load('dieta.sesiones.v1', {});
   var entrenoActivo = null, tutOpen = false;
+  var sesOpen = load('dieta.sesopen.v1', {});
 
   function mondayIso() {
     var d = new Date();
@@ -470,12 +529,12 @@
     var nextSes = ses.find(function (s) { return weekDone.indexOf(rutKey + '-' + s.id) < 0; });
 
     var html = '<div class="card"><h2>Tu plan de fuerza</h2>' +
-      '<div class="sub">Full body, 3 días por semana (por ejemplo lunes, miércoles y viernes). Dos sesiones de torso y una de pierna, y la rutina cambia sola cada mes.</div>' +
+      '<div class="sub">' + (eq.skills ? 'Calistenia con barra y skills estáticos: básicos, muscle up, front lever, straddle planche y pino. Elige 3 días por semana y ve rotando las sesiones.' : 'Full body, 3 días por semana (por ejemplo lunes, miércoles y viernes). Dos sesiones de torso y una de pierna, y la rutina cambia sola cada mes.') + '</div>' +
       '<div class="seg" style="margin-top:12px">' + Object.keys(RUTINAS).map(function (k) {
         return '<button data-equipo="' + k + '"' + (k === equipo ? ' class="active"' : '') + '>' + RUTINAS[k].nombre + '</button>';
       }).join('') + '</div></div>';
 
-    html += '<div class="card"><div class="hist-head"><h2>' + MONTHS[mIdx].charAt(0).toUpperCase() + MONTHS[mIdx].slice(1) + ': rutina ' + rutKey + '</h2>' +
+    html += '<div class="card"><div class="hist-head"><h2>' + (eq.skills ? 'Plan de skills (todo el año)' : MONTHS[mIdx].charAt(0).toUpperCase() + MONTHS[mIdx].slice(1) + ': rutina ' + rutKey) + '</h2>' +
       '<span class="pill">' + eq.nombre + '</span></div>' +
       '<div class="fact"><span>Esta semana</span><b>' + weekDone.length + ' de 3 sesiones</b></div>' +
       '<div class="fact"><span>Este mes</span><b>' + monthCount + ' / 12</b></div>' +
@@ -488,12 +547,17 @@
       var active = entrenoActivo === key;
       var checked = active ? (window.__exChecks || {}) : {};
       var nChecked = Object.keys(checked).filter(function (k) { return checked[k]; }).length;
-      html += '<div class="card"><div class="hist-head"><h2 class="ex-day">Día ' + (i + 1) + '/3 · ' + s.nombre + '</h2>' +
-        (doneThisWeek ? '<span class="pill done-pill">✓ hecha esta semana</span>' : (isNext ? '<span class="pill orange">Próximo entreno</span>' : '')) + '</div>' +
+      var open = !!sesOpen[key] || active;
+      html += '<div class="card"><div class="hist-head ses-head" data-ses-toggle="' + key + '"><h2 class="ex-day">Día ' + (i + 1) + '/' + ses.length + ' · ' + s.nombre + '</h2>' +
+        (doneThisWeek ? '<span class="pill done-pill">✓ hecha esta semana</span>' : (isNext ? '<span class="pill orange">Próximo entreno</span>' : '')) +
+        '<span class="ses-chevron' + (open ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>' +
         '<div class="sub">' + s.ej.length + ' ejercicios</div>' +
+        (open ? '<div class="ses-body">' : '<div class="ses-body" hidden>') +
+        (eq.skills ? '' :
         '<div class="tut-chips"><span class="chip">TUT 2-1</span><span class="chip">RIR 2</span>' +
         '<button class="chip link" data-tut>¿Qué es?</button></div>' +
-        (tutOpen ? '<div class="note green" style="margin-top:8px"><b>TUT 2-1:</b> baja el peso en 2 segundos y sube en 1, sin pausas. <b>RIR 2:</b> termina cada serie pudiendo haber hecho unas 2 repeticiones más. Así progresas sin lesionarte.</div>' : '') +
+        (tutOpen ? '<div class="note green" style="margin-top:8px"><b>TUT 2-1:</b> baja el peso en 2 segundos y sube en 1, sin pausas. <b>RIR 2:</b> termina cada serie pudiendo haber hecho unas 2 repeticiones más. Así progresas sin lesionarte.</div>' : '')) +
+        (s.nota ? '<div class="note green" style="margin-top:8px">' + s.nota + '</div>' : '') +
         s.ej.map(function (x, j) {
           var row = '<div class="ex-row' + (active && checked[j] ? ' ex-done' : '') + '"' + (active ? ' data-ex-check="' + j + '"' : '') + '>' +
             (active ? '<div class="ex-check">' + (checked[j] ? '✓' : '') + '</div>' : '<div class="ex-num">' + (j + 1) + '</div>') +
@@ -509,7 +573,7 @@
       } else if (!doneThisWeek) {
         html += '<button class="btn primary" data-start-session="' + key + '">Empezar entreno</button>';
       }
-      html += '</div>';
+      html += '</div></div>';
     });
 
     var history = doneKeys.sort().reverse().slice(0, 10);
@@ -699,6 +763,14 @@
       return;
     }
     if (t.closest && t.closest('[data-tut]')) { tutOpen = !tutOpen; renderEntreno(); return; }
+    var sesT = t.closest && t.closest('[data-ses-toggle]');
+    if (sesT) {
+      var sk = sesT.getAttribute('data-ses-toggle');
+      sesOpen[sk] = !sesOpen[sk];
+      save('dieta.sesopen.v1', sesOpen);
+      renderEntreno();
+      return;
+    }
     var startS = t.closest && t.closest('[data-start-session]');
     if (startS) { entrenoActivo = startS.getAttribute('data-start-session'); window.__exChecks = {}; renderEntreno(); return; }
     var cancelS = t.closest && t.closest('[data-cancel-session]');
