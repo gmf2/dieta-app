@@ -32,6 +32,13 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - d7: ahora "Tortitas de avena y plátano" (antes tostada de pavo). Ya estaba pendiente de generación; prompt corregido (meal-d7).
 - 6 platos rápidos usan ahora "Patata cocida" (n9, n13, n14, n15, n16, c10): las fotos pendientes deben mostrar patata cocida, no cruda ni frita.
 
+
+## Busqueda stock diurna (2026-10-23 ~12:31 CEST, pedido de Gabriel: "busca en internet y las copias")
+- r-oct-c CUBIERTA con stock: Arroz-con-Pollo.jpg (Kobako, CC BY-SA 2.5, Wikimedia). Arroz+pollo visibles; calabaza no visible (secundaria). Instalada y en credits.json. Si la IA genera esta noche una con calabaza visible, puede reemplazarla.
+- n6: stock rechazado x2 (arroz thai con huevo / plato sizzling con fuente vacia) - sigue pendiente de IA.
+- Pipeline corregido: thumb.wikimedia.org bloquea esta IP (403/429); descargar ORIGINALES de upload.wikimedia.org y redimensionar local (PIL, 640px, q82). Openverse API funciona pero con cortes; reintentar.
+- Continua la busqueda del resto (d6, d7, n8-n16, c4, c10, r-*) en wakes de continuacion; la generacion IA de 00:20 queda como respaldo para lo que el stock no cubra.
+
 ## Reglas
 - QC estricto: la foto debe mostrar el plato/ejercicio nombrado; una foto aproximada no cuenta como cobertura si faltan ingredientes característicos (Gabriel, vía Main).
 - Gabriel no quiere recetas sin foto: priorizar generación de las visibles en la rotación del mes en curso.
