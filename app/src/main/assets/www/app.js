@@ -113,7 +113,11 @@
     return '<div class="ing">' + rows +
       '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
       ' kcal y ~' + plan.protein + ' g de proteína (objetivo de la comida: ' + Math.round(targetKcal / 10) * 10 +
-      ' kcal · ~' + protSlot + ' g; las piezas van enteras). Valores de composición del USDA.</div></div>';
+      ' kcal · ~' + protSlot + ' g; las piezas van enteras).' +
+      (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
+        ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
+        : '') +
+      ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
   }
 
   function optionProtein(option, targetKcal, dayTarget) {
@@ -289,7 +293,11 @@
         return '<div class="ing">' + rows +
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína (objetivo de la comida: ' + Math.round(dp.kcal / 10) * 10 +
-          ' kcal · ~' + dp.prot + ' g; las piezas van enteras). Valores de composición del USDA.</div></div>';
+          ' kcal · ~' + dp.prot + ' g; las piezas van enteras).' +
+          (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
+            ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
+            : '') +
+          ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
       })() : ingredientHTML(selected, target, r.target));
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
         (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + dayLog[slot] + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
@@ -304,13 +312,23 @@
       return acc + (dayPlans2[s] ? dayPlans2[s].plan.kcal : 0);
     }, 0);
     var protGoal = proteinGoal(profile);
+    var offNotes = ['desayuno', 'comida', 'cena'].map(function (s) {
+      var d = dayPlans2[s];
+      if (!d || !d.plan) return null;
+      if (Math.abs(d.plan.dk) <= 60 && Math.abs(d.plan.dp) <= 10) return null;
+      var o = findOption(picks[s]);
+      return (o ? o.name : s) + ' queda a ' + (d.plan.dk > 0 ? '+' : '') + d.plan.dk + ' kcal (' + (d.plan.dp > 0 ? '+' : '') + d.plan.dp + ' g prot) de lo ideal';
+    }).filter(Boolean);
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
       '<div class="fact"><span>Desayuno / Comida / Cena</span><b>' + slotTarget(r, 'desayuno') + ' / ' + slotTarget(r, 'comida') + ' / ' + slotTarget(r, 'cena') + ' kcal</b></div>' +
       (dayProt >= protGoal * 0.9
         ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
         : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
-      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual, de modo que el día queda cerca del objetivo con cualquier combinación. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo.</div></div>';
+      (offNotes.length
+        ? '<div class="note">Ajuste aproximado: ' + offNotes.join('; ') + '. No existen cantidades razonables que lo acerquen más a tu objetivo, y el resto del día no se retoca para compensar.</div>'
+        : '') +
+      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual, de modo que el día queda cerca del objetivo con cualquier combinación. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
 
     document.getElementById('tab-hoy').innerHTML = html;
   }
