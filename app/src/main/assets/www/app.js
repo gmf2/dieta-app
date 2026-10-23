@@ -16,7 +16,7 @@
   var GOAL_LABEL = { perder: 'Perder grasa', mantener: 'Mantener', ganar: 'Ganar músculo' };
   var ACTIVITY_LABEL = ['Sedentario', 'Actividad ligera', 'Actividad ligera', 'Actividad moderada',
     'Actividad moderada', 'Actividad alta', 'Actividad alta', 'Actividad muy alta'];
-  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n7':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1 };
+  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n7':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1, 'd6':1, 'd7':1, 'n13':1, 'n6':1, 'n9':1, 'r-jun-d':1, 'r-jun-n':1, 'r-mar-n':1, 'r-sep-d':1 };
   var ICONS = {
     bowl: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>',
     pot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M8 6c1-2 7-2 8 0"/></svg>',
@@ -346,8 +346,8 @@
     var tk = 0, tp = 0;
     option.components.forEach(function (c) { tk += ING[c.name].k * c.grams / 100; tp += ING[c.name].p * c.grams / 100; });
     return '<div class="ing">' + rows +
-      '<div class="cap">Este mes no tiene objetivo guardado: cantidades base de la dieta (~' + Math.round(tk) +
-      ' kcal · ~' + Math.round(tp) + ' g de proteína), sin ajuste. Lo ya pasado no se recalcula.</div></div>';
+      '<div class="cap">Cantidades base de la dieta (~' + Math.round(tk) +
+      ' kcal · ~' + Math.round(tp) + ' g de proteína), sin ajuste a objetivo.</div></div>';
   }
   function renderRecetas() {
     var r = compute(profile);
@@ -356,16 +356,39 @@
     var key = viewY + '-' + String(viewM + 1).padStart(2, '0');
     var isCurrent = key === curKey, isPast = key < curKey;
     var savedGoal = objetivos[key];
-    var g = isPast ? (savedGoal || 0) : r.target;
+    var g = isPast ? 0 : r.target;
     var recipes = RECIPES.filter(function (x) { return x.month === viewM; });
     var mLabel = MONTHS[viewM].charAt(0).toUpperCase() + MONTHS[viewM].slice(1);
     var html = '<div class="card"><h2>Recetas y comidas del mes</h2>' +
-      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta, junto a las comidas clásicas de ese mes. Los meses pasados se muestran con el objetivo guardado entonces; si no había, con las cantidades base, sin inventar ajustes.</div></div>';
+      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta, junto a las comidas clásicas de ese mes. El mes actual y los futuros usan tu objetivo de ahora; los pasados muestran solo lo registrado entonces.</div></div>';
     html += '<div class="month-nav"><button id="mPrev">← Anterior</button><h2>' + mLabel + ' ' + viewY + '</h2><button id="mNext">Siguiente →</button></div>';
-    if (isCurrent) html += '<div class="card"><div class="fact"><span>Este mes</span><b>Objetivo actual: ' + r.target + ' kcal/día · ' + proteinGoal(profile) + ' g proteína</b></div></div>';
-    else if (isPast && savedGoal) html += '<div class="card"><div class="fact"><span>Mes pasado</span><b>Objetivo guardado entonces: ' + savedGoal + ' kcal/día</b></div></div>';
-    else if (isPast) html += '<div class="card"><div class="fact"><span>Mes pasado</span><b>Sin objetivo guardado</b></div><div class="muted">Se muestran las cantidades base de la dieta, sin ajuste a posteriori: lo ya pasado no se recalcula.</div></div>';
-    else html += '<div class="card"><div class="fact"><span>Mes futuro</span><b>Se ajustará a tu objetivo cuando llegue (ahora: ' + r.target + ' kcal/día)</b></div></div>';
+
+    if (isCurrent) {
+      html += '<div class="card"><div class="fact"><span>Este mes</span><b>Objetivo actual: ' + r.target + ' kcal/día · ' + proteinGoal(profile) + ' g proteína</b></div></div>';
+    } else if (!isPast) {
+      html += '<div class="card"><div class="fact"><span>Mes futuro</span><b>Cantidades con tu objetivo actual: ' + r.target + ' kcal/día</b></div>' +
+        '<div class="muted">Varían si tu perfil cambia: se recalculan solas.</div></div>';
+    } else {
+      /* Mes pasado: solo hechos registrados entonces. Nada de recalcular la dieta de hoy con un objetivo viejo. */
+      html += '<div class="card"><h2>Lo registrado en ' + mLabel + '</h2>';
+      html += savedGoal
+        ? '<div class="fact"><span>Objetivo que tenías guardado</span><b>' + savedGoal + ' kcal/día</b></div>'
+        : '<div class="fact"><span>Objetivo</span><b>Sin objetivo guardado</b></div>';
+      var days = Object.keys(registro).filter(function (k) { return k.slice(0, 7) === key; });
+      var consumed = 0, counted = 0;
+      days.forEach(function (k) {
+        var slots = registro[k], sum = 0, n = 0;
+        ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) { sum += slots[sl]; n++; } });
+        if (n) { consumed += sum; counted++; }
+      });
+      if (counted) {
+        html += '<div class="fact"><span>Comidas marcadas</span><b>' + counted + (counted === 1 ? ' día' : ' días') + ' · media de ' + Math.round(consumed / counted) + ' kcal/día</b></div>';
+      } else {
+        html += '<div class="muted">Sin comidas marcadas en este mes.</div>';
+      }
+      if (!savedGoal && !counted) html += '<div class="muted">No hay registro de este mes: solo se muestra el catálogo base debajo.</div>';
+      html += '</div>';
+    }
 
     recipes.forEach(function (rec) {
       var inUse = picks[rec.slot] === rec.id;
@@ -382,7 +405,8 @@
         '</div></div>';
     });
 
-    html += '<div class="card"><h2>Comidas clásicas de ' + mLabel + '</h2>';
+    html += '<div class="card"><h2>' + (isPast ? 'Catálogo de ' + mLabel + ' (referencia)' : 'Comidas clásicas de ' + mLabel) + '</h2>' +
+      (isPast ? '<div class="sub">Cantidades base de la dieta, sin ajuste: es el catálogo de ese mes, no un registro de lo que comiste.</div>' : '');
     ['desayuno', 'comida', 'cena'].forEach(function (slot) {
       var slotK = g ? Math.round(g * SLOT_SHARE[slot] / 10) * 10 : 0;
       html += '<div class="hist-slot-h">' + SLOT_LABEL[slot] + (slotK ? ' · ' + slotK + ' kcal' : '') + '</div>';
@@ -396,15 +420,6 @@
           (g ? ingredientHTML(o, slotK, g) : baseHTML(o)) + '</div>';
       });
     });
-    var days = Object.keys(registro).filter(function (k) { return k.slice(0, 7) === key; });
-    var consumed = 0, counted = 0;
-    days.forEach(function (k) {
-      var slots = registro[k], sum = 0, n = 0;
-      ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) { sum += slots[sl]; n++; } });
-      if (n) { consumed += sum; counted++; }
-    });
-    if (counted) html += '<div class="muted mt8">Marcadas ' + counted + (counted === 1 ? ' día' : ' días') +
-      ' · media de ' + Math.round(consumed / counted) + ' kcal/día registradas' + (savedGoal ? ' frente a ' + savedGoal + ' de objetivo' : '') + '.</div>';
     html += '</div>';
     document.getElementById('tab-recetas').innerHTML = html;
   }
