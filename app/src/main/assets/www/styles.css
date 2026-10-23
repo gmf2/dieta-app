@@ -220,3 +220,19 @@ nav.tabs button { font-size: .66rem; padding: 8px 0 10px; }
 .ses-head { cursor: pointer; user-select: none; }
 .ses-chevron { color: var(--green); display: inline-flex; transition: transform .2s; margin-left: 6px; }
 .ses-chevron.open { transform: rotate(180deg); }
+
+/* Calistenia: bloques con variantes básico/media/avanzada */
+.blk-label { font-size: .7rem; font-weight: 800; color: var(--green-d); text-transform: uppercase; letter-spacing: .05em; margin: 14px 0 2px; padding-top: 10px; border-top: 2px solid var(--line); }
+.ex-row.lvl1 { border-left: 3px solid #22c55e; padding-left: 7px; }
+.ex-row.lvl2 { border-left: 3px solid #f59e0b; padding-left: 7px; }
+.ex-row.lvl3 { border-left: 3px solid #ef4444; padding-left: 7px; }
+.lvl-pill { display: inline-block; font-size: .62rem; font-weight: 800; letter-spacing: .04em; padding: 2px 7px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+.lvl-pill.lvl1 { background: #dcfce7; color: #15803d; }
+.lvl-pill.lvl2 { background: #fef3c7; color: #b45309; }
+.lvl-pill.lvl3 { background: #fee2e2; color: #b91c1c; }
+
+/* Lightbox de fotos (recetas, platos y ejercicios) */
+.lb-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.lb-overlay img { max-width: 94vw; max-height: 86vh; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
+.lb-close { position: absolute; top: 14px; right: 18px; color: #fff; font-size: 2rem; font-weight: 300; line-height: 1; }
+.meal-card img, .recipe-card > img, .ex-thumb { cursor: zoom-in; }

@@ -44,3 +44,27 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - Gabriel no quiere recetas sin foto: priorizar generación de las visibles en la rotación del mes en curso.
 - NO publicar (merge a main / release) sin revisión final y OK explícito de Gabriel.
 - Cuota: no asumir que todo cabe en un día; dejar margen para regeneraciones y lo que no quepa pasa a la noche siguiente.
+
+
+## 2026-10-23 13:00 - Estado tras oleada stock 2
+- INSTALADAS stock (en wip-v0.1.5, pusheado cecb8ba): d6, d7, n6 (Unsplash), n9, n13, r-jun-d, r-jun-n, r-mar-n, r-sep-d. 9 platos.
+- c4 REVERTIDO a IA antigua: potaje sin pollo != receta (lleva pollo). c4 PENDIENTE. La IA antigua tampoco muestra pollo -> prioridad alta regeneracion IA 00:20 (garbanzos+espinacas+pollo+patata).
+- PENDIENTES (13 platos): c4, n8, n10, n11, n12, n15, c10, r-ago-c, r-ago-d, r-ene-n, r-feb-d, r-jul-c, r-mar-d, r-nov-d + 28 ex-* + skill-frontlever-tuck.
+- Near-misses: n8 (sin nueces), n15 (sin atun), c10 (deconstruido).
+- Textos de procedencia actualizados (index.html footer + app.js creditos) con Unsplash.
+- Commons thumbs: usar thumburl EXACTO de la API (960px); reescribir a 640px da 400 (Wikimedia restringe tamanos). upload.wikimedia.org 429 desde sandbox; thumb.wikimedia.org OK con thumburl exacto.
+
+
+## 2026-10-23 13:03 - Cierre fase stock (acotada por parent)
+- n10 INSTALADA (sin commit): "Plato de jamón y queso" Juan Fernández CC BY-SA 2.0 — jamon+queso+almendras visibles (variedad: queso curado/almendras vs queso fresco/nueces; parent puede vetar). En repo assets + credits (53 entradas) + webapp. PENDIENTE DE COMMIT (parent: agrupar pushes).
+- STOCK CUBIERTO total fase: r-oct-c + d6, d7, n6, n9, n10, n13, r-jun-d, r-jun-n, r-mar-n, r-sep-d = 11 platos.
+- PENDIENTES platos (13, cola IA 00:20): c4 (prioridad, IA antigua sin pollo), n8, n11, n12, n15, c10, r-ago-c, r-ago-d, r-ene-n, r-feb-d, r-jul-c, r-mar-d, r-nov-d.
+- ex-* (28) + skill-frontlever-tuck: pase acotado NO hecho aun (busqueda Commons/Unsplash acotada pendiente).
+- NUEVA TAREA (prioridad Gabriel 13:02): rehacer Calistenia = sesiones COMPLETAS por skill (front lever lo nombra expresamente), 5-7 bloques con variantes + series/reps/tiempos, ref: 4 pizarras en /downloads/image-*.jpg (2 muscle-up, pierna-movilidad, handstand-straddle planche). Investigar en internet. Ambiguos sin resolver: MT, AF (al fallo), "100 a 200 x1", "10z". Preservar progresiones sin nivel pro. Sin release nueva automatica.
+
+
+## 2026-10-23 13:04 - VETO parent n10
+- n10 REVERTIDA a foto anterior de main (parent: queso curado+almendras != queso fresco+nueces; no acomodar receta a foto). n10 vuelve a PENDIENTES.
+- PENDIENTES platos ahora 14: c4, n8, n10, n11, n12, n15, c10, r-ago-c, r-ago-d, r-ene-n, r-feb-d, r-jul-c, r-mar-d, r-nov-d.
+- Stock cubierto definitivo fase: 10 platos (r-oct-c, d6, d7, n6, n9, n13, r-jun-d, r-jun-n, r-mar-n, r-sep-d).
+- Calistenia: disenar rutina PROPIA contrastada (no transcripcion exacta de pizarras); abreviaturas ambiguas no hace falta preguntar si diseno propio. Pizarras = referencia de estructura/volumen.

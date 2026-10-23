@@ -6,8 +6,8 @@ const ING = {
   'Aceite de oliva': { p: 0, k: 884, ug: 10, u: 'cucharada' },
   'Aguacate': { p: 2, k: 160, ug: 75, u: 'medio aguacate' },
   'Alubias cocidas': { p: 9, k: 127, ug: 150, u: 'cazo' },
-  'Arroz (en crudo)': { p: 7.1, k: 360, ug: 150, u: 'vaso' },
-  'Arroz integral (en crudo)': { p: 7.9, k: 360, ug: 150, u: 'vaso' },
+  'Arroz (en crudo)': { p: 7.1, k: 360, ug: 75, u: 'cazo' },
+  'Arroz integral (en crudo)': { p: 7.9, k: 360, ug: 75, u: 'cazo' },
   'Atún': { p: 26, k: 116, ug: 80, u: 'lata' },
   'Boniato': { p: 1.6, k: 86, ug: 150, u: 'boniato mediano' },
   'Brócoli': { p: 2.8, k: 34, ug: 150, u: 'plato' },
@@ -32,7 +32,7 @@ const ING = {
   'Fiambre de pavo': { p: 18, k: 105, ug: 20, u: 'loncha' },
   'Jamón cocido': { p: 16, k: 110, ug: 20, u: 'loncha' },
   'Leche o bebida vegetal': { p: 3, k: 46, ug: 200, u: 'vaso' },
-  'Lentejas (en crudo)': { p: 24.6, k: 352, ug: 160, u: 'vaso' },
+  'Lentejas (en crudo)': { p: 24.6, k: 352, ug: 80, u: 'cazo' },
   'Lentejas cocidas': { p: 9, k: 116, ug: 150, u: 'cazo' },
   'Lubina': { p: 18.4, k: 97, ug: 150, u: 'filete' },
   'Mango': { p: 0.8, k: 60, ug: 200, u: 'mango' },
@@ -502,6 +502,52 @@ function computePlan(option0, sk, sp) {
     if (gain2 < gain && s2.v <= 1200) { s = s2; }
     else { comps.forEach((c, i) => { c.lo = saved[i].lo; c.hi = saved[i].hi; }); best = bestBefore; }
   }
+  // Piezas enteras: ingredientes con unidad casera (huevo, patata, yogur...)
+  // se ajustan a unidades completas (minimo 1) para que la etiqueta y los
+  // gramos cuadren. Despues se prueba subir/bajar una unidad por ingrediente
+  // y se reequilibra el granel, para seguir cerca del objetivo de kcal/prot.
+  comps.forEach(c => {
+    const ing = ING[c.name];
+    if (ing && ing.ug) {
+      let n = Math.round(c.g / ing.ug);
+      if (n < 1) n = 1;
+      c.g = n * ing.ug;
+    }
+  });
+  const errU = () => { const t = stats(); return Math.abs(t.k - sk) + 3 * Math.abs(t.p - sp); };
+  for (let sweep = 0; sweep < 4; sweep++) {
+    let improved = false;
+    for (const c of comps) {
+      const ing = ING[c.name];
+      if (!ing || !ing.ug) continue;
+      const n0 = Math.round(c.g / ing.ug);
+      let bestN = n0, bestE = errU();
+      [n0 - 1, n0 + 1].forEach(n => {
+        if (n < 1 || n > 8) return;
+        c.g = n * ing.ug;
+        const e = errU();
+        if (e < bestE - 1e-9) { bestE = e; bestN = n; }
+      });
+      c.g = bestN * ing.ug;
+      if (bestN !== n0) improved = true;
+    }
+    if (!improved) break;
+  }
+  for (let sweep = 0; sweep < 6; sweep++) {
+    let improved = false;
+    for (const c of comps) {
+      if (ING[c.name].ug || c.hi <= c.lo) continue;
+      const orig = c.g; let bestG = orig;
+      for (let g = c.lo; g <= c.hi; g += c.step) {
+        c.g = g; const cst = cost();
+        if (cst < best - 1e-9) { best = cst; bestG = g; }
+      }
+      c.g = bestG;
+      if (bestG !== orig) improved = true;
+    }
+    if (!improved) break;
+  }
+  s = stats();
   return { items: comps.map(c => ({ name: c.name, grams: c.g })), kcal: Math.round(s.k), protein: Math.round(s.p), vol: s.v,
            dk: Math.round(s.k - sk), dp: Math.round(s.p - sp) };
 }

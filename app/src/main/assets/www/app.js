@@ -36,8 +36,8 @@
   function household(name, grams) {
     var ing = ING[name];
     if (!ing || !ing.ug) return '';
-    var n = Math.round((grams / ing.ug) * 2) / 2;
-    if (n < 0.5) n = 0.5;
+    var n = Math.round(grams / ing.ug);
+    if (n < 1) n = 1;
     var num = (n % 1 === 0) ? String(n) : String(n).replace('.', ',');
     return num + ' ' + plural(ing.u, n);
   }
@@ -112,8 +112,7 @@
     }).join('');
     return '<div class="ing">' + rows +
       '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
-      ' kcal y ~' + plan.protein + ' g de proteína (objetivo de la comida: ' + Math.round(targetKcal / 10) * 10 +
-      ' kcal · ~' + protSlot + ' g; las piezas van enteras).' +
+      ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
       (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
         ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
         : '') +
@@ -134,7 +133,7 @@
     var colors = { desayuno: '#ffd166', comida: '#ff9f5a', cena: '#a7f3d0' };
     document.getElementById('heroSplit').innerHTML = ['desayuno', 'comida', 'cena'].map(function (s) {
       return '<div class="split-row"><span><span class="dot" style="background:' + colors[s] + '"></span>' +
-        SLOT_LABEL[s] + '</span><b>' + slotTarget(r, s) + '</b></div>';
+        SLOT_LABEL[s] + '</span><b>' + slotTarget(r, s) + ' kcal · ' + Math.round(proteinGoal(profile) * PSHARE[profile.objetivo][s]) + ' g prot</b></div>';
     }).join('');
   }
 
@@ -190,10 +189,10 @@
       '<div class="fact"><span>Objetivo diario (' + GOAL_LABEL[profile.objetivo].toLowerCase() + ')</span><b>' + r.target + ' kcal</b></div>';
     var pkg = PROTEIN_GKG[profile.objetivo], pg = proteinGoal(profile);
     html += '<div class="fact"><span>Proteína diaria (' + GOAL_LABEL[profile.objetivo].toLowerCase() + ', ' + String(pkg).replace('.', ',') + ' g/kg)</span><b>' + pg + ' g</b></div>';
-    html += '<div class="note green"><b>Proteína según objetivo</b> (a tu peso actual de ' + profile.peso + ' kg): ' +
-      'perder grasa = 2 g/kg, <b>' + Math.round(2 * profile.peso) + ' g</b> al día (protege el músculo al bajar); ' +
-      'mantener = 1,6 g/kg, <b>' + Math.round(1.6 * profile.peso) + ' g</b>; ' +
-      'ganar músculo = 1,8 g/kg, <b>' + Math.round(1.8 * profile.peso) + ' g</b>. Rangos habituales de nutrición deportiva, orientativos.</div>';
+    html += '<div class="note green"><b>Proteína para tu objetivo</b> (' + GOAL_LABEL[profile.objetivo].toLowerCase() + ', a tu peso actual de ' + profile.peso + ' kg): ' +
+      String(pkg).replace('.', ',') + ' g/kg → <b>' + pg + ' g al día</b>' +
+      (profile.objetivo === 'perder' ? ', para proteger el músculo mientras bajas' : '') +
+      '. Rangos habituales de nutrición deportiva, orientativos.</div>';
 
     if (profile.objetivo !== 'mantener') {
       var diff = GOAL_ADJUST[profile.objetivo];
@@ -207,7 +206,7 @@
       html += '<div class="note green">Objetivo de mantenimiento: comes lo que gastas, sin déficit ni superávit.</div>';
     }
     if (r.floored) html += '<div class="note">Con ese objetivo saldrían menos de ' + r.floor + ' kcal, así que lo he dejado en ' + r.floor + '. Bajar más no es recomendable sin supervisión.</div>';
-    html += '<div class="note green">Ajuste por objetivo: -500 kcal para perder, +300 para ganar. Es orientación general, no consejo médico.</div></div>';
+    html += '</div>';
 
     html += '<div class="card"><h2>Revisión quincenal</h2><div class="sub">Cada revisión guarda TODO: peso, altura, edad, deporte, objetivo y tus calorías calculadas. El historial está en Progreso.</div>' +
       '<button class="btn primary" id="btnCheckin">' +
@@ -264,7 +263,7 @@
 
       var hOpen = !!hoyOpen[slot];
       html += '<div class="slot-head" data-hoy-toggle="' + slot + '">' + ICONS[SLOT_ICON[slot]] + '<h3>' + SLOT_LABEL[slot] + '</h3>' +
-        '<span class="kcal">' + target + ' kcal</span>' +
+        '<span class="kcal">' + target + ' kcal · ' + Math.round(pgoal * psh[slot]) + ' g prot</span>' +
         '<span class="ses-chevron' + (hOpen ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>';
       html += hOpen ? '<div>' : '<div hidden>';
       html += '<div class="meal-grid">' + options.map(function (o) {
@@ -292,8 +291,7 @@
         }).join('');
         return '<div class="ing">' + rows +
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
-          ' kcal y ~' + plan.protein + ' g de proteína (objetivo de la comida: ' + Math.round(dp.kcal / 10) * 10 +
-          ' kcal · ~' + dp.prot + ' g; las piezas van enteras).' +
+          ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
           (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
             ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
             : '') +
@@ -321,7 +319,8 @@
     }).filter(Boolean);
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
-      '<div class="fact"><span>Desayuno / Comida / Cena</span><b>' + slotTarget(r, 'desayuno') + ' / ' + slotTarget(r, 'comida') + ' / ' + slotTarget(r, 'cena') + ' kcal</b></div>' +
+      '<div class="fact"><span>Desayuno / Comida / Cena</span><b>' + slotTarget(r, 'desayuno') + ' / ' + slotTarget(r, 'comida') + ' / ' + slotTarget(r, 'cena') + ' kcal · ' +
+      Math.round(pgoal * psh.desayuno) + ' / ' + Math.round(pgoal * psh.comida) + ' / ' + Math.round(pgoal * psh.cena) + ' g prot</b></div>' +
       (dayProt >= protGoal * 0.9
         ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
         : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
@@ -333,30 +332,80 @@
     document.getElementById('tab-hoy').innerHTML = html;
   }
 
-  /* ---------- Recetas ---------- */
+  /* ---------- Recetas e historial (vista unificada por mes) ---------- */
+  var viewY = new Date().getFullYear(), viewM = new Date().getMonth();
+  function normName(s2) { return String(s2).toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function baseHTML(option) {
+    var rows = option.components.map(function (c) {
+      var kcal = Math.round(ING[c.name].k * c.grams / 100);
+      var prot = Math.round(ING[c.name].p * c.grams / 100);
+      return '<div class="ing-row"><div><div class="ing-name">' + esc(c.name) + '</div>' +
+        '<div class="ing-sub">' + household(c.name, c.grams) + '</div></div>' +
+        '<div class="ing-right"><b>' + c.grams + ' g</b><span>' + kcal + ' kcal · ' + prot + ' g prot</span></div></div>';
+    }).join('');
+    var tk = 0, tp = 0;
+    option.components.forEach(function (c) { tk += ING[c.name].k * c.grams / 100; tp += ING[c.name].p * c.grams / 100; });
+    return '<div class="ing">' + rows +
+      '<div class="cap">Este mes no tiene objetivo guardado: cantidades base de la dieta (~' + Math.round(tk) +
+      ' kcal · ~' + Math.round(tp) + ' g de proteína), sin ajuste. Lo ya pasado no se recalcula.</div></div>';
+  }
   function renderRecetas() {
     var r = compute(profile);
-    var recipes = RECIPES.filter(function (x) { return x.month === month; });
-    var html = '<div class="card"><h2>Recetas de temporada</h2>' +
-      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta. Saciantes y ligeras: mucho volumen, fibra y proteína.</div></div>';
-    html += '<div class="month-nav"><button id="mPrev">← Anterior</button><h2>' + MONTHS[month] + '</h2><button id="mNext">Siguiente →</button></div>';
+    var nowD = new Date();
+    var curKey = nowD.getFullYear() + '-' + String(nowD.getMonth() + 1).padStart(2, '0');
+    var key = viewY + '-' + String(viewM + 1).padStart(2, '0');
+    var isCurrent = key === curKey, isPast = key < curKey;
+    var savedGoal = objetivos[key];
+    var g = isPast ? (savedGoal || 0) : r.target;
+    var recipes = RECIPES.filter(function (x) { return x.month === viewM; });
+    var mLabel = MONTHS[viewM].charAt(0).toUpperCase() + MONTHS[viewM].slice(1);
+    var html = '<div class="card"><h2>Recetas y comidas del mes</h2>' +
+      '<div class="sub">Tres recetas nuevas cada mes para sustituir cualquier plato de tu dieta, junto a las comidas clásicas de ese mes. Los meses pasados se muestran con el objetivo guardado entonces; si no había, con las cantidades base, sin inventar ajustes.</div></div>';
+    html += '<div class="month-nav"><button id="mPrev">← Anterior</button><h2>' + mLabel + ' ' + viewY + '</h2><button id="mNext">Siguiente →</button></div>';
+    if (isCurrent) html += '<div class="card"><div class="fact"><span>Este mes</span><b>Objetivo actual: ' + r.target + ' kcal/día · ' + proteinGoal(profile) + ' g proteína</b></div></div>';
+    else if (isPast && savedGoal) html += '<div class="card"><div class="fact"><span>Mes pasado</span><b>Objetivo guardado entonces: ' + savedGoal + ' kcal/día</b></div></div>';
+    else if (isPast) html += '<div class="card"><div class="fact"><span>Mes pasado</span><b>Sin objetivo guardado</b></div><div class="muted">Se muestran las cantidades base de la dieta, sin ajuste a posteriori: lo ya pasado no se recalcula.</div></div>';
+    else html += '<div class="card"><div class="fact"><span>Mes futuro</span><b>Se ajustará a tu objetivo cuando llegue (ahora: ' + r.target + ' kcal/día)</b></div></div>';
 
     recipes.forEach(function (rec) {
-      var target = slotTarget(r, rec.slot);
       var inUse = picks[rec.slot] === rec.id;
       var ph = photoFor(rec);
       html += '<div class="recipe-card">' +
         (ph ? '<img src="' + ph + '" alt="' + esc(rec.name) + '" loading="lazy">'
             : '<div class="emoji-cover">' + ICONS[SLOT_ICON[rec.slot]] + '</div>') +
-        '<div class="r-body"><span class="pill orange">Sustituye a: ' + SLOT_LABEL[rec.slot].toLowerCase() + '</span>' +
+        '<div class="r-body"><span class="pill orange">Receta de ' + MONTHS[viewM] + ' · sustituye a: ' + SLOT_LABEL[rec.slot].toLowerCase() + '</span>' +
         '<h3 class="mt8">' + esc(rec.name) + '</h3>' +
-        ingredientHTML(rec, target, r.target) +
+        (g ? ingredientHTML(rec, Math.round(g * SLOT_SHARE[rec.slot] / 10) * 10, g) : baseHTML(rec)) +
         '<ol class="steps">' + rec.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' +
-        (inUse ? '<div class="inuse">✓ Ya está en tu dieta de hoy</div>'
-               : '<button class="btn primary small" data-use="' + rec.id + '" data-slot="' + rec.slot + '">Usarla hoy como ' + SLOT_LABEL[rec.slot].toLowerCase() + '</button>') +
+        (isCurrent ? (inUse ? '<div class="inuse">✓ Ya está en tu dieta de hoy</div>'
+               : '<button class="btn primary small" data-use="' + rec.id + '" data-slot="' + rec.slot + '">Usarla hoy como ' + SLOT_LABEL[rec.slot].toLowerCase() + '</button>') : '') +
         '</div></div>';
     });
 
+    html += '<div class="card"><h2>Comidas clásicas de ' + mLabel + '</h2>';
+    ['desayuno', 'comida', 'cena'].forEach(function (slot) {
+      var slotK = g ? Math.round(g * SLOT_SHARE[slot] / 10) * 10 : 0;
+      html += '<div class="hist-slot-h">' + SLOT_LABEL[slot] + (slotK ? ' · ' + slotK + ' kcal' : '') + '</div>';
+      var opts = classicsFor(viewM, slot).filter(function (o) {
+        return !recipes.some(function (rr) { return rr.slot === slot && normName(rr.name) === normName(o.name); });
+      });
+      opts.forEach(function (o) {
+        var did = key + '-' + o.id;
+        html += '<button class="hist-meal" data-hmeal="' + did + '">' + esc(o.name) + '</button>' +
+          '<div class="hist-meal-detail" id="hmd-' + did + '" hidden>' +
+          (g ? ingredientHTML(o, slotK, g) : baseHTML(o)) + '</div>';
+      });
+    });
+    var days = Object.keys(registro).filter(function (k) { return k.slice(0, 7) === key; });
+    var consumed = 0, counted = 0;
+    days.forEach(function (k) {
+      var slots = registro[k], sum = 0, n = 0;
+      ['desayuno', 'comida', 'cena'].forEach(function (sl) { if (slots[sl]) { sum += slots[sl]; n++; } });
+      if (n) { consumed += sum; counted++; }
+    });
+    if (counted) html += '<div class="muted mt8">Marcadas ' + counted + (counted === 1 ? ' día' : ' días') +
+      ' · media de ' + Math.round(consumed / counted) + ' kcal/día registradas' + (savedGoal ? ' frente a ' + savedGoal + ' de objetivo' : '') + '.</div>';
+    html += '</div>';
     document.getElementById('tab-recetas').innerHTML = html;
   }
 
@@ -460,50 +509,126 @@
       nombre: 'Calistenia',
       skills: true,
       A: [
-        { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Esta rutina es el plan hasta tener la base: cuando las dominadas, las flexiones y los fondos te salgan con técnica limpia y sin forzar, puedes empezar a probar las skills poco a poco.', ej: [
-          { n: 'Flexiones (de rodillas si hace falta)', s: '3 x 8-12', g: 'Nivel 1 · Pecho', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', g: 'Nivel 1 · Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Sentadilla al aire', s: '3 x 15', g: 'Nivel 1 · Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Plancha', s: '3 x 20-30 s', g: 'Nivel 1 · Core', p: 'plank', img: 'core-plancha' },
-          { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas (cuando empiecen a salir)', s: '4 x 4-6', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Fondos en paralelas (estables)', s: '3 x 8-12', g: 'Nivel 2 · Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
-          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', g: 'Nivel 3 · Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', g: 'Nivel 3 · Pecho', p: 'pushup', img: 'cal-flexiones' } ] },
-        { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida. Empieza esta rutina cuando las dominadas estrictas te resulten cómodas; el muscle up pide un tirón explosivo que se construye aquí. Trabaja solo los ejercicios del nivel que hayas elegido arriba.', ej: [
-          { n: 'Dominadas', s: '4 x 5', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominada explosiva al pecho', s: '4 x 4', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
-          { n: 'Fondos en paralelas (estables)', s: '3 x 8', g: 'Nivel 1 · Empuje', p: 'dip', img: 'skill-fondos-barra' },
-          { n: 'Transición con goma', s: '3 x 5', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
-          { n: 'Balanceo kipping controlado', s: '3 x 6', g: 'Nivel 3 · Técnica', p: 'pullup', img: 'skill-kipping' },
-          { n: 'Primer muscle up (intentos)', s: '5 intentos', g: 'Nivel 3 · Skill', p: 'pullup', img: 'skill-muscleup-transicion' } ] },
-        { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META. Empieza cuando tengas soltura en dominadas. Progresión habitual: colgado activo → tuck → advanced tuck → una pierna → front lever. Sube de nivel solo cuando el actual te salga limpio y cómodo.', ej: [
-          { n: 'Colgado de barra con escápulas activas', s: '4 x 8 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
-          { n: 'Subidas a tuck front lever', s: '3 x 4', g: 'Nivel 2 · Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
-          { n: 'Advanced tuck (espalda plana)', s: '3 x 8 s', g: 'Nivel 2 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
-          { n: 'Front lever a una pierna', s: '3 x 5 s', g: 'Nivel 3 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
-          { n: 'Negativa de dominada a front lever', s: '3 x 3', g: 'Nivel 3 · Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' } ] },
-        { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META. Empieza cuando las flexiones te resulten fáciles. Progresión habitual: lean → frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
-          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', g: 'Nivel 1 · Empuje', p: 'plank', img: 'skill-planche-lean' },
-          { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', g: 'Nivel 1 · Equilibrio', p: 'plank', img: 'skill-frog-stand' },
-          { n: 'Tuck planche hold', s: '3 x 8-10 s', g: 'Nivel 2 · Estático', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Flexiones pseudo-planche', s: '3 x 6', g: 'Nivel 2 · Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
-          { n: 'Advanced tuck planche', s: '3 x 5 s', g: 'Nivel 3 · Estático', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Straddle planche (intentos)', s: '5 intentos', g: 'Nivel 3 · Skill', p: 'plank', img: 'skill-planche-tuck' } ] },
-        { id: 'b5', nombre: 'Meta: Pino (handstand)', nota: 'El pino libre es la META. Progresión: pike → pared → salidas controladas → pino libre → flexiones en pino. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana.', ej: [
-          { n: 'Flexiones pike', s: '3 x 8', g: 'Nivel 1 · Hombro', p: 'pushup', img: 'cal-pike' },
-          { n: 'Pino contra pared (de espaldas a la pared)', s: '4 x 20-30 s', g: 'Nivel 1 · Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Hollow body hold', s: '3 x 15 s', g: 'Nivel 1 · Core', p: 'plank', img: 'skill-hollow' },
-          { n: 'Caminata de pared hasta pino', s: '3 x 3', g: 'Nivel 2 · Técnica', p: 'pushup', img: 'skill-pino-caminata' },
-          { n: 'Pino de cara a la pared, con salidas', s: '4 x 10-20 s', g: 'Nivel 2 · Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Pino libre (intentos con salida)', s: '5-8 intentos', g: 'Nivel 3 · Skill', p: 'plank', img: 'skill-pino-libre' },
-          { n: 'Flexiones en pino contra pared', s: '3 x 5', g: 'Nivel 3 · Hombro', p: 'pushup', img: 'skill-pino-flexiones' } ] }
+        { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Elige UNA variante por bloque: la que te salga limpia y cómoda. Las variantes de un mismo bloque no se hacen seguidas. Cuando las dominadas, las flexiones y los fondos te salgan con técnica limpia, puedes empezar a probar las skills poco a poco.', ej: [
+          { n: 'Flexiones de rodillas', s: '3 x 8-12', b: 1, lvl: 1, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Flexiones', s: '3 x 8-12', b: 1, lvl: 2, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', b: 1, lvl: 3, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', b: 2, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Remo invertido con pies elevados', s: '4 x 8', b: 2, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Australianas 3 posiciones', s: '3 x 10 s por posición', b: 2, lvl: 3, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Sentadilla al aire', s: '3 x 15', b: 3, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Sentadilla profunda con pausa abajo', s: '3 x 12', b: 3, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Zancadas', s: '3 x 10 por pierna', b: 3, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Plancha', s: '3 x 20-30 s', b: 4, lvl: 1, g: 'Core', p: 'plank', img: 'core-plancha' },
+          { n: 'Plancha con toques de hombro', s: '3 x 20', b: 4, lvl: 2, g: 'Core', p: 'plank', img: 'core-plancha' },
+          { n: 'Hollow body hold', s: '3 x 15 s', b: 4, lvl: 3, g: 'Core', p: 'plank', img: 'skill-hollow' },
+          { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', b: 5, lvl: 1, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas', s: '4 x 4-6', b: 5, lvl: 2, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 5, lvl: 3, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Fondos asistidos (banco o goma)', s: '3 x 8', b: 6, lvl: 1, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
+          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 6, lvl: 2, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
+          { n: 'Fondos con pausa abajo', s: '3 x 6-8', b: 6, lvl: 3, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' } ] },
+        { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida: empieza cuando las dominadas estrictas te resulten cómodas. Sesión completa por bloques: elige UNA variante por bloque (la que te salga limpia) y haz sus series. Las variantes de un bloque no se encadenan.', ej: [
+          { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
+          { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
+          { n: 'Australianas cerradas', s: '3 x 6-12', b: 3, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Australianas mixtas', s: '3 x 6-12', b: 3, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Dominadas comando', s: '3 x 4-8', b: 3, lvl: 3, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Transición con pies apoyados', s: '3 x 4-6', b: 4, lvl: 1, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Transición con goma', s: '3 x 4-5', b: 4, lvl: 2, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', b: 4, lvl: 3, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
+          { n: 'Flexiones con parada abajo 2-3 s', s: '3 x 6-10', b: 5, lvl: 1, g: 'Empuje', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
+          { n: 'Fondos en barra recta', s: '3 x 5-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
+          { n: 'Dominada alta con balanceo controlado', s: '3 x 4', b: 6, lvl: 1, g: 'Skill', p: 'pullup', img: 'skill-kipping' },
+          { n: 'Balanceo kipping controlado', s: '3 x 6', b: 6, lvl: 2, g: 'Skill', p: 'pullup', img: 'skill-kipping' },
+          { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: 'skill-muscleup-transicion' } ] },
+        { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META: empieza con soltura en dominadas. Sesión completa por bloques: elige UNA variante por bloque. El trabajo de brazo recto carga tendones más que músculos y los tendones adaptan lento: quédate siempre a 1-2 segundos o reps de tu máximo, y sube de variante solo cuando la actual salga limpia.', ej: [
+          { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Retracciones escapulares en barra', s: '3 x 6-8', b: 1, lvl: 3, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
+          { n: 'Advanced tuck (espalda plana)', s: '3 x 8-15 s', b: 2, lvl: 2, g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
+          { n: 'Front lever a una pierna', s: '3 x 5-10 s', b: 2, lvl: 3, g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
+          { n: 'Subidas a tuck front lever', s: '3 x 3-4', b: 3, lvl: 1, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
+          { n: 'Subidas a advanced tuck', s: '3 x 3-5', b: 3, lvl: 2, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
+          { n: 'Negativa de dominada a front lever', s: '3 x 3', b: 3, lvl: 3, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' },
+          { n: 'Dominadas', s: '3 x 4-8', b: 4, lvl: 1, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas (volumen)', s: '4 x 5-8', b: 4, lvl: 2, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 4, lvl: 3, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Remo invertido en barra baja', s: '4 x 8', b: 5, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Remo en tuck front lever', s: '3 x 5-8', b: 5, lvl: 2, g: 'Espalda', p: 'row', img: 'skill-frontlever-tuck' },
+          { n: 'Remo en advanced tuck', s: '3 x 5', b: 5, lvl: 3, g: 'Espalda', p: 'row', img: 'skill-frontlever-advtuck' },
+          { n: 'Negativa lenta de tuck a colgado (3-4 s)', s: '3 x 3', b: 6, lvl: 1, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' },
+          { n: 'Negativa de front lever (unos 5 s)', s: '3 x 3', b: 6, lvl: 2, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' },
+          { n: 'Negativa de front lever (8-10 s)', s: '3 x 3', b: 6, lvl: 3, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' } ] },
+        { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META: empieza cuando las flexiones te resulten fáciles. Sesión completa por bloques: elige UNA variante por bloque. Aquí la unidad es el mes, no la semana: paciencia, y cuida las muñecas (calienta antes).', ej: [
+          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', b: 1, lvl: 1, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
+          { n: 'Planche lean con pies elevados', s: '4 x 15-20 s', b: 1, lvl: 2, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
+          { n: 'Planche lean máximo controlado', s: '4 x 15 s', b: 1, lvl: 3, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
+          { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
+          { n: 'Crow pose (cuervo)', s: '3 x 15-20 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
+          { n: 'Tuck planche hold', s: '3 x 8-12 s', b: 2, lvl: 3, g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Flexiones pseudo-planche', s: '3 x 6-8', b: 4, lvl: 2, g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
+          { n: 'Flexiones pseudo-planche con pies elevados', s: '3 x 5-8', b: 4, lvl: 3, g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
+          { n: 'Fondos asistidos', s: '3 x 8', b: 5, lvl: 1, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
+          { n: 'Fondos lean planche', s: '3 x 6-8', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
+          { n: 'Fondos lean planche con piernas elevadas', s: '4 x 6-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
+          { n: 'Movilidad y carga de muñecas', s: '2 x 30 s', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: 'core-plancha' },
+          { n: 'L-sit', s: '3 x 10 s', b: 6, lvl: 2, g: 'Core', p: 'plank', img: 'skill-hollow' },
+          { n: 'De L-sit a tuck planche', s: '3 x 3', b: 6, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'skill-planche-tuck' } ] },
+        { id: 'b5', nombre: 'Meta: Pino (handstand)', nota: 'El pino libre es la META. Sesión completa por bloques: elige UNA variante por bloque. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana. Calienta muñecas antes de empezar.', ej: [
+          { n: 'Under switch (cambio de apoyo)', s: '3 x 10-20', b: 1, lvl: 1, g: 'Entrada', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Wall climb (caminata de pared)', s: '4 x 20 s', b: 1, lvl: 2, g: 'Entrada', p: 'pushup', img: 'skill-pino-caminata' },
+          { n: 'Caminata de pared hasta pino', s: '3 x 3', b: 1, lvl: 3, g: 'Entrada', p: 'pushup', img: 'skill-pino-caminata' },
+          { n: 'Pino contra pared (de espaldas)', s: '4 x 20-30 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Pino de cara a la pared', s: '4 x 20-30 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Pino de cara a la pared, con salidas', s: '4 x 10-20 s', b: 2, lvl: 3, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Pino contra pared, una pierna despegada', s: '3 x 10 s por lado', b: 3, lvl: 1, g: 'Skill', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Salidas de pino (práctica 5 min)', s: '5 min', b: 3, lvl: 2, g: 'Skill', p: 'plank', img: 'skill-pino-libre' },
+          { n: 'Pino libre o con compañero (intentos)', s: '5-8 intentos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'skill-pino-libre' },
+          { n: 'Flexiones (con o sin rodillas)', s: '3 x 10-15', b: 4, lvl: 1, g: 'Hombro', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Flexiones pike', s: '3 x 8', b: 4, lvl: 2, g: 'Hombro', p: 'pushup', img: 'cal-pike' },
+          { n: 'Flexiones en pino contra pared', s: '3 x 5', b: 4, lvl: 3, g: 'Hombro', p: 'pushup', img: 'skill-pino-flexiones' },
+          { n: 'Hollow body hold', s: '3 x 15 s', b: 5, lvl: 1, g: 'Core', p: 'plank', img: 'skill-hollow' },
+          { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: 'skill-hollow' },
+          { n: 'De L-sit a pino', s: '3 x 3-4', b: 5, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'skill-pino-libre' },
+          { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: 'core-plancha' },
+          { n: 'Estiramiento de hombros en pared', s: '2 x 30 s', b: 6, lvl: 2, g: 'Preparación', p: 'plank', img: 'core-plancha' },
+          { n: 'Puente (progresión suave)', s: '3 x 10 s', b: 6, lvl: 3, g: 'Preparación', p: 'plank', img: 'core-plancha' } ] },
+        { id: 'b6', nombre: 'Pierna y movilidad', nota: 'Sesión completa de pierna con calistenia. Elige UNA variante por bloque. Si tienes alguna lesión: limita el recorrido en sentadillas profundas y paso mono, y cambia las explosivas por la versión sin impacto (rápidas sin salto).', ej: [
+          { n: 'Sentadillas sumo con contracción activa', s: '3 x 15-25', b: 1, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Sentadillas profundas con pausa de 1 s abajo', s: '3 x 15-20', b: 1, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Sentadillas explosivas', s: '3 x 15-20', b: 1, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Zancadas', s: '3 x 10 por pierna', b: 2, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Pistols asistidas (agarrándote)', s: '3 x 6 por pierna', b: 2, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Pistol squat a cajón o silla', s: '3 x 4-6 por pierna', b: 2, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Marcha alta con patada frontal', s: '3 x 20', b: 3, lvl: 1, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Front step + patada frontal', s: '3 x 20', b: 3, lvl: 2, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Front step con salto', s: '3 x 15', b: 3, lvl: 3, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Zancada lateral estática', s: '3 x 20-30 s por lado', b: 4, lvl: 1, g: 'Pierna · Isométrico', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Paso mono lateral', s: '3 x 30-45 s por lado', b: 4, lvl: 2, g: 'Pierna · Isométrico', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Paso mono lateral con salto', s: '3 x 20', b: 4, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Elevaciones de gemelos', s: '3 x 15', b: 5, lvl: 1, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Gemelos a una pierna', s: '3 x 12 por pierna', b: 5, lvl: 2, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' } ] }
       ],
       B: null
     }
+
   };
+
   RUTINAS.calistenia.B = RUTINAS.calistenia.A;
 
   function exSVG(p) {
@@ -560,17 +685,10 @@
       '<div class="fact"><span>Este mes</span><b>' + monthCount + ' / 12</b></div>' +
       '<div class="prog-track"><div class="prog-fill" style="width:' + Math.min(100, Math.round(monthCount / 12 * 100)) + '%"></div></div></div>';
 
-    if (eq.skills) {
-      html += '<div class="card"><h2>Tu nivel en barra</h2>' +
-        '<div class="sub">Cada sesión muestra solo los ejercicios del nivel que elijas aquí. Sube de nivel cuando el actual te salga limpio y cómodo durante un par de semanas seguidas, sin forzar. Si estás empezando, quédate en la sesión «Básicos de barra» hasta tener la base.</div>' +
-        '<div class="seg" style="margin-top:12px">' +
-        '<button data-calnivel="1"' + (calisNivel === 1 ? ' class="active"' : '') + '>1 · Base</button>' +
-        '<button data-calnivel="2"' + (calisNivel === 2 ? ' class="active"' : '') + '>2 · Intermedio</button>' +
-        '<button data-calnivel="3"' + (calisNivel === 3 ? ' class="active"' : '') + '>3 · Avanzado</button></div></div>';
-    }
 
-    function exLvl(x) { var m = /^Nivel (\d)/.exec(x.g); return m ? parseInt(m[1], 10) : 0; }
-    function sesEx(s) { return eq.skills ? s.ej.filter(function (x) { return exLvl(x) === calisNivel; }) : s.ej; }
+    var LVL_LBL = ['', 'BÁSICO', 'MEDIA', 'AVANZADA'];
+    function sesEx(s) { return s.ej; }
+    function sesBlocks(s) { var b = {}; s.ej.forEach(function (x) { if (x.b) b[x.b] = 1; }); return Object.keys(b); }
     ses.forEach(function (s, i) {
       var ej = sesEx(s);
       var key = rutKey + '-' + s.id;
@@ -583,26 +701,32 @@
       html += '<div class="card"><div class="hist-head ses-head" data-ses-toggle="' + key + '"><h2 class="ex-day">Día ' + (i + 1) + '/' + ses.length + ' · ' + s.nombre + '</h2>' +
         (doneThisWeek ? '<span class="pill done-pill">✓ hecha esta semana</span>' : (isNext ? '<span class="pill orange">Próximo entreno</span>' : '')) +
         '<span class="ses-chevron' + (open ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>' +
-        '<div class="sub">' + ej.length + ' ejercicios' + (eq.skills ? ' · Nivel ' + calisNivel : '') + '</div>' +
+        '<div class="sub">' + (eq.skills ? sesBlocks(s).length + ' bloques · elige 1 variante por bloque' : ej.length + ' ejercicios') + '</div>' +
         (open ? '<div class="ses-body">' : '<div class="ses-body" hidden>') +
         (eq.skills ? '' :
         '<div class="tut-chips"><span class="chip">TUT 2-1</span><span class="chip">RIR 2</span>' +
         '<button class="chip link" data-tut>¿Qué es?</button></div>' +
         (tutOpen ? '<div class="note green" style="margin-top:8px"><b>TUT 2-1:</b> baja el peso en 2 segundos y sube en 1, sin pausas. <b>RIR 2:</b> termina cada serie pudiendo haber hecho unas 2 repeticiones más. Así progresas sin lesionarte.</div>' : '')) +
         (s.nota ? '<div class="note green" style="margin-top:8px">' + s.nota + '</div>' : '') +
-        (eq.skills && ej.length === 0 ? '<div class="note">Esta sesión no tiene ejercicios de Nivel ' + calisNivel + ': es una meta avanzada. Baja al nivel que te toque hoy o sigue con «Básicos de barra».</div>' : '') +
         ej.map(function (x, j) {
-          var lvlTag = eq.skills ? x.g.replace(/^Nivel \d · /, '') : x.g;
-          var row = '<div class="ex-row' + (active && checked[j] ? ' ex-done' : '') + '"' + (active ? ' data-ex-check="' + j + '"' : '') + '>' +
-            (active ? '<div class="ex-check">' + (checked[j] ? '✓' : '') + '</div>' : '<div class="ex-num">' + (j + 1) + '</div>') +
+          var lvlTag = x.g;
+          var row = '<div class="ex-row' + (eq.skills ? ' var-row lvl' + x.lvl : '') + (active && checked[j] ? ' ex-done' : '') + '"' + (active ? ' data-ex-check="' + j + '"' : '') + '>' +
+            (active ? '<div class="ex-check">' + (checked[j] ? '✓' : '') + '</div>' : '<div class="ex-num">' + (eq.skills ? '' : (j + 1)) + '</div>') +
             exThumb(x) +
             '<div class="ex-info"><div class="ex-name">' + x.n + '</div>' +
-            '<div class="ex-sets">' + x.s + ' · ' + lvlTag + '</div></div></div>';
+            '<div class="ex-sets">' + x.s + ' · ' + lvlTag + (eq.skills ? ' <span class="lvl-pill lvl' + x.lvl + '">' + LVL_LBL[x.lvl] + '</span>' : '') + '</div></div></div>';
           if (x.ss && j > 0 && !ej[j - 1].ss) row = row; // isolated ss handled below
-          return (x.ss && (j === 0 || !ej[j - 1].ss) ? '<div class="ss-label">Superserie: una detrás de otra, descansa al final</div>' : '') + row;
+          var ss = (x.ss && (j === 0 || !ej[j - 1].ss) ? '<div class="ss-label">Superserie: una detrás de otra, descansa al final</div>' : '');
+          var blk = (eq.skills && x.b && (j === 0 || ej[j - 1].b !== x.b) ? '<div class="blk-label">Bloque ' + x.b + '</div>' : '');
+          return ss + blk + row;
         }).join('');
       if (active) {
-        html += '<button class="btn primary" data-complete-session="' + key + '"' + (nChecked < ej.length ? ' style="opacity:.55"' : '') + '>Completar sesión (' + nChecked + '/' + ej.length + ')</button>' +
+        var req = ej.length, ok = nChecked;
+        if (eq.skills) {
+          req = sesBlocks(s).length;
+          ok = sesBlocks(s).filter(function (bn) { return ej.some(function (x, j) { return String(x.b) === String(bn) && checked[j]; }); }).length;
+        }
+        html += '<button class="btn primary" data-complete-session="' + key + '"' + (ok < req ? ' style="opacity:.55"' : '') + '>Completar sesión (' + (eq.skills ? 'bloques ' : '') + ok + '/' + req + ')</button>' +
           '<button class="btn ghost" data-cancel-session>Cancelar</button>';
       } else if (!doneThisWeek) {
         html += '<button class="btn primary" data-start-session="' + key + '">Empezar entreno</button>';
@@ -610,58 +734,7 @@
       html += '</div></div>';
     });
 
-    var history = doneKeys.sort().reverse().slice(0, 10);
-    if (history.length) {
-      var names = {};
-      Object.keys(RUTINAS).forEach(function (m) { ['A', 'B'].forEach(function (rk) { RUTINAS[m][rk].forEach(function (s) { names[rk + '-' + s.id] = s.nombre; }); }); });
-      html += '<div class="card"><h2>Registro de sesiones</h2>' + history.map(function (k) {
-        return '<div class="rev-row"><b>' + fmtDate(k) + '</b> · ' + (names[sesiones[k]] || 'Sesión') + '</div>';
-      }).join('') + '</div>';
-    }
     document.getElementById('tab-entreno').innerHTML = html;
-  }
-
-  /* ---------- Historial por mes ---------- */
-  function renderHistorial() {
-    var now = new Date();
-    var r = compute(profile);
-    var html = '<div class="card"><h2>Historial por mes</h2>' +
-      '<div class="sub">Pulsa un mes para ver TODAS sus comidas (clásicas de ese mes + la receta de temporada), con ingredientes en gramos, kcal y proteína, ajustadas al objetivo que tenías entonces.</div></div>';
-    for (var i = 0; i < 6; i++) {
-      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      var m = d.getMonth(), key = d.getFullYear() + '-' + String(m + 1).padStart(2, '0');
-      var goal = objetivos[key];
-      var days = Object.keys(registro).filter(function (k) { return k.slice(0, 7) === key; });
-      var consumed = 0, counted = 0;
-      days.forEach(function (k) {
-        var slots = registro[k], sum = 0, n = 0;
-        ['desayuno', 'comida', 'cena'].forEach(function (s) { if (slots[s]) { sum += slots[s]; n++; } });
-        if (n) { consumed += sum; counted++; }
-      });
-      html += '<div class="card hist-month"><div class="hist-head" data-hm="' + key + '" style="cursor:pointer"><h3>' +
-        MONTHS[m].charAt(0).toUpperCase() + MONTHS[m].slice(1) + (i === 0 ? ' <span style="text-transform:none;font-weight:600;color:var(--muted);font-size:.78rem">(este mes)</span>' : '') + '</h3>' +
-        (goal ? '<span class="pill">Objetivo: ' + goal + ' kcal/día</span>' : '<span class="pill">Sin objetivo guardado</span>') + '</div>' +
-        (counted ? '<div class="muted">Marcadas ' + counted + (counted === 1 ? ' día' : ' días') +
-          ' · media de ' + Math.round(consumed / counted) + ' kcal/día registradas' +
-          (goal ? ' frente a ' + goal + ' de objetivo' : '') + '.</div>'
-               : '<div class="muted">Sin comidas marcadas este mes.</div>') +
-        '<div class="hist-detail" hidden>';
-      var g = goal || r.target;
-      ['desayuno', 'comida', 'cena'].forEach(function (slot) {
-        var slotK = Math.round(g * SLOT_SHARE[slot] / 10) * 10;
-        html += '<div class="hist-slot-h">' + SLOT_LABEL[slot] + ' · ' + slotK + ' kcal</div>';
-        var monthRecipe = RECIPES.find(function (x) { return x.month === m && x.slot === slot; });
-        var opts = classicsFor(m, slot).concat(monthRecipe ? [monthRecipe] : []);
-        opts.forEach(function (o) {
-          var did = key + '-' + o.id;
-          html += '<button class="hist-meal" data-hmeal="' + did + '">' + esc(o.name) +
-            (o.pasos ? ' <span style="color:#b45309;font-weight:600">· receta del mes</span>' : '') + '</button>' +
-            '<div class="hist-meal-detail" id="hmd-' + did + '" hidden>' + ingredientHTML(o, slotK, g) + '</div>';
-        });
-      });
-      html += '</div><div class="muted" style="margin-top:6px;font-size:.72rem">Toca el mes para abrir o cerrar.</div></div>';
-    }
-    document.getElementById('tab-historial').innerHTML = html;
   }
 
   /* ---------- Progreso ---------- */
@@ -751,7 +824,7 @@
     document.getElementById('tab-progreso').innerHTML = html;
   }
 
-  function renderAll() { renderHero(); renderPerfil(); renderHoy(); renderRecetas(); renderHistorial(); renderProgreso(); renderEntreno(); }
+  function renderAll() { renderHero(); renderPerfil(); renderHoy(); renderRecetas(); renderProgreso(); renderEntreno(); }
 
   /* ---------- Eventos ---------- */
   function onProfileChange(key, val) {
@@ -763,7 +836,7 @@
     save('dieta.perfil.v1', profile);
     renderHero();
     clearTimeout(window.__rt);
-    window.__rt = setTimeout(function () { renderPerfil(); renderHoy(); renderRecetas(); renderHistorial(); renderProgreso(); renderEntreno(); }, 400);
+    window.__rt = setTimeout(function () { renderPerfil(); renderHoy(); renderRecetas(); renderProgreso(); renderEntreno(); }, 400);
   }
 
   document.addEventListener('input', function (e) {
@@ -779,6 +852,14 @@
     }
   });
 
+  function openLightbox(src, alt) {
+    var ov = document.createElement('div');
+    ov.className = 'lb-overlay';
+    ov.innerHTML = '<span class="lb-close">×</span><img src="' + src + '" alt="' + (alt || '') + '">';
+    ov.addEventListener('click', function () { ov.remove(); });
+    document.body.appendChild(ov);
+  }
+
   document.addEventListener('click', function (e) {
     var t = e.target;
     var nav = t.closest && t.closest('nav.tabs button');
@@ -789,17 +870,15 @@
       window.scrollTo(0, 0);
       return;
     }
+    if (t.tagName === 'IMG' && (t.classList.contains('ex-thumb') || (t.closest && (t.closest('.recipe-card') || t.closest('.meal-card'))))) {
+      if (t.closest && t.closest('.meal-card')) { e.preventDefault(); e.stopPropagation(); }
+      openLightbox(t.src, t.alt);
+      return;
+    }
     var eqBtn = t.closest && t.closest('[data-equipo]');
     if (eqBtn) {
       equipo = eqBtn.getAttribute('data-equipo');
       save('dieta.equipo.v1', equipo);
-      renderEntreno();
-      return;
-    }
-    var cnBtn = t.closest && t.closest('[data-calnivel]');
-    if (cnBtn) {
-      calisNivel = parseInt(cnBtn.getAttribute('data-calnivel'), 10);
-      save('dieta.calisnivel.v1', calisNivel);
       renderEntreno();
       return;
     }
@@ -865,7 +944,7 @@
       }
       registro[tIso] = dayLog;
       save('dieta.registro.v1', registro);
-      renderHoy(); renderHistorial(); renderProgreso();
+      renderHoy(); renderRecetas(); renderProgreso();
       return;
     }
     var use = t.closest && t.closest('[data-use]');
@@ -893,8 +972,8 @@
       document.getElementById('photoInput').click();
       return;
     }
-    if (t.id === 'mPrev') { month = (month + 11) % 12; renderRecetas(); renderHoy(); return; }
-    if (t.id === 'mNext') { month = (month + 1) % 12; renderRecetas(); renderHoy(); return; }
+    if (t.id === 'mPrev') { viewM--; if (viewM < 0) { viewM = 11; viewY--; } renderRecetas(); return; }
+    if (t.id === 'mNext') { viewM++; if (viewM > 11) { viewM = 0; viewY++; } renderRecetas(); return; }
     if (t.id === 'btnCheckin') {
       var iso = todayIso();
       var rr2 = compute(profile);
