@@ -80,3 +80,11 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 
 ## 2026-10-24 00:43 CEST - FIX CRITICO
 - Corregida coma que faltaba en PHOTO_IDS (app.js:19) introducida en ff3f798: el literal quedaba como `'r-sep-d':1  'n8':1` (SyntaxError que rompia TODA la app, pantallas vacias). Detectado al preparar capturas en navegador headless. Verificado con node --check y render real en Chrome: app vuelve a renderizar.
+
+## 2026-10-24 00:52 CEST - Correcciones de revision parent (fotos heredadas + sentadilla)
+- RECHAZADA r-ene-c "Cocido ligero de garbanzos" (heredada, stock): mostraba una rodaja de CHORIZO y la receta lleva PAVO (confirmado visualmente). SUSTITUIDA por IA: cocido ligero de garbanzos con pavo, zanahoria, apio y patata, caldo claro.
+- SUSTITUIDA r-nov-c "Albondigas de pavo con arroz" (heredada: arroz sin albondigas) por IA: 5 albondigas en salsa de tomate con arroz.
+- SUSTITUIDA r-jul-d "Tostada fria de yogur y fruta" (heredada: mesa de brunch generica) por IA: tostada integral con yogur griego, fresas, arandanos, kiwi y semillas.
+- SUSTITUIDA r-mar-c "Paella de pollo y verduras" (heredada: pixelada/oscura) por IA: paella de pollo y verduras nitida.
+- SUSTITUIDA ex-cal-sentadilla (Commons USAF, sentadilla LASTRADA con mochila) por IA de sentadilla a peso corporal exacta (sin carga), por decision de parent sin necesidad de consultar. Credito Commons eliminado de credits.json (53 entradas); la foto Commons ya no se usa.
+- Estado platos: 0 pendientes salvo nueva revision. Ejercicios pendientes: skill-frontlever-negativa y skill-muscleup-negativo (fallback SVG, decision cerrada).
