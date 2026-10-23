@@ -164,7 +164,7 @@
       var byIds = Object.keys(cr).filter(function (k) { return /CC BY/.test(cr[k].license); });
       if (Object.keys(cr).length) {
         html += '<div class="card"><h2>Créditos de fotos</h2>' +
-          '<div class="sub">Fotos de platos de Wikimedia Commons con licencia libre (CC0 / dominio público / CC BY / CC BY-SA) y fotos generadas por IA. Las CC BY / CC BY-SA llevan atribución:</div>' +
+          '<div class="sub">Fotos de platos de Wikimedia Commons y Unsplash con licencia libre (CC0 / dominio público / CC BY / CC BY-SA / Unsplash License) y fotos generadas por IA. Cada foto con atribución obligatoria lleva su autor y licencia:</div>' +
           byIds.map(function (k) {
             var c = cr[k];
             return '<div class="rev-row" style="font-size:.72rem"><b>' + (c.title || k) + '</b> — ' + (c.artist || 'desconocido') +
