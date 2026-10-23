@@ -70,3 +70,10 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - Calistenia: disenar rutina PROPIA contrastada (no transcripcion exacta de pizarras); abreviaturas ambiguas no hace falta preguntar si diseno propio. Pizarras = referencia de estructura/volumen.
 
 - n9: RECHAZADA 13:41 (Main): la tostada Commons es atun CRUDO estilo ceviche, no tostas de atun; preparacion caracteristica distinta. Pasa a pendientes IA.
+
+## 2026-10-24 00:40 CEST - Oleada IA nocturna (agente nuevo, retoma trabajo perdido)
+- GENERADAS E INSTALADAS 15 platos (IA, QC visual estricto, componentes verificados contra data.js RECIPE_REPLACE/RECIPE_ADD): n8, n9 (con patata cocida), n10 (jamón cocido+queso fresco+nueces+pan; reemplaza stock aproximado), n11, n12, n15 (con patata cocida), c4 (garbanzos+espinacas+pollo+patata; reemplaza IA antigua sin pollo), c10 (hummus+pollo asado+patata), r-ago-c, r-ago-d, r-ene-n, r-feb-d, r-jul-c, r-mar-d, r-nov-d. PHOTO_IDS actualizado.
+- RECUPERADAS 3 fotos Commons perdidas con el agente anterior (re-descargadas y verificadas): ex-cal-flexiones (Girl doing push-ups on a rock, CC BY 2.0 PTPioneer), ex-cal-sentadilla (Stay fit anywhere anytime 6186146, PD USAF; NOTA: la sentadilla lleva mochila puesta - mismo movimiento, parent puede vetar), ex-skill-pino-flexiones (Handstand pushup, PD USAF). credits.json 54 entradas.
+- GENERADOS E INSTALADOS 12 ejercicios (IA, postura contrastada y verificable): cal-pike, cal-remo-mesa, manc-fondos-banco, skill-dominada-explosiva, skill-fondos-barra, skill-kipping, skill-frontlever-tuck, skill-frontlever-advtuck, skill-frontlever-subidas, skill-pino-caminata, skill-planche-lean, skill-pseudo-pushup.
+- PENDIENTES DECLARADOS 2 (fallback SVG): skill-frontlever-negativa (generada: palanca extendida estática; RETENIDA por precedente parent: no usar foto estática de posición como demostración de negativa - imagen disponible si parent decide), skill-muscleup-negativo (veto parent a transición estática; sin generar).
+- 0 platos pendientes. Sin merge a main ni release: pendiente OK explícito de Gabriel.
