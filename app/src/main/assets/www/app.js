@@ -98,8 +98,9 @@
   function fmtDate(iso) { return iso.slice(5).split('-').reverse().join('/'); }
 
   /* Ingredientes: nombre + medida casera | gramos + kcal (valores USDA) */
-  function ingredientHTML(option, targetKcal) {
+  function ingredientHTML(option, targetKcal, dayTarget) {
     var factor = targetKcal / option.kcal;
+    var protSlot = Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
     var totalProt = 0;
     var WHOLE = { pieza: 1, huevo: 1, rebanada: 1, 'medio aguacate': 1, 'boniato mediano': 1, 'calabacín': 1, lata: 1, fresa: 1, manzana: 1, pera: 1, 'plátano': 1, mango: 1, filete: 1, loncha: 1, 'patata mediana': 1, yogur: 1, tajada: 1 };
     var rows = option.components.map(function (c) {
@@ -114,7 +115,7 @@
     }).join('');
     return '<div class="ing">' + rows +
       '<div class="cap">Cantidades ajustadas a tu objetivo (' + Math.round(targetKcal / 10) * 10 +
-      ' kcal en esta comida, aprox.; las piezas van enteras). Proteína del plato: ~' + totalProt + ' g. Valores de composición del USDA.</div></div>';
+      ' kcal en esta comida, aprox.; las piezas van enteras). Proteína del plato: ~' + totalProt + ' g de ~' + protSlot + ' g objetivo. Valores de composición del USDA.</div></div>';
   }
 
   function optionProtein(option, targetKcal) {
@@ -256,7 +257,7 @@
             (o.rapida ? '<div class="m-tag quick">' + quickTag(o) + '</div>' : '<div class="m-tag">Clásico</div>')) +
           '</div></button>';
       }).join('') + '</div>';
-      html += ingredientHTML(selected, target);
+      html += ingredientHTML(selected, target, r.target);
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
         (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + dayLog[slot] + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
       html += '</div>';
@@ -271,7 +272,7 @@
       '<div class="fact"><span>Comida</span><b>' + slotTarget(r, 'comida') + ' kcal</b></div>' +
       '<div class="fact"><span>Cena</span><b>' + slotTarget(r, 'cena') + ' kcal</b></div>' +
       '<div class="fact"><span>Total del día</span><b>' + r.target + ' kcal</b></div>' +
-      '<div class="fact"><span>Proteína del día (con lo elegido)</span><b>~' + dayProt + ' g de ' + protGoal + ' g</b></div>' +
+      '<div class="fact"><span>Proteína del menú elegido</span><b>~' + dayProt + ' g de ' + protGoal + ' g</b></div>' +
       (dayProt >= protGoal * 0.9
         ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
         : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
@@ -407,37 +408,44 @@
       nombre: 'Calistenia',
       skills: true,
       A: [
-        { id: 'b1', nombre: 'Básicos de barra', nota: 'Base para todo lo demás: antes de ir a por skills necesitas unas 8 dominadas y 15 fondos limpios. Si no te salen las dominadas, haz negativas: sube como puedas y baja en 3-4 segundos.', ej: [
-          { n: 'Dominadas', s: '4 x 6 (o negativas 4 x 4)', g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Fondos en paralelas o entre sillas', s: '3 x 8', g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
-          { n: 'Flexiones', s: '3 x 12', g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Sentadilla al aire', s: '3 x 15', g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Plancha', s: '3 x 30 s', g: 'Core', p: 'plank', img: 'core-plancha' } ] },
-        { id: 'b2', nombre: 'Skill: Muscle up', nota: 'Progresión: 1) 8 dominadas limpias, 2) dominada explosiva al pecho, 3) transición con goma, 4) primer muscle up. Domina cada paso unas 2 semanas antes de subir.', ej: [
-          { n: 'Dominada explosiva al pecho', s: '4 x 5', g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
-          { n: 'Fondos en barra alta (o entre sillas)', s: '3 x 6', g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
-          { n: 'Transición con goma', s: '3 x 5', g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', g: 'Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
-          { n: 'Balanceo kipping controlado', s: '3 x 8', g: 'Técnica', p: 'pullup', img: 'skill-kipping' } ] },
-        { id: 'b3', nombre: 'Skill: Front lever', nota: 'Progresión: tuck → advanced tuck → una pierna → straddle → front lever completo. Aguanta 15 s limpios en un nivel antes de subir al siguiente.', ej: [
-          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 10 s', g: 'Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
-          { n: 'Subidas a tuck front lever', s: '3 x 4', g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
-          { n: 'Negativa de dominada a front lever', s: '3 x 3', g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' },
-          { n: 'Advanced tuck front lever (espalda plana)', s: '3 x 8 s', g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
-          { n: 'Remo en tuck front lever', s: '3 x 4', g: 'Fuerza', p: 'row', img: 'skill-frontlever-remo' } ] },
-        { id: 'b4', nombre: 'Skill: Straddle planche', nota: 'Lo de "straddle" lo tomo como straddle planche: plancha en el suelo/barras con las piernas abiertas. Progresión: frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
-          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', g: 'Empuje estático', p: 'plank', img: 'skill-planche-lean' },
-          { n: 'Frog stand (equilibrio de rana)', s: '4 x 15 s', g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
-          { n: 'Tuck planche hold', s: '3 x 10 s', g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Flexiones pseudo-planche', s: '3 x 6', g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
-          { n: 'Flexiones pike', s: '3 x 8', g: 'Hombro', p: 'pushup', img: 'cal-pike' } ] },
-        { id: 'b5', nombre: 'Skill: Pino (handstand)', nota: 'Progresión: pared → salidas controladas → pino libre 10 s → flexiones en pino. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana.', ej: [
-          { n: 'Pino contra pared (de espaldas a la pared)', s: '4 x 20-30 s', g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Caminata de pared hasta pino', s: '3 x 3', g: 'Técnica', p: 'pushup', img: 'skill-pino-caminata' },
-          { n: 'Pino libre (intentos con salida)', s: '5 intentos', g: 'Equilibrio', p: 'plank', img: 'skill-pino-libre' },
-          { n: 'Flexiones en pino contra pared (o pike)', s: '3 x 5', g: 'Hombro', p: 'pushup', img: 'skill-pino-flexiones' },
-          { n: 'Hollow body hold', s: '3 x 15 s', g: 'Core', p: 'plank', img: 'skill-hollow' } ] }
+        { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Esta rutina ES el plan hasta que consigas 8 dominadas limpias, 20 flexiones y 15 fondos; con esa base ya puedes trabajar las skills. Los niveles marcan el orden: domina el Nivel 1 antes de tocar el 2.', ej: [
+          { n: 'Flexiones (de rodillas si hace falta)', s: '3 x 8-12', g: 'Nivel 1 · Pecho', p: 'pushup', img: 'cal-flexiones' },
+          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', g: 'Nivel 1 · Espalda', p: 'row', img: 'cal-remo-mesa' },
+          { n: 'Sentadilla al aire', s: '3 x 15', g: 'Nivel 1 · Pierna', p: 'squat', img: 'cal-sentadilla' },
+          { n: 'Plancha', s: '3 x 20-30 s', g: 'Nivel 1 · Core', p: 'plank', img: 'core-plancha' },
+          { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominadas (cuando empiecen a salir)', s: '4 x 4-6', g: 'Nivel 2 · Espalda', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Fondos entre sillas o paralelas', s: '3 x 8-12', g: 'Nivel 2 · Pecho · Tríceps', p: 'dip', img: 'skill-fondos' } ] },
+        { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida. Requisito para esta rutina: 8 dominadas limpias. Trabaja solo los ejercicios de tu nivel; cuando te salgan cómodos unas 2 semanas, sube.', ej: [
+          { n: 'Dominadas', s: '4 x 5', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Dominada explosiva al pecho', s: '4 x 4', g: 'Nivel 1 · Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
+          { n: 'Fondos en paralelas o entre sillas', s: '3 x 8', g: 'Nivel 1 · Empuje', p: 'dip', img: 'skill-fondos-barra' },
+          { n: 'Transición con goma', s: '3 x 5', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
+          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', g: 'Nivel 2 · Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
+          { n: 'Balanceo kipping controlado', s: '3 x 6', g: 'Nivel 3 · Técnica', p: 'pullup', img: 'skill-kipping' },
+          { n: 'Primer muscle up (intentos)', s: '5 intentos', g: 'Nivel 3 · Skill', p: 'pullup', img: 'skill-muscleup-transicion' } ] },
+        { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META. Requisito: 5 dominadas limpias. Progresión: colgado activo → tuck → advanced tuck → una pierna → front lever. Aguanta 10-15 s limpios en un nivel antes de subir al siguiente.', ej: [
+          { n: 'Colgado de barra con escápulas activas', s: '4 x 8 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-dominadas' },
+          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', g: 'Nivel 1 · Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
+          { n: 'Subidas a tuck front lever', s: '3 x 4', g: 'Nivel 2 · Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
+          { n: 'Advanced tuck (espalda plana)', s: '3 x 8 s', g: 'Nivel 2 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
+          { n: 'Front lever a una pierna', s: '3 x 5 s', g: 'Nivel 3 · Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
+          { n: 'Negativa de dominada a front lever', s: '3 x 3', g: 'Nivel 3 · Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' } ] },
+        { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META. Requisito: 15 flexiones limpias. Progresión: lean → frog stand → tuck → advanced tuck → straddle. Aquí la unidad es el mes, no la semana: paciencia.', ej: [
+          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', g: 'Nivel 1 · Empuje', p: 'plank', img: 'skill-planche-lean' },
+          { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', g: 'Nivel 1 · Equilibrio', p: 'plank', img: 'skill-frog-stand' },
+          { n: 'Tuck planche hold', s: '3 x 8-10 s', g: 'Nivel 2 · Estático', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Flexiones pseudo-planche', s: '3 x 6', g: 'Nivel 2 · Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
+          { n: 'Advanced tuck planche', s: '3 x 5 s', g: 'Nivel 3 · Estático', p: 'plank', img: 'skill-planche-tuck' },
+          { n: 'Straddle planche (intentos)', s: '5 intentos', g: 'Nivel 3 · Skill', p: 'plank', img: 'skill-planche-tuck' } ] },
+        { id: 'b5', nombre: 'Meta: Pino (handstand)', nota: 'El pino libre es la META. Progresión: pike → pared → salidas controladas → pino libre → flexiones en pino. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana.', ej: [
+          { n: 'Flexiones pike', s: '3 x 8', g: 'Nivel 1 · Hombro', p: 'pushup', img: 'cal-pike' },
+          { n: 'Pino contra pared (de espaldas a la pared)', s: '4 x 20-30 s', g: 'Nivel 1 · Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Hollow body hold', s: '3 x 15 s', g: 'Nivel 1 · Core', p: 'plank', img: 'skill-hollow' },
+          { n: 'Caminata de pared hasta pino', s: '3 x 3', g: 'Nivel 2 · Técnica', p: 'pushup', img: 'skill-pino-caminata' },
+          { n: 'Pino de cara a la pared, con salidas', s: '4 x 10-20 s', g: 'Nivel 2 · Equilibrio', p: 'plank', img: 'skill-pino-pared' },
+          { n: 'Pino libre (intentos con salida)', s: '5-8 intentos', g: 'Nivel 3 · Skill', p: 'plank', img: 'skill-pino-libre' },
+          { n: 'Flexiones en pino contra pared', s: '3 x 5', g: 'Nivel 3 · Hombro', p: 'pushup', img: 'skill-pino-flexiones' } ] }
       ],
       B: null
     }
@@ -580,7 +588,7 @@
           var did = key + '-' + o.id;
           html += '<button class="hist-meal" data-hmeal="' + did + '">' + esc(o.name) +
             (o.pasos ? ' <span style="color:#b45309;font-weight:600">· receta del mes</span>' : '') + '</button>' +
-            '<div class="hist-meal-detail" id="hmd-' + did + '" hidden>' + ingredientHTML(o, slotK) + '</div>';
+            '<div class="hist-meal-detail" id="hmd-' + did + '" hidden>' + ingredientHTML(o, slotK, g) + '</div>';
         });
       });
       html += '</div><div class="muted" style="margin-top:6px;font-size:.72rem">Toca el mes para abrir o cerrar.</div></div>';
