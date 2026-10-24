@@ -36,10 +36,13 @@
   function household(name, grams) {
     var ing = ING[name];
     if (!ing || !ing.ug) return '';
-    var n = Math.round(grams / ing.ug);
-    if (n < 1) n = 1;
-    var num = (n % 1 === 0) ? String(n) : String(n).replace('.', ',');
-    return num + ' ' + plural(ing.u, n);
+    var n = Math.round(grams / (ing.ug / 2)) / 2;
+    if (n < 0.5) n = 0.5;
+    var num;
+    if (n % 1 === 0) num = String(n);
+    else if (n < 1) num = '1/2';
+    else num = Math.floor(n) + ' 1/2';
+    return num + ' ' + plural(ing.u, n < 1 ? 1 : n);
   }
 
   function load(key, fallback) {
@@ -283,7 +286,18 @@
       var opts0 = classicsFor(month, slot);
       var mr0 = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
       if (mr0) opts0 = opts0.concat([mr0]);
-      if (!opts0.some(function (o) { return o.id === picks[slot]; })) picks[slot] = opts0[0].id;
+      if (!opts0.some(function (o) { return o.id === picks[slot]; })) {
+        /* Pick por defecto: la opcion que mejor cuadra con el objetivo del perfil
+           (antes era siempre la primera del mes, pudiera quedar muy desviada). */
+        var sk0 = slotTarget(r, slot), sp0 = Math.round(pgoal * psh[slot]);
+        var bestO = opts0[0], bestE = Infinity;
+        opts0.forEach(function (o) {
+          var pl0 = computePlan(o, sk0, sp0);
+          var e0 = Math.abs(pl0.dk) + 3 * Math.abs(pl0.dp);
+          if (e0 < bestE - 1e-9) { bestE = e0; bestO = o; }
+        });
+        picks[slot] = bestO.id;
+      }
     });
     // Cada plato se resuelve contra el objetivo de su franja (sin compensacion
     // entre comidas): el solver garantiza las cantidades por plato.

@@ -50,21 +50,21 @@ const ING = {
   'Pasta (en crudo)': { p: 13, k: 360, c: 72, g: 1.5, ug: 40, u: 'puñado' },
   'Pasta integral (en crudo)': { p: 13.9, k: 350, c: 67, g: 2.5, ug: 40, u: 'puñado' },
   'Patata': { p: 2, k: 77, c: 17.5, g: 0.1, ug: 150, u: 'patata mediana' },
-  'Patata cocida': { p: 2, k: 77, c: 17.5, g: 0.1, ug: 150, u: 'patata mediana' }, // envasada al vacio o cocida de antes: mantiene el plato sin fogon
-  'Pavo en dados': { p: 22, k: 135, c: 0, g: 4.5, ug: 150, u: 'porción' },
+  'Patata cocida': { p: 1.9, k: 87, c: 20.1, g: 0.1, ug: 150, u: 'patata mediana' }, // envasada al vacio o cocida de antes: mantiene el plato sin fogon
+  'Pavo en dados': { p: 27, k: 127, c: 0, g: 2.1, ug: 150, u: 'porción' },
   'Pavo picado': { p: 20, k: 150, c: 0, g: 7.5, ug: 150, u: 'porción' },
-  'Pechuga de pavo': { p: 22, k: 135, c: 0, g: 4.5, ug: 150, u: 'filete' },
-  'Pechuga de pollo': { p: 22.5, k: 165, c: 0, g: 7.8, ug: 150, u: 'filete' },
+  'Pechuga de pavo': { p: 27, k: 127, c: 0, g: 2.1, ug: 150, u: 'filete' },
+  'Pechuga de pollo': { p: 22.5, k: 120, c: 0, g: 2.6, ug: 150, u: 'filete' },
   'Pera': { p: 0.4, k: 57, c: 15.2, g: 0.1, ug: 150, u: 'pera' },
   'Pescado blanco': { p: 17, k: 90, c: 0, g: 2, ug: 150, u: 'filete' },
   'Pimiento y cebolla': { p: 1.2, k: 35, c: 7, g: 0.3, ug: 150, u: 'plato' },
   'Pisto casero': { p: 1.2, k: 50, c: 6, g: 2.5, ug: 150, u: 'plato' },
   'Plátano': { p: 1.1, k: 89, c: 22.8, g: 0.3, ug: 120, u: 'plátano' },
   'Pollo': { p: 20, k: 165, c: 0, g: 9, ug: 150, u: 'porción' },
-  'Pollo a la plancha': { p: 23, k: 165, c: 0, g: 7.4, ug: 150, u: 'porción' },
-  'Pollo asado': { p: 24, k: 190, c: 0, g: 10, ug: 150, u: 'porción' },
-  'Pollo desmigado': { p: 23, k: 165, c: 0, g: 7.4, ug: 150, u: 'porción' },
-  'Pollo en dados': { p: 22, k: 165, c: 0, g: 7.8, ug: 150, u: 'porción' },
+  'Pollo a la plancha': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
+  'Pollo asado': { p: 29.8, k: 197, c: 0, g: 7.8, ug: 150, u: 'porción' },
+  'Pollo desmigado': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
+  'Pollo en dados': { p: 22.5, k: 120, c: 0, g: 2.6, ug: 150, u: 'porción' },
   'Puerro': { p: 1.5, k: 61, c: 14.2, g: 0.3, ug: 150, u: 'puerro' },
   'Queso fresco': { p: 12, k: 110, c: 3, g: 6, ug: 40, u: 'porción' },
   'Requesón': { p: 11, k: 98, c: 3.4, g: 4.3, ug: 100, u: 'cazo' },
@@ -213,7 +213,7 @@ let RECIPES = [
   { id: 'r-may-c', month: 4, slot: 'comida', name: 'Pasta integral con atún', kcal: 1090, components: [
       { name: 'Pasta integral (en crudo)', grams: 160 }, { name: 'Atún', grams: 80 }, { name: 'Tomate natural', grams: 200 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 90 } ], pasos: ['Cuece la pasta.', 'Saltea con el tomate y el aceite, añade el atún al final y sirve con el pan.'] },
   { id: 'r-may-n', month: 4, slot: 'cena', name: 'Pisto con huevo y atún', kcal: 805, components: [
-      { name: 'Pisto casero', grams: 320 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Atún', grams: 80 } ], pasos: ['Calienta el pisto con un hilo de aceite.', 'Añade el huevo a la plancha o escalfado encima y acompaña con el pan.'] },
+      { name: 'Pisto casero', grams: 320 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Atún', grams: 80 } ], pasos: ['Calienta el pisto con un hilo de aceite y mezcla con el atún escurrido.', 'Corona con el huevo a la plancha o escalfado y acompaña con el pan.'] },
   { id: 'r-jun-d', month: 5, slot: 'desayuno', name: 'Bol de mango y yogur', kcal: 805, components: [
       { name: 'Mango', grams: 150 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Copos de avena', grams: 110 }, { name: 'Coco rallado', grams: 15 } ], pasos: ['Tritura medio mango con el yogur.', 'Añade el resto en dados con avena y coco.'] },
   { id: 'r-jun-c', month: 5, slot: 'comida', name: 'Ensalada de garbanzos y atún', kcal: 1050, components: [
@@ -235,7 +235,7 @@ let RECIPES = [
   { id: 'r-sep-d', month: 8, slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 795, components: [
       { name: 'Copos de avena', grams: 110 }, { name: 'Plátano', grams: 100 }, { name: 'Huevo', grams: 60 }, { name: 'Yogur griego natural', grams: 250 } ], pasos: ['Tritura la avena, el plátano y el huevo; haz tortitas en una sartén antiadherente.', 'Sirve con el yogur.'] },
   { id: 'r-sep-c', month: 8, slot: 'comida', name: 'Arroz integral con huevo y pollo', kcal: 1060, components: [
-      { name: 'Arroz integral (en crudo)', grams: 160 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Pollo a la plancha', grams: 130 } ], pasos: ['Cuece el arroz y saltea las verduras con el aceite.', 'Corona con un huevo a la plancha.'] },
+      { name: 'Arroz integral (en crudo)', grams: 160 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Pollo a la plancha', grams: 130 } ], pasos: ['Cuece el arroz y saltea las verduras con el aceite.', 'Haz el pollo y el huevo a la plancha y sirve todo junto.'] },
   { id: 'r-sep-n', month: 8, slot: 'cena', name: 'Calamares a la plancha', kcal: 840, components: [
       { name: 'Calamares', grams: 150 }, { name: 'Ensalada variada', grams: 200 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Patata', grams: 150 } ], pasos: ['Haz los calamares a la plancha con el aceite 2-3 minutos.', 'Acompaña con la ensalada, la patata y el pan.'] },
   { id: 'r-oct-d', month: 9, slot: 'desayuno', name: 'Porridge con manzana asada', kcal: 825, components: [
@@ -247,7 +247,7 @@ let RECIPES = [
   { id: 'r-nov-d', month: 10, slot: 'desayuno', name: 'Tostada con requesón y nueces', kcal: 805, components: [
       { name: 'Pan integral', grams: 160 }, { name: 'Requesón', grams: 95 }, { name: 'Nueces', grams: 40 }, { name: 'Fruta de temporada', grams: 100 } ], pasos: ['Tuesta el pan y unta el requesón.', 'Añade las nueces y acompaña con fruta.'] },
   { id: 'r-nov-c', month: 10, slot: 'comida', name: 'Albóndigas de pavo con arroz', kcal: 1115, components: [
-      { name: 'Pavo picado', grams: 175 }, { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Tomate natural', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Forma las albóndigas y dóralas con el aceite.', 'Cuece en salsa de tomate 15 minutos y sirve con el arroz y el pan.'] },
+      { name: 'Pavo picado', grams: 175 }, { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Tomate natural', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Forma las albóndigas con el pavo picado y dóralas con el aceite.', 'Cuécelas en la salsa de tomate 15 minutos y sirve con el arroz y el pan.'] },
   { id: 'r-nov-n', month: 10, slot: 'cena', name: 'Crema de calabaza con pavo', kcal: 845, components: [
       { name: 'Calabaza', grams: 320 }, { name: 'Pavo en dados', grams: 120 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Cuece la calabaza y la patata, y tritura.', 'Añade el pavo salteado con el aceite por encima y acompaña con el pan.'] },
   { id: 'r-dic-d', month: 11, slot: 'desayuno', name: 'Tostada con jamón cocido', kcal: 755, components: [
@@ -315,6 +315,7 @@ const OVR = {
 // Rediseño de recetas: overrides de rango y componentes añadidos por plato.
 const RECIPE_OVR = {
   'n8': { 'Nueces': [15, 30, 15], 'Pan integral': [30, 60, 30] },
+  'd7': { 'Huevo': [60, 120, 60], 'Yogur griego natural': [125, 250, 25] },
   'n10': { 'Nueces': [15, 30, 15], 'Jamón cocido': [60, 100, 20] },
   'd8': { 'Nueces': [15, 30, 15] },
   'd3': { 'Aguacate': [75, 75, 75], 'Pan integral': [90, 120, 30], 'Jamón cocido': [40, 80, 20] },
@@ -385,7 +386,7 @@ const RECIPE_REPLACE = {
       { name: 'Aceite de oliva', grams: 15 }, { name: 'Pan integral', grams: 30 } ] },
   // d7 era proteico en exceso para cualquier objetivo: tortitas de avena, real y flexible
   'd7': { slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 780,
-    components: [ { name: 'Copos de avena', grams: 70, 'Huevo': [60, 120, 60], 'Yogur griego natural': [125, 250, 25]}, { name: 'Huevo', grams: 60 },
+    components: [ { name: 'Copos de avena', grams: 70 }, { name: 'Huevo', grams: 60 },
       { name: 'Plátano', grams: 120 }, { name: 'Yogur griego natural', grams: 125 }, { name: 'Miel', grams: 7 } ],
     pasos: ['Tritura avena, huevo y plátano.', 'Cuaja tortitas pequeñas en sartén antiadherente y corona con yogur y miel.'] },
 };
@@ -453,6 +454,7 @@ function computePlan(option0, sk, sp) {
       A.g = snap(ga, A); B.g = snap(gb, B);
     }
   }
+  const big = Math.max(1, Math.min(1.3, sk / 1100));
   function stats() {
     let k = 0, p = 0, v = 0, f = 0;
     comps.forEach(c => { k += ING[c.name].k * c.g / 100; p += ING[c.name].p * c.g / 100; v += c.g; f += (ING[c.name].g || 0) * c.g / 100; });
@@ -461,7 +463,7 @@ function computePlan(option0, sk, sp) {
   function cost() {
     const s = stats();
     const fatPct = s.k > 0 ? s.f * 9 / s.k * 100 : 0;
-    return Math.pow((s.k - sk) / 25, 2) + Math.pow((s.p - sp) / 3, 2) + Math.pow(Math.max(0, s.v - 1000) / 100, 2) +
+    return Math.pow((s.k - sk) / 25, 2) + Math.pow((s.p - sp) / 3, 2) + Math.pow(Math.max(0, s.v - 1000 * big) / 100, 2) +
       Math.pow(Math.max(0, fatPct - 40) / 5, 2);
   }
   let best = cost();
@@ -524,13 +526,13 @@ function computePlan(option0, sk, sp) {
     const hard = (c) => {
       const ing = ING[c.name];
       if (ing.ug && ing.ug <= 10) return [c.lo, c.hi];  // especias y miel: nunca ensanchar
-      if (PROT_ANCHORS[c.name]) return [60, 320, 10];
+      if (PROT_ANCHORS[c.name]) return [60, Math.round(Math.min(350, 320 * big)), 10];
       if (/^Huevo/.test(c.name)) return [60, 180, 60];
       if (c.name === 'Aceite de oliva') return [5, 30, 5];
-      if (ing.k >= 200 && ing.p < 18) return [40, 250, 10];   // arroz/pasta/copos/pan
-      if (ing.k >= 60 && ing.p < 8) return [80, 375, 25];     // patata, boniato, fruta, maiz
+      if (ing.k >= 200 && ing.p < 18) return [40, Math.round(Math.min(300, 250 * big)), 10];   // arroz/pasta/copos/pan
+      if (ing.k >= 60 && ing.p < 8) return [80, Math.round(Math.min(450, 375 * big) / 25) * 25, 25];     // patata, boniato, fruta, maiz
       if (ing.k < 40) return [50, 300, 25];                   // verduras
-      if (ing.p >= 8) return [60, 300, 10];                   // lacteos altos en prot, legumbres
+      if (ing.p >= 8) return [60, Math.round(Math.min(400, 300 * big)), 10];                   // lacteos altos en prot, legumbres
       return [c.lo, c.hi];
     };
     comps.forEach(c => {
@@ -556,27 +558,33 @@ function computePlan(option0, sk, sp) {
     const s2 = stats();
     const gain = Math.abs(s.k - sk) + 3 * Math.abs(s.p - sp);
     const gain2 = Math.abs(s2.k - sk) + 3 * Math.abs(s2.p - sp);
-    if (gain2 < gain && s2.v <= 1200) { s = s2; }
+    if (gain2 < gain && s2.v <= 1200 * big) { s = s2; }
     else { comps.forEach((c, i) => { c.lo = saved[i].lo; c.hi = saved[i].hi; }); best = bestBefore; }
   }
   // Piezas enteras: ingredientes con unidad casera (huevo, patata, yogur...)
   // se ajustan a unidades completas (minimo 1) para que la etiqueta y los
   // gramos cuadren. Despues se prueba subir/bajar una unidad por ingrediente
   // y se reequilibra el granel, para seguir cerca del objetivo de kcal/prot.
+  // Franjas pequeñas (perfiles ligeros): las piezas se redondean a MEDIA unidad
+  // (1/2 rebanada, 1/2 lata) para que el minimo de pieza no dispare la racion.
+  const HALF_UNITS = ['rebanada', 'lata', 'tomate', 'patata mediana', 'boniato mediano', 'plátano', 'pera', 'manzana', 'mango', 'pieza', 'fresa', 'calabacín', 'puerro', 'vaso', 'tajada', 'loncha', 'filete', 'cazo', 'puñado', 'porción', 'plato', 'yogur', 'cucharada', 'cucharadita'];
+  const halfOK = (name) => sk < 550 && HALF_UNITS.indexOf(ING[name].u) >= 0;
+  const unitStep = (name) => { const ug = ING[name].ug; return halfOK(name) ? ug / 2 : ug; };
   const unitBounds = (c) => {
-    const ug = ING[c.name].ug;
-    const nMax = Math.max(1, Math.floor(c.hi / ug));
-    const nMin = Math.min(nMax, Math.max(1, Math.ceil(c.lo / ug)));
+    const st = unitStep(c.name);
+    const nMax = Math.max(1, Math.floor(c.hi / st));
+    const nMin = Math.min(nMax, Math.max(1, Math.ceil(c.lo / st)));
     return [nMin, nMax];
   };
   comps.forEach(c => {
     const ing = ING[c.name];
     if (ing && ing.ug) {
+      const st = unitStep(c.name);
       const [nMin, nMax] = unitBounds(c);
-      let n = Math.round(c.g / ing.ug);
+      let n = Math.round(c.g / st);
       if (n < nMin) n = nMin;
       if (n > nMax) n = nMax;
-      c.g = n * ing.ug;
+      c.g = n * st;
     }
   });
   const errU = () => { const t = stats(); const fp = t.k > 0 ? t.f * 9 / t.k * 100 : 0;
@@ -586,16 +594,17 @@ function computePlan(option0, sk, sp) {
     for (const c of comps) {
       const ing = ING[c.name];
       if (!ing || !ing.ug) continue;
-      const n0 = Math.round(c.g / ing.ug);
+      const st = unitStep(c.name);
+      const n0 = Math.round(c.g / st);
       let bestN = n0, bestE = errU();
       const [nLo, nHi] = unitBounds(c);
       [n0 - 1, n0 + 1].forEach(n => {
-        if (n < nLo || n > Math.min(8, nHi)) return;
-        c.g = n * ing.ug;
+        if (n < nLo || n > Math.min(halfOK(c.name) ? 16 : 8, nHi)) return;
+        c.g = n * st;
         const e = errU();
         if (e < bestE - 1e-9) { bestE = e; bestN = n; }
       });
-      c.g = bestN * ing.ug;
+      c.g = bestN * st;
       if (bestN !== n0) improved = true;
     }
     if (!improved) break;
