@@ -16,7 +16,7 @@
   var GOAL_LABEL = { perder: 'Perder grasa', mantener: 'Mantener', ganar: 'Ganar músculo' };
   var ACTIVITY_LABEL = ['Sedentario', 'Actividad ligera', 'Actividad ligera', 'Actividad moderada',
     'Actividad moderada', 'Actividad alta', 'Actividad alta', 'Actividad muy alta'];
-  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c2':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd1':1, 'd2':1, 'd3':1, 'd4':1, 'd5':1, 'd8':1, 'n1':1, 'n10':1, 'n14':1, 'n16':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'n7':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-c':1, 'r-dic-d':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-feb-n':1, 'r-jul-d':1, 'r-jul-n':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-may-n':1, 'r-nov-c':1, 'r-nov-n':1, 'r-oct-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1, 'd6':1, 'd7':1, 'n13':1, 'n6':1, 'r-jun-d':1, 'r-jun-n':1, 'r-mar-n':1, 'r-sep-d':1, 'n8':1, 'n9':1, 'n11':1, 'n12':1, 'n15':1, 'r-ago-c':1, 'r-ago-d':1, 'r-ene-n':1, 'r-feb-d':1, 'r-jul-c':1, 'r-mar-d':1, 'r-nov-d':1, };
+  var PHOTO_IDS = { 'c1':1, 'c10':1, 'c3':1, 'c4':1, 'c5':1, 'c6':1, 'c7':1, 'c8':1, 'c9':1, 'd2':1, 'd4':1, 'n1':1, 'n10':1, 'n2':1, 'n3':1, 'n4':1, 'n5':1, 'r-abr-c':1, 'r-abr-d':1, 'r-abr-n':1, 'r-ago-n':1, 'r-dic-n':1, 'r-ene-c':1, 'r-ene-d':1, 'r-feb-c':1, 'r-jul-d':1, 'r-jun-c':1, 'r-mar-c':1, 'r-may-c':1, 'r-may-d':1, 'r-nov-c':1, 'r-oct-d':1, 'r-oct-n':1, 'r-sep-c':1, 'r-sep-n':1, 'd6':1, 'd7':1, 'n6':1, 'r-jun-d':1, 'r-jun-n':1, 'r-sep-d':1, 'n8':1, 'n9':1, 'n11':1, 'n12':1, 'n15':1, 'r-ago-c':1, 'r-ago-d':1, 'r-ene-n':1, 'r-feb-d':1, 'r-jul-c':1, 'r-mar-d':1, 'r-nov-d':1, };
   var ICONS = {
     bowl: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>',
     pot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M8 6c1-2 7-2 8 0"/></svg>',
@@ -273,7 +273,7 @@
         return '<button class="meal-card' + (o.id === selected.id ? ' selected' : '') + '" data-slot="' + slot + '" data-id="' + o.id + '">' +
           '<span class="check">✓</span>' +
           (ph ? '<img src="' + ph + '" alt="' + esc(o.name) + '" loading="lazy">'
-              : '<div class="svg-cover">' + ICONS[SLOT_ICON[o.slot]] + '</div>') +
+              : '<div class="svg-cover photo-pending">' + ICONS[SLOT_ICON[o.slot]] + '<small>Foto pendiente</small></div>') +
           '<div class="m-body"><div class="m-name">' + esc(o.name) + '</div>' +
           (isRecipe ? '<div class="m-tag recipe-of">Receta de ' + MONTHS[month] + '</div>' :
             (o.rapida ? '<div class="m-tag quick">' + quickTag(o) + '</div>' : '<div class="m-tag">Clásico</div>')) +
@@ -415,7 +415,7 @@
       var ph = photoFor(rec);
       html += '<div class="recipe-card">' +
         (ph ? '<img src="' + ph + '" alt="' + esc(rec.name) + '" loading="lazy">'
-            : '<div class="emoji-cover">' + ICONS[SLOT_ICON[rec.slot]] + '</div>') +
+            : '<div class="emoji-cover photo-pending">' + ICONS[SLOT_ICON[rec.slot]] + '<small>Foto pendiente</small></div>') +
         '<div class="r-body"><span class="pill orange">Receta de ' + MONTHS[viewM] + ' · sustituye a: ' + SLOT_LABEL[rec.slot].toLowerCase() + '</span>' +
         '<h3 class="mt8">' + esc(rec.name) + '</h3>' +
         (g ? ingredientHTML(rec, Math.round(g * SLOT_SHARE[rec.slot] / 10) * 10, g) : baseHTML(rec)) +
@@ -487,7 +487,7 @@
         { n: 'Gemelos con goma', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'gomas-gemelos' },
         { n: 'Plancha con toques de hombro', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-plancha-toques' } ] },
       { id: 'T2', nombre: 'Fullbody Torso', ej: [
-        { n: 'Press inclinado con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: 'gomas-press-inclinado' },
+        { n: 'Press inclinado con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: null },
         { n: 'Jalón al pecho con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-pecho' },
         { n: 'Elevaciones laterales con goma', s: '3 x 15', g: 'Hombro', p: 'curl', img: 'gomas-elev-laterales' },
         { n: 'Face pull con goma', s: '3 x 15', g: 'Espalda', p: 'row', img: 'gomas-face-pull' },
@@ -519,7 +519,7 @@
         { n: 'Extensión de tríceps a 2 manos', s: '3 x 12', g: 'Tríceps', p: 'press', img: 'manc-triceps', ss: 1 } ] } ],
       B: [
       { id: 'T1', nombre: 'Fullbody Torso', ej: [
-        { n: 'Jalón agarre estrecho en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: 'manc-jalon-pecho' },
+        { n: 'Jalón agarre estrecho en polea', s: '4 x 12', g: 'Espalda', p: 'row', img: null },
         { n: 'Remo a 1 mano con mancuerna', s: '4 x 10 por brazo', g: 'Espalda', p: 'row', img: 'manc-remo-1m' },
         { n: 'Curl de bíceps con mancuernas', s: '3 x 12', g: 'Bíceps', p: 'curl', img: 'manc-curl' },
         { n: 'Flexiones sobre mancuernas con pausa', s: '4 x 8', g: 'Pecho', p: 'pushup', img: 'manc-flexiones' },
@@ -545,119 +545,119 @@
       skills: true,
       A: [
         { id: 'b1', nombre: 'Básicos de barra (empieza aquí)', nota: 'Sin nivel previo: no hace falta ni una dominada. Elige UNA variante por bloque: la que te salga limpia y cómoda. Las variantes de un mismo bloque no se hacen seguidas. Cuando las dominadas, las flexiones y los fondos te salgan con técnica limpia, puedes empezar a probar las skills poco a poco.', ej: [
-          { n: 'Flexiones de rodillas', s: '3 x 8-12', b: 1, lvl: 1, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Flexiones', s: '3 x 8-12', b: 1, lvl: 2, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', b: 1, lvl: 3, g: 'Pecho', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', b: 2, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Remo invertido con pies elevados', s: '4 x 8', b: 2, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Australianas 3 posiciones', s: '3 x 10 s por posición', b: 2, lvl: 3, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Sentadilla al aire', s: '3 x 15', b: 3, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Sentadilla profunda con pausa abajo', s: '3 x 12', b: 3, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Zancadas', s: '3 x 10 por pierna', b: 3, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Plancha', s: '3 x 20-30 s', b: 4, lvl: 1, g: 'Core', p: 'plank', img: 'core-plancha' },
-          { n: 'Plancha con toques de hombro', s: '3 x 20', b: 4, lvl: 2, g: 'Core', p: 'plank', img: 'core-plancha' },
-          { n: 'Hollow body hold', s: '3 x 15 s', b: 4, lvl: 3, g: 'Core', p: 'plank', img: 'skill-hollow' },
-          { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', b: 5, lvl: 1, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas', s: '4 x 4-6', b: 5, lvl: 2, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 5, lvl: 3, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Fondos asistidos (banco o goma)', s: '3 x 8', b: 6, lvl: 1, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
-          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 6, lvl: 2, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' },
-          { n: 'Fondos con pausa abajo', s: '3 x 6-8', b: 6, lvl: 3, g: 'Pecho · Tríceps', p: 'dip', img: 'skill-fondos' } ] },
+          { n: 'Flexiones de rodillas', s: '3 x 8-12', b: 1, lvl: 1, g: 'Pecho', p: 'pushup', img: "cal-flexiones-rodillas" },
+          { n: 'Flexiones', s: '3 x 8-12', b: 1, lvl: 2, g: 'Pecho', p: 'pushup', img: "cal-flexiones" },
+          { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', b: 1, lvl: 3, g: 'Pecho', p: 'pushup', img: "cal-flexiones-diamante" },
+          { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', b: 2, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-mesa" },
+          { n: 'Remo invertido con pies elevados', s: '4 x 8', b: 2, lvl: 2, g: 'Espalda', p: 'row', img: "cal-remo-elevado" },
+          { n: 'Australianas 3 posiciones', s: '3 x 10 s por posición', b: 2, lvl: 3, g: 'Espalda', p: 'row', img: null },
+          { n: 'Sentadilla al aire', s: '3 x 15', b: 3, lvl: 1, g: 'Pierna', p: 'squat', img: "cal-sentadilla" },
+          { n: 'Sentadilla profunda con pausa abajo', s: '3 x 12', b: 3, lvl: 2, g: 'Pierna', p: 'squat', img: "cal-sentadilla" },
+          { n: 'Zancadas', s: '3 x 10 por pierna', b: 3, lvl: 3, g: 'Pierna', p: 'squat', img: "cal-zancadas" },
+          { n: 'Plancha', s: '3 x 20-30 s', b: 4, lvl: 1, g: 'Core', p: 'plank', img: "core-plancha" },
+          { n: 'Plancha con toques de hombro', s: '3 x 20', b: 4, lvl: 2, g: 'Core', p: 'plank', img: "core-plancha-toques" },
+          { n: 'Hollow body hold', s: '3 x 15 s', b: 4, lvl: 3, g: 'Core', p: 'plank', img: "skill-hollow" },
+          { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', b: 5, lvl: 1, g: 'Espalda', p: 'pullup', img: null },
+          { n: 'Dominadas', s: '4 x 4-6', b: 5, lvl: 2, g: 'Espalda', p: 'pullup', img: "skill-dominadas" },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 5, lvl: 3, g: 'Espalda', p: 'pullup', img: null },
+          { n: 'Fondos asistidos (banco o goma)', s: '3 x 8', b: 6, lvl: 1, g: 'Pecho · Tríceps', p: 'dip', img: "cal-fondos-asistidos" },
+          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 6, lvl: 2, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" },
+          { n: 'Fondos con pausa abajo', s: '3 x 6-8', b: 6, lvl: 3, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" } ] },
         { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida: empieza cuando las dominadas estrictas te resulten cómodas. Sesión completa por bloques: elige UNA variante por bloque (la que te salga limpia) y haz sus series. Las variantes de un bloque no se encadenan.', ej: [
-          { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
-          { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: 'skill-dominada-explosiva' },
-          { n: 'Australianas cerradas', s: '3 x 6-12', b: 3, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Australianas mixtas', s: '3 x 6-12', b: 3, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Dominadas comando', s: '3 x 4-8', b: 3, lvl: 3, g: 'Espalda', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Transición con pies apoyados', s: '3 x 4-6', b: 4, lvl: 1, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Transición con goma', s: '3 x 4-5', b: 4, lvl: 2, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-transicion' },
-          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', b: 4, lvl: 3, g: 'Técnica', p: 'pullup', img: 'skill-muscleup-negativo' },
-          { n: 'Flexiones con parada abajo 2-3 s', s: '3 x 6-10', b: 5, lvl: 1, g: 'Empuje', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
-          { n: 'Fondos en barra recta', s: '3 x 5-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: 'skill-fondos-barra' },
-          { n: 'Dominada alta con balanceo controlado', s: '3 x 4', b: 6, lvl: 1, g: 'Skill', p: 'pullup', img: 'skill-kipping' },
-          { n: 'Balanceo kipping controlado', s: '3 x 6', b: 6, lvl: 2, g: 'Skill', p: 'pullup', img: 'skill-kipping' },
-          { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: 'skill-muscleup-transicion' } ] },
+          { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
+          { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: null },
+          { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: null },
+          { n: 'Australianas cerradas', s: '3 x 6-12', b: 3, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-cerrado" },
+          { n: 'Australianas mixtas', s: '3 x 6-12', b: 3, lvl: 2, g: 'Espalda', p: 'row', img: null },
+          { n: 'Dominadas comando', s: '3 x 4-8', b: 3, lvl: 3, g: 'Espalda', p: 'pullup', img: null },
+          { n: 'Transición con pies apoyados', s: '3 x 4-6', b: 4, lvl: 1, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Transición con goma', s: '3 x 4-5', b: 4, lvl: 2, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', b: 4, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Flexiones con parada abajo 2-3 s', s: '3 x 6-10', b: 5, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
+          { n: 'Fondos en paralelas', s: '3 x 8-12', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: "skill-fondos" },
+          { n: 'Fondos en barra recta', s: '3 x 5-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: "skill-fondos-barra" },
+          { n: 'Dominada alta con balanceo controlado', s: '3 x 4', b: 6, lvl: 1, g: 'Skill', p: 'pullup', img: null },
+          { n: 'Balanceo kipping controlado', s: '3 x 6', b: 6, lvl: 2, g: 'Skill', p: 'pullup', img: "skill-kipping" },
+          { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: null } ] },
         { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META: empieza con soltura en dominadas. Sesión completa por bloques: elige UNA variante por bloque. El trabajo de brazo recto carga tendones más que músculos y los tendones adaptan lento: quédate siempre a 1-2 segundos o reps de tu máximo, y sube de variante solo cuando la actual salga limpia.', ej: [
-          { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Retracciones escapulares en barra', s: '3 x 6-8', b: 1, lvl: 3, g: 'Base', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: 'skill-frontlever-tuck' },
-          { n: 'Advanced tuck (espalda plana)', s: '3 x 8-15 s', b: 2, lvl: 2, g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
-          { n: 'Front lever a una pierna', s: '3 x 5-10 s', b: 2, lvl: 3, g: 'Estático', p: 'pullup', img: 'skill-frontlever-advtuck' },
-          { n: 'Subidas a tuck front lever', s: '3 x 3-4', b: 3, lvl: 1, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
-          { n: 'Subidas a advanced tuck', s: '3 x 3-5', b: 3, lvl: 2, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-subidas' },
-          { n: 'Negativa de dominada a front lever', s: '3 x 3', b: 3, lvl: 3, g: 'Fuerza', p: 'pullup', img: 'skill-frontlever-negativa' },
-          { n: 'Dominadas', s: '3 x 4-8', b: 4, lvl: 1, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas (volumen)', s: '4 x 5-8', b: 4, lvl: 2, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 4, lvl: 3, g: 'Tirón', p: 'pullup', img: 'skill-dominadas' },
-          { n: 'Remo invertido en barra baja', s: '4 x 8', b: 5, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-mesa' },
-          { n: 'Remo en tuck front lever', s: '3 x 5-8', b: 5, lvl: 2, g: 'Espalda', p: 'row', img: 'skill-frontlever-tuck' },
-          { n: 'Remo en advanced tuck', s: '3 x 5', b: 5, lvl: 3, g: 'Espalda', p: 'row', img: 'skill-frontlever-advtuck' },
-          { n: 'Negativa lenta de tuck a colgado (3-4 s)', s: '3 x 3', b: 6, lvl: 1, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' },
-          { n: 'Negativa de front lever (unos 5 s)', s: '3 x 3', b: 6, lvl: 2, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' },
-          { n: 'Negativa de front lever (8-10 s)', s: '3 x 3', b: 6, lvl: 3, g: 'Excéntrico', p: 'pullup', img: 'skill-frontlever-negativa' } ] },
+          { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: "skill-colgado-activo" },
+          { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: null },
+          { n: 'Retracciones escapulares en barra', s: '3 x 6-8', b: 1, lvl: 3, g: 'Base', p: 'pullup', img: null },
+          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: null },
+          { n: 'Advanced tuck (espalda plana)', s: '3 x 8-15 s', b: 2, lvl: 2, g: 'Estático', p: 'pullup', img: null },
+          { n: 'Front lever a una pierna', s: '3 x 5-10 s', b: 2, lvl: 3, g: 'Estático', p: 'pullup', img: null },
+          { n: 'Subidas a tuck front lever', s: '3 x 3-4', b: 3, lvl: 1, g: 'Fuerza', p: 'pullup', img: null },
+          { n: 'Subidas a advanced tuck', s: '3 x 3-5', b: 3, lvl: 2, g: 'Fuerza', p: 'pullup', img: null },
+          { n: 'Negativa de dominada a front lever', s: '3 x 3', b: 3, lvl: 3, g: 'Fuerza', p: 'pullup', img: null },
+          { n: 'Dominadas', s: '3 x 4-8', b: 4, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
+          { n: 'Dominadas (volumen)', s: '4 x 5-8', b: 4, lvl: 2, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 4, lvl: 3, g: 'Tirón', p: 'pullup', img: null },
+          { n: 'Remo invertido en barra baja', s: '4 x 8', b: 5, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-mesa" },
+          { n: 'Remo en tuck front lever', s: '3 x 5-8', b: 5, lvl: 2, g: 'Espalda', p: 'row', img: null },
+          { n: 'Remo en advanced tuck', s: '3 x 5', b: 5, lvl: 3, g: 'Espalda', p: 'row', img: null },
+          { n: 'Negativa lenta de tuck a colgado (3-4 s)', s: '3 x 3', b: 6, lvl: 1, g: 'Excéntrico', p: 'pullup', img: null },
+          { n: 'Negativa de front lever (unos 5 s)', s: '3 x 3', b: 6, lvl: 2, g: 'Excéntrico', p: 'pullup', img: null },
+          { n: 'Negativa de front lever (8-10 s)', s: '3 x 3', b: 6, lvl: 3, g: 'Excéntrico', p: 'pullup', img: null } ] },
         { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META: empieza cuando las flexiones te resulten fáciles. Sesión completa por bloques: elige UNA variante por bloque. Aquí la unidad es el mes, no la semana: paciencia, y cuida las muñecas (calienta antes).', ej: [
-          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', b: 1, lvl: 1, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
-          { n: 'Planche lean con pies elevados', s: '4 x 15-20 s', b: 1, lvl: 2, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
-          { n: 'Planche lean máximo controlado', s: '4 x 15 s', b: 1, lvl: 3, g: 'Empuje', p: 'plank', img: 'skill-planche-lean' },
-          { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
-          { n: 'Crow pose (cuervo)', s: '3 x 15-20 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: 'skill-frog-stand' },
-          { n: 'Tuck planche hold', s: '3 x 8-12 s', b: 2, lvl: 3, g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'skill-planche-tuck' },
-          { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Flexiones pseudo-planche', s: '3 x 6-8', b: 4, lvl: 2, g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
-          { n: 'Flexiones pseudo-planche con pies elevados', s: '3 x 5-8', b: 4, lvl: 3, g: 'Empuje', p: 'pushup', img: 'skill-pseudo-pushup' },
-          { n: 'Fondos asistidos', s: '3 x 8', b: 5, lvl: 1, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
-          { n: 'Fondos lean planche', s: '3 x 6-8', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
-          { n: 'Fondos lean planche con piernas elevadas', s: '4 x 6-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: 'skill-fondos' },
-          { n: 'Movilidad y carga de muñecas', s: '2 x 30 s', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: 'core-plancha' },
-          { n: 'L-sit', s: '3 x 10 s', b: 6, lvl: 2, g: 'Core', p: 'plank', img: 'skill-hollow' },
-          { n: 'De L-sit a tuck planche', s: '3 x 3', b: 6, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'skill-planche-tuck' } ] },
+          { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', b: 1, lvl: 1, g: 'Empuje', p: 'plank', img: null },
+          { n: 'Planche lean con pies elevados', s: '4 x 15-20 s', b: 1, lvl: 2, g: 'Empuje', p: 'plank', img: null },
+          { n: 'Planche lean máximo controlado', s: '4 x 15 s', b: 1, lvl: 3, g: 'Empuje', p: 'plank', img: null },
+          { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: "skill-frog-stand" },
+          { n: 'Crow pose (cuervo)', s: '3 x 15-20 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: "skill-frog-stand" },
+          { n: 'Tuck planche hold', s: '3 x 8-12 s', b: 2, lvl: 3, g: 'Estático', p: 'plank', img: null },
+          { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: null },
+          { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: null },
+          { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: null },
+          { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
+          { n: 'Flexiones pseudo-planche', s: '3 x 6-8', b: 4, lvl: 2, g: 'Empuje', p: 'pushup', img: "skill-pseudo-pushup" },
+          { n: 'Flexiones pseudo-planche con pies elevados', s: '3 x 5-8', b: 4, lvl: 3, g: 'Empuje', p: 'pushup', img: null },
+          { n: 'Fondos asistidos', s: '3 x 8', b: 5, lvl: 1, g: 'Empuje', p: 'dip', img: "cal-fondos-asistidos" },
+          { n: 'Fondos lean planche', s: '3 x 6-8', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: null },
+          { n: 'Fondos lean planche con piernas elevadas', s: '4 x 6-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: null },
+          { n: 'Movilidad y carga de muñecas', s: '2 x 30 s', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: "cal-movilidad-munecas" },
+          { n: 'L-sit', s: '3 x 10 s', b: 6, lvl: 2, g: 'Core', p: 'plank', img: "skill-lsit" },
+          { n: 'De L-sit a tuck planche', s: '3 x 3', b: 6, lvl: 3, g: 'Core · Skill', p: 'plank', img: null } ] },
         { id: 'b5', nombre: 'Meta: Pino (handstand)', nota: 'El pino libre es la META. Sesión completa por bloques: elige UNA variante por bloque. Poco y a menudo: 10 minutos al día valen más que una hora el fin de semana. Calienta muñecas antes de empezar.', ej: [
-          { n: 'Under switch (cambio de apoyo)', s: '3 x 10-20', b: 1, lvl: 1, g: 'Entrada', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Wall climb (caminata de pared)', s: '4 x 20 s', b: 1, lvl: 2, g: 'Entrada', p: 'pushup', img: 'skill-pino-caminata' },
-          { n: 'Caminata de pared hasta pino', s: '3 x 3', b: 1, lvl: 3, g: 'Entrada', p: 'pushup', img: 'skill-pino-caminata' },
-          { n: 'Pino contra pared (de espaldas)', s: '4 x 20-30 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Pino de cara a la pared', s: '4 x 20-30 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Pino de cara a la pared, con salidas', s: '4 x 10-20 s', b: 2, lvl: 3, g: 'Equilibrio', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Pino contra pared, una pierna despegada', s: '3 x 10 s por lado', b: 3, lvl: 1, g: 'Skill', p: 'plank', img: 'skill-pino-pared' },
-          { n: 'Salidas de pino (práctica 5 min)', s: '5 min', b: 3, lvl: 2, g: 'Skill', p: 'plank', img: 'skill-pino-libre' },
-          { n: 'Pino libre o con compañero (intentos)', s: '5-8 intentos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'skill-pino-libre' },
-          { n: 'Flexiones (con o sin rodillas)', s: '3 x 10-15', b: 4, lvl: 1, g: 'Hombro', p: 'pushup', img: 'cal-flexiones' },
-          { n: 'Flexiones pike', s: '3 x 8', b: 4, lvl: 2, g: 'Hombro', p: 'pushup', img: 'cal-pike' },
-          { n: 'Flexiones en pino contra pared', s: '3 x 5', b: 4, lvl: 3, g: 'Hombro', p: 'pushup', img: 'skill-pino-flexiones' },
-          { n: 'Hollow body hold', s: '3 x 15 s', b: 5, lvl: 1, g: 'Core', p: 'plank', img: 'skill-hollow' },
-          { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: 'skill-hollow' },
-          { n: 'De L-sit a pino', s: '3 x 3-4', b: 5, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'skill-pino-libre' },
-          { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: 'core-plancha' },
-          { n: 'Estiramiento de hombros en pared', s: '2 x 30 s', b: 6, lvl: 2, g: 'Preparación', p: 'plank', img: 'core-plancha' },
-          { n: 'Puente (progresión suave)', s: '3 x 10 s', b: 6, lvl: 3, g: 'Preparación', p: 'plank', img: 'core-plancha' } ] },
+          { n: 'Under switch (cambio de apoyo)', s: '3 x 10-20', b: 1, lvl: 1, g: 'Entrada', p: 'pushup', img: null },
+          { n: 'Wall climb (caminata de pared)', s: '4 x 20 s', b: 1, lvl: 2, g: 'Entrada', p: 'pushup', img: "skill-pino-caminata" },
+          { n: 'Caminata de pared hasta pino', s: '3 x 3', b: 1, lvl: 3, g: 'Entrada', p: 'pushup', img: "skill-pino-caminata" },
+          { n: 'Pino contra pared (de espaldas)', s: '4 x 20-30 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: "skill-pino-pared-espaldas" },
+          { n: 'Pino de cara a la pared', s: '4 x 20-30 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: "skill-pino-pared-cara" },
+          { n: 'Pino de cara a la pared, con salidas', s: '4 x 10-20 s', b: 2, lvl: 3, g: 'Equilibrio', p: 'plank', img: null },
+          { n: 'Pino contra pared, una pierna despegada', s: '3 x 10 s por lado', b: 3, lvl: 1, g: 'Skill', p: 'plank', img: "skill-pino-una-pierna" },
+          { n: 'Salidas de pino (práctica 5 min)', s: '5 min', b: 3, lvl: 2, g: 'Skill', p: 'plank', img: null },
+          { n: 'Pino libre o con compañero (intentos)', s: '5-8 intentos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: "skill-pino-libre" },
+          { n: 'Flexiones (con o sin rodillas)', s: '3 x 10-15', b: 4, lvl: 1, g: 'Hombro', p: 'pushup', img: "cal-flexiones" },
+          { n: 'Flexiones pike', s: '3 x 8', b: 4, lvl: 2, g: 'Hombro', p: 'pushup', img: "cal-pike" },
+          { n: 'Flexiones en pino contra pared', s: '3 x 5', b: 4, lvl: 3, g: 'Hombro', p: 'pushup', img: "skill-pino-flexiones" },
+          { n: 'Hollow body hold', s: '3 x 15 s', b: 5, lvl: 1, g: 'Core', p: 'plank', img: "skill-hollow" },
+          { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: null },
+          { n: 'De L-sit a pino', s: '3 x 3-4', b: 5, lvl: 3, g: 'Core · Skill', p: 'plank', img: null },
+          { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: null },
+          { n: 'Estiramiento de hombros en pared', s: '2 x 30 s', b: 6, lvl: 2, g: 'Preparación', p: 'plank', img: "cal-hombros-pared" },
+          { n: 'Puente (progresión suave)', s: '3 x 10 s', b: 6, lvl: 3, g: 'Preparación', p: 'plank', img: "cal-puente" } ] },
         { id: 'b6', nombre: 'Pierna y movilidad', nota: 'Sesión completa de pierna con calistenia. Elige UNA variante por bloque. Si tienes alguna lesión: limita el recorrido en sentadillas profundas y paso mono, y cambia las explosivas por la versión sin impacto (rápidas sin salto).', ej: [
-          { n: 'Sentadillas sumo con contracción activa', s: '3 x 15-25', b: 1, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Sentadillas profundas con pausa de 1 s abajo', s: '3 x 15-20', b: 1, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Sentadillas explosivas', s: '3 x 15-20', b: 1, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Zancadas', s: '3 x 10 por pierna', b: 2, lvl: 1, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Pistols asistidas (agarrándote)', s: '3 x 6 por pierna', b: 2, lvl: 2, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Pistol squat a cajón o silla', s: '3 x 4-6 por pierna', b: 2, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Marcha alta con patada frontal', s: '3 x 20', b: 3, lvl: 1, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Front step + patada frontal', s: '3 x 20', b: 3, lvl: 2, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Front step con salto', s: '3 x 15', b: 3, lvl: 3, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Zancada lateral estática', s: '3 x 20-30 s por lado', b: 4, lvl: 1, g: 'Pierna · Isométrico', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Paso mono lateral', s: '3 x 30-45 s por lado', b: 4, lvl: 2, g: 'Pierna · Isométrico', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Paso mono lateral con salto', s: '3 x 20', b: 4, lvl: 3, g: 'Pierna', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Elevaciones de gemelos', s: '3 x 15', b: 5, lvl: 1, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Gemelos a una pierna', s: '3 x 12 por pierna', b: 5, lvl: 2, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' },
-          { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: 'cal-sentadilla' } ] }
+          { n: 'Sentadillas sumo con contracción activa', s: '3 x 15-25', b: 1, lvl: 1, g: 'Pierna', p: 'squat', img: "cal-sumo" },
+          { n: 'Sentadillas profundas con pausa de 1 s abajo', s: '3 x 15-20', b: 1, lvl: 2, g: 'Pierna', p: 'squat', img: "cal-sentadilla" },
+          { n: 'Sentadillas explosivas', s: '3 x 15-20', b: 1, lvl: 3, g: 'Pierna', p: 'squat', img: "cal-sentadilla-salto" },
+          { n: 'Zancadas', s: '3 x 10 por pierna', b: 2, lvl: 1, g: 'Pierna', p: 'squat', img: "cal-zancadas" },
+          { n: 'Pistols asistidas (agarrándote)', s: '3 x 6 por pierna', b: 2, lvl: 2, g: 'Pierna', p: 'squat', img: "cal-pistol-asistida" },
+          { n: 'Pistol squat a cajón o silla', s: '3 x 4-6 por pierna', b: 2, lvl: 3, g: 'Pierna', p: 'squat', img: "cal-pistol-silla" },
+          { n: 'Marcha alta con patada frontal', s: '3 x 20', b: 3, lvl: 1, g: 'Pierna · Movilidad', p: 'squat', img: null },
+          { n: 'Front step + patada frontal', s: '3 x 20', b: 3, lvl: 2, g: 'Pierna · Movilidad', p: 'squat', img: null },
+          { n: 'Front step con salto', s: '3 x 15', b: 3, lvl: 3, g: 'Pierna · Movilidad', p: 'squat', img: null },
+          { n: 'Zancada lateral estática', s: '3 x 20-30 s por lado', b: 4, lvl: 1, g: 'Pierna · Isométrico', p: 'squat', img: "cal-zancada-lateral" },
+          { n: 'Paso mono lateral', s: '3 x 30-45 s por lado', b: 4, lvl: 2, g: 'Pierna · Isométrico', p: 'squat', img: null },
+          { n: 'Paso mono lateral con salto', s: '3 x 20', b: 4, lvl: 3, g: 'Pierna', p: 'squat', img: null },
+          { n: 'Elevaciones de gemelos', s: '3 x 15', b: 5, lvl: 1, g: 'Gemelo', p: 'squat', img: "cal-gemelos" },
+          { n: 'Gemelos a una pierna', s: '3 x 12 por pierna', b: 5, lvl: 2, g: 'Gemelo', p: 'squat', img: "cal-gemelos-1p" },
+          { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: "cal-gemelos-escalon" },
+          { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: null },
+          { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: null },
+          { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: null } ] }
       ],
       B: null
     }
@@ -694,8 +694,9 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
   function exThumb(x) {
-    var svg = '<div class="ex-svg">' + exSVG(x.p) + '</div>';
-    return '<img class="ex-thumb" src="assets/ex-' + x.img + '.jpg" alt="" loading="lazy" onerror="this.outerHTML=this.dataset.fb" data-fb="' + svg.replace(/"/g, '&quot;') + '">';
+    var svg = '<div class="ex-svg" role="img" aria-label="Foto pendiente de verificación">' + exSVG(x.p) + '</div>';
+    if (!x.img) return '<div class="ex-photo-pending">' + svg + '<small>Foto pendiente</small></div>';
+    return '<img class="ex-thumb" src="assets/ex-' + x.img + '.jpg" alt="' + esc(x.n) + '" loading="lazy" onerror="this.outerHTML=this.dataset.fb" data-fb="' + svg.replace(/"/g, '&quot;') + '">';
   }
   function renderEntreno() {
     var mIdx = new Date().getMonth();
@@ -890,7 +891,7 @@
   function openLightbox(src, alt) {
     var ov = document.createElement('div');
     ov.className = 'lb-overlay';
-    ov.innerHTML = '<span class="lb-close">×</span><img src="' + src + '" alt="' + (alt || '') + '">';
+    ov.innerHTML = '<span class="lb-close">×</span><figure><img src="' + src + '" alt="' + esc(alt || '') + '"><figcaption>' + esc(alt || '') + '</figcaption></figure>';
     ov.addEventListener('click', function () { ov.remove(); });
     document.body.appendChild(ov);
   }

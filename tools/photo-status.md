@@ -94,3 +94,7 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 - APROBADA ex-cal-sentadilla (IA peso corporal).
 - El resto de fotos IA de ejercicios instaladas quedan como ILUSTRACION, no demostracion tecnica certificada.
 - Ejercicios pendientes con fallback SVG (7): skill-frontlever-tuck, skill-frontlever-advtuck, skill-frontlever-subidas, skill-planche-lean, skill-dominada-explosiva, skill-frontlever-negativa, skill-muscleup-negativo.
+
+
+## 2026-10-24 10:10 - Auditoría completa por variante y plato
+El estado vigente es tools/photo-audit-2026-10-24.md y su inventario JSON. 53/70 platos con imagen, 17 pendientes. Calistenia: 54/108 filas con ilustración, 54 pendientes. Total ejercicios: 128/184 con imagen, 56 pendientes. Ningún dato de receta o rutina cambiado. Sin publicar. Se retiran aproximaciones heredadas, no se declara cobertura por mera existencia del archivo.

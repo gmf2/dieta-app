@@ -1,0 +1,1593 @@
+{
+  "calisthenics": [
+    {
+      "name": "Flexiones de rodillas",
+      "img": "cal-flexiones-rodillas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones",
+      "img": "cal-flexiones",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones diamante o declinadas",
+      "img": "cal-flexiones-diamante",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Remo invertido en mesa o barra baja",
+      "img": "cal-remo-mesa",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Remo invertido con pies elevados",
+      "img": "cal-remo-elevado",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Australianas 3 posiciones",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Sentadilla al aire",
+      "img": "cal-sentadilla",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Sentadilla profunda con pausa abajo",
+      "img": "cal-sentadilla",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Zancadas",
+      "img": "cal-zancadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Plancha",
+      "img": "core-plancha",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Plancha con toques de hombro",
+      "img": "core-plancha-toques",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Hollow body hold",
+      "img": "skill-hollow",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Negativas de dominada (baja en 3-4 s)",
+      "img": null,
+      "status": "pending",
+      "reason": "Negative sequences retained as pending under review restriction."
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Dominadas arqueras o con lastre",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Fondos asistidos (banco o goma)",
+      "img": "cal-fondos-asistidos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Fondos en paralelas",
+      "img": "skill-fondos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Fondos con pausa abajo",
+      "img": "skill-fondos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Muscle up en barra baja",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Muscle up con goma",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Muscle up con parada abajo",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Dominadas rápidas subiendo, bajada lenta",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Dominada explosiva al pecho",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Australianas cerradas",
+      "img": "cal-remo-cerrado",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Australianas mixtas",
+      "img": null,
+      "status": "pending",
+      "reason": "Mixed grip not reliably distinguishable in candidate."
+    },
+    {
+      "name": "Dominadas comando",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Transición con pies apoyados",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Transición con goma",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Muscle up negativo (bajada lenta)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Flexiones con parada abajo 2-3 s",
+      "img": "cal-flexiones",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Fondos en paralelas",
+      "img": "skill-fondos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Fondos en barra recta",
+      "img": "skill-fondos-barra",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Dominada alta con balanceo controlado",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Balanceo kipping controlado",
+      "img": "skill-kipping",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Muscle up (intentos)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Colgado de barra con escápulas activas",
+      "img": "skill-colgado-activo",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Colgado en arco (arch hang)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Retracciones escapulares en barra",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Tuck front lever (rodillas al pecho)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Advanced tuck (espalda plana)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Front lever a una pierna",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Subidas a tuck front lever",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Subidas a advanced tuck",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Negativa de dominada a front lever",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Dominadas (volumen)",
+      "img": "skill-dominadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Dominadas arqueras o con lastre",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Remo invertido en barra baja",
+      "img": "cal-remo-mesa",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Remo en tuck front lever",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Remo en advanced tuck",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Negativa lenta de tuck a colgado (3-4 s)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Negativa de front lever (unos 5 s)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Negativa de front lever (8-10 s)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Planche lean (peso al frente, brazos rectos)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Planche lean con pies elevados",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Planche lean máximo controlado",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Frog stand (equilibrio de rana)",
+      "img": "skill-frog-stand",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Crow pose (cuervo)",
+      "img": "skill-frog-stand",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Tuck planche hold",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Subidas a tuck planche",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Advanced tuck planche",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Straddle planche (intentos)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Flexiones",
+      "img": "cal-flexiones",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones pseudo-planche",
+      "img": "skill-pseudo-pushup",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones pseudo-planche con pies elevados",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Fondos asistidos",
+      "img": "cal-fondos-asistidos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Fondos lean planche",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Fondos lean planche con piernas elevadas",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Movilidad y carga de muñecas",
+      "img": "cal-movilidad-munecas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "L-sit",
+      "img": "skill-lsit",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "De L-sit a tuck planche",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Under switch (cambio de apoyo)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Wall climb (caminata de pared)",
+      "img": "skill-pino-caminata",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Caminata de pared hasta pino",
+      "img": "skill-pino-caminata",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Pino contra pared (de espaldas)",
+      "img": "skill-pino-pared-espaldas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Pino de cara a la pared",
+      "img": "skill-pino-pared-cara",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Pino de cara a la pared, con salidas",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Pino contra pared, una pierna despegada",
+      "img": "skill-pino-una-pierna",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Salidas de pino (práctica 5 min)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Pino libre o con compañero (intentos)",
+      "img": "skill-pino-libre",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones (con o sin rodillas)",
+      "img": "cal-flexiones",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones pike",
+      "img": "cal-pike",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Flexiones en pino contra pared",
+      "img": "skill-pino-flexiones",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Hollow body hold",
+      "img": "skill-hollow",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Hollow body con balanceo",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "De L-sit a pino",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Movilidad de muñecas y hombros",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Estiramiento de hombros en pared",
+      "img": "cal-hombros-pared",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Puente (progresión suave)",
+      "img": "cal-puente",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Sentadillas sumo con contracción activa",
+      "img": "cal-sumo",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Sentadillas profundas con pausa de 1 s abajo",
+      "img": "cal-sentadilla",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Sentadillas explosivas",
+      "img": "cal-sentadilla-salto",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Zancadas",
+      "img": "cal-zancadas",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Pistols asistidas (agarrándote)",
+      "img": "cal-pistol-asistida",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Pistol squat a cajón o silla",
+      "img": "cal-pistol-silla",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Marcha alta con patada frontal",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Front step + patada frontal",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Front step con salto",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Zancada lateral estática",
+      "img": "cal-zancada-lateral",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Paso mono lateral",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Paso mono lateral con salto",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Elevaciones de gemelos",
+      "img": "cal-gemelos",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Gemelos a una pierna",
+      "img": "cal-gemelos-1p",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Gemelos a una pierna en escalón",
+      "img": "cal-gemelos-escalon",
+      "status": "illustration",
+      "reason": null
+    },
+    {
+      "name": "Movilidad de tobillo y cadera",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Movilidad de cadera + isquiotibiales",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    },
+    {
+      "name": "Movilidad global (flujo completo)",
+      "img": null,
+      "status": "pending",
+      "reason": "No photo or sequence passed exact-variant verification; generic reuse removed."
+    }
+  ],
+  "allExerciseRows": [
+    {
+      "name": "Jalón al pecho con goma",
+      "img": "gomas-jalon-pecho",
+      "exists": true
+    },
+    {
+      "name": "Remo a 2 manos con goma",
+      "img": "gomas-remo-2m",
+      "exists": true
+    },
+    {
+      "name": "Curl de bíceps a 1 mano con goma",
+      "img": "gomas-curl-1m",
+      "exists": true
+    },
+    {
+      "name": "Flexiones con goma",
+      "img": "gomas-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Press militar a 1 mano con goma",
+      "img": "gomas-press-militar-1m",
+      "exists": true
+    },
+    {
+      "name": "Plancha",
+      "img": "core-plancha",
+      "exists": true
+    },
+    {
+      "name": "Peso muerto B-stance con goma",
+      "img": "gomas-rdl-bstance",
+      "exists": true
+    },
+    {
+      "name": "Subidas al cajón con goma",
+      "img": "gomas-subidas-cajon",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla con goma",
+      "img": "gomas-sentadilla",
+      "exists": true
+    },
+    {
+      "name": "Zancada atrás con goma",
+      "img": "gomas-zancada",
+      "exists": true
+    },
+    {
+      "name": "Puente de glúteo con goma",
+      "img": "gomas-puente",
+      "exists": true
+    },
+    {
+      "name": "Gemelos con goma",
+      "img": "gomas-gemelos",
+      "exists": true
+    },
+    {
+      "name": "Plancha lateral",
+      "img": "core-plancha-lateral",
+      "exists": true
+    },
+    {
+      "name": "Press de pecho a 1 mano con goma",
+      "img": "gomas-press-pecho-1m",
+      "exists": true
+    },
+    {
+      "name": "Jalón a 1 mano con goma",
+      "img": "gomas-jalon-1m",
+      "exists": true
+    },
+    {
+      "name": "Press militar con goma",
+      "img": "gomas-press-militar",
+      "exists": true
+    },
+    {
+      "name": "Remo sentado con goma",
+      "img": "gomas-remo-sentado",
+      "exists": true
+    },
+    {
+      "name": "Curl martillo con goma",
+      "img": "gomas-curl-martillo",
+      "exists": true
+    },
+    {
+      "name": "Extensión de tríceps con goma",
+      "img": "gomas-triceps",
+      "exists": true
+    },
+    {
+      "name": "Jalón agarre estrecho con goma",
+      "img": "gomas-jalon-estrecho",
+      "exists": true
+    },
+    {
+      "name": "Remo a 1 mano con goma",
+      "img": "gomas-remo-1m",
+      "exists": true
+    },
+    {
+      "name": "Curl de bíceps con goma",
+      "img": "gomas-curl",
+      "exists": true
+    },
+    {
+      "name": "Flexiones con goma y pausa",
+      "img": "gomas-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Press Arnold con goma",
+      "img": "gomas-press-arnold",
+      "exists": true
+    },
+    {
+      "name": "Escaladores",
+      "img": "core-escaladores",
+      "exists": true
+    },
+    {
+      "name": "Peso muerto rumano con goma",
+      "img": "gomas-rdl",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla búlgara con goma",
+      "img": "gomas-bulgara",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla con goma y pausa",
+      "img": "gomas-sentadilla",
+      "exists": true
+    },
+    {
+      "name": "Zancada lateral con goma",
+      "img": "gomas-zancada-lateral",
+      "exists": true
+    },
+    {
+      "name": "Puente de glúteo a 1 pierna con goma",
+      "img": "gomas-puente-1p",
+      "exists": true
+    },
+    {
+      "name": "Gemelos con goma",
+      "img": "gomas-gemelos",
+      "exists": true
+    },
+    {
+      "name": "Plancha con toques de hombro",
+      "img": "core-plancha-toques",
+      "exists": true
+    },
+    {
+      "name": "Press inclinado con goma",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Jalón al pecho con goma",
+      "img": "gomas-jalon-pecho",
+      "exists": true
+    },
+    {
+      "name": "Elevaciones laterales con goma",
+      "img": "gomas-elev-laterales",
+      "exists": true
+    },
+    {
+      "name": "Face pull con goma",
+      "img": "gomas-face-pull",
+      "exists": true
+    },
+    {
+      "name": "Curl de bíceps con goma",
+      "img": "gomas-curl",
+      "exists": true
+    },
+    {
+      "name": "Extensión tras nuca con goma",
+      "img": "gomas-triceps-nuca",
+      "exists": true
+    },
+    {
+      "name": "Jalón al pecho en polea",
+      "img": "manc-jalon-pecho",
+      "exists": true
+    },
+    {
+      "name": "Remo a 2 manos con mancuernas",
+      "img": "manc-remo-2m",
+      "exists": true
+    },
+    {
+      "name": "Curl de bíceps a 1 mano",
+      "img": "manc-curl-1m",
+      "exists": true
+    },
+    {
+      "name": "Flexiones sobre mancuernas",
+      "img": "manc-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Press militar a 1 mano",
+      "img": "manc-press-militar-1m",
+      "exists": true
+    },
+    {
+      "name": "Plancha",
+      "img": "core-plancha",
+      "exists": true
+    },
+    {
+      "name": "Peso muerto B-stance con mancuernas",
+      "img": "manc-rdl-bstance",
+      "exists": true
+    },
+    {
+      "name": "Subidas al cajón con mancuernas",
+      "img": "manc-subidas-cajon",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla goblet",
+      "img": "manc-sentadilla-goblet",
+      "exists": true
+    },
+    {
+      "name": "Zancada atrás con mancuernas",
+      "img": "manc-zancada",
+      "exists": true
+    },
+    {
+      "name": "Puente de glúteo con mancuerna",
+      "img": "manc-puente",
+      "exists": true
+    },
+    {
+      "name": "Gemelos con mancuernas",
+      "img": "manc-gemelos",
+      "exists": true
+    },
+    {
+      "name": "Plancha lateral",
+      "img": "core-plancha-lateral",
+      "exists": true
+    },
+    {
+      "name": "Press de pecho a 1 mano con mancuerna",
+      "img": "manc-press-pecho-1m",
+      "exists": true
+    },
+    {
+      "name": "Jalón a 1 mano en polea",
+      "img": "manc-jalon-1m",
+      "exists": true
+    },
+    {
+      "name": "Press militar con mancuernas",
+      "img": "manc-press-militar",
+      "exists": true
+    },
+    {
+      "name": "Remo sentado en polea",
+      "img": "manc-remo-sentado",
+      "exists": true
+    },
+    {
+      "name": "Curl martillo",
+      "img": "manc-curl-martillo",
+      "exists": true
+    },
+    {
+      "name": "Extensión de tríceps a 2 manos",
+      "img": "manc-triceps",
+      "exists": true
+    },
+    {
+      "name": "Jalón agarre estrecho en polea",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Remo a 1 mano con mancuerna",
+      "img": "manc-remo-1m",
+      "exists": true
+    },
+    {
+      "name": "Curl de bíceps con mancuernas",
+      "img": "manc-curl",
+      "exists": true
+    },
+    {
+      "name": "Flexiones sobre mancuernas con pausa",
+      "img": "manc-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Press Arnold con mancuernas",
+      "img": "manc-press-arnold",
+      "exists": true
+    },
+    {
+      "name": "Escaladores",
+      "img": "core-escaladores",
+      "exists": true
+    },
+    {
+      "name": "Peso muerto con mancuernas",
+      "img": "manc-rdl",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla búlgara con mancuernas",
+      "img": "manc-bulgara",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla goblet con pausa",
+      "img": "manc-sentadilla-goblet",
+      "exists": true
+    },
+    {
+      "name": "Zancada lateral con mancuerna",
+      "img": "manc-zancada-lateral",
+      "exists": true
+    },
+    {
+      "name": "Puente de glúteo a 1 pierna con mancuerna",
+      "img": "manc-puente-1p",
+      "exists": true
+    },
+    {
+      "name": "Gemelos con mancuernas",
+      "img": "manc-gemelos",
+      "exists": true
+    },
+    {
+      "name": "Plancha con toques de hombro",
+      "img": "core-plancha-toques",
+      "exists": true
+    },
+    {
+      "name": "Press banca con mancuernas",
+      "img": "manc-press-banca",
+      "exists": true
+    },
+    {
+      "name": "Remo a 2 manos agarre ancho",
+      "img": "manc-remo-2m-ancho",
+      "exists": true
+    },
+    {
+      "name": "Elevaciones laterales",
+      "img": "manc-elev-laterales",
+      "exists": true
+    },
+    {
+      "name": "Pájaros con mancuernas",
+      "img": "manc-pajaros",
+      "exists": true
+    },
+    {
+      "name": "Curl concentrado",
+      "img": "manc-curl-concentrado",
+      "exists": true
+    },
+    {
+      "name": "Fondos asistidos en banco",
+      "img": "manc-fondos-banco",
+      "exists": true
+    },
+    {
+      "name": "Flexiones de rodillas",
+      "img": "cal-flexiones-rodillas",
+      "exists": true
+    },
+    {
+      "name": "Flexiones",
+      "img": "cal-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Flexiones diamante o declinadas",
+      "img": "cal-flexiones-diamante",
+      "exists": true
+    },
+    {
+      "name": "Remo invertido en mesa o barra baja",
+      "img": "cal-remo-mesa",
+      "exists": true
+    },
+    {
+      "name": "Remo invertido con pies elevados",
+      "img": "cal-remo-elevado",
+      "exists": true
+    },
+    {
+      "name": "Australianas 3 posiciones",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Sentadilla al aire",
+      "img": "cal-sentadilla",
+      "exists": true
+    },
+    {
+      "name": "Sentadilla profunda con pausa abajo",
+      "img": "cal-sentadilla",
+      "exists": true
+    },
+    {
+      "name": "Zancadas",
+      "img": "cal-zancadas",
+      "exists": true
+    },
+    {
+      "name": "Plancha",
+      "img": "core-plancha",
+      "exists": true
+    },
+    {
+      "name": "Plancha con toques de hombro",
+      "img": "core-plancha-toques",
+      "exists": true
+    },
+    {
+      "name": "Hollow body hold",
+      "img": "skill-hollow",
+      "exists": true
+    },
+    {
+      "name": "Negativas de dominada (baja en 3-4 s)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "exists": true
+    },
+    {
+      "name": "Dominadas arqueras o con lastre",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Fondos asistidos (banco o goma)",
+      "img": "cal-fondos-asistidos",
+      "exists": true
+    },
+    {
+      "name": "Fondos en paralelas",
+      "img": "skill-fondos",
+      "exists": true
+    },
+    {
+      "name": "Fondos con pausa abajo",
+      "img": "skill-fondos",
+      "exists": true
+    },
+    {
+      "name": "Muscle up en barra baja",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Muscle up con goma",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Muscle up con parada abajo",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "exists": true
+    },
+    {
+      "name": "Dominadas rápidas subiendo, bajada lenta",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Dominada explosiva al pecho",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Australianas cerradas",
+      "img": "cal-remo-cerrado",
+      "exists": true
+    },
+    {
+      "name": "Australianas mixtas",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Dominadas comando",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Transición con pies apoyados",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Transición con goma",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Muscle up negativo (bajada lenta)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Flexiones con parada abajo 2-3 s",
+      "img": "cal-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Fondos en paralelas",
+      "img": "skill-fondos",
+      "exists": true
+    },
+    {
+      "name": "Fondos en barra recta",
+      "img": "skill-fondos-barra",
+      "exists": true
+    },
+    {
+      "name": "Dominada alta con balanceo controlado",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Balanceo kipping controlado",
+      "img": "skill-kipping",
+      "exists": true
+    },
+    {
+      "name": "Muscle up (intentos)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Colgado de barra con escápulas activas",
+      "img": "skill-colgado-activo",
+      "exists": true
+    },
+    {
+      "name": "Colgado en arco (arch hang)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Retracciones escapulares en barra",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Tuck front lever (rodillas al pecho)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Advanced tuck (espalda plana)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Front lever a una pierna",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Subidas a tuck front lever",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Subidas a advanced tuck",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Negativa de dominada a front lever",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Dominadas",
+      "img": "skill-dominadas",
+      "exists": true
+    },
+    {
+      "name": "Dominadas (volumen)",
+      "img": "skill-dominadas",
+      "exists": true
+    },
+    {
+      "name": "Dominadas arqueras o con lastre",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Remo invertido en barra baja",
+      "img": "cal-remo-mesa",
+      "exists": true
+    },
+    {
+      "name": "Remo en tuck front lever",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Remo en advanced tuck",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Negativa lenta de tuck a colgado (3-4 s)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Negativa de front lever (unos 5 s)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Negativa de front lever (8-10 s)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Planche lean (peso al frente, brazos rectos)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Planche lean con pies elevados",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Planche lean máximo controlado",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Frog stand (equilibrio de rana)",
+      "img": "skill-frog-stand",
+      "exists": true
+    },
+    {
+      "name": "Crow pose (cuervo)",
+      "img": "skill-frog-stand",
+      "exists": true
+    },
+    {
+      "name": "Tuck planche hold",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Subidas a tuck planche",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Advanced tuck planche",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Straddle planche (intentos)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Flexiones",
+      "img": "cal-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Flexiones pseudo-planche",
+      "img": "skill-pseudo-pushup",
+      "exists": true
+    },
+    {
+      "name": "Flexiones pseudo-planche con pies elevados",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Fondos asistidos",
+      "img": "cal-fondos-asistidos",
+      "exists": true
+    },
+    {
+      "name": "Fondos lean planche",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Fondos lean planche con piernas elevadas",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Movilidad y carga de muñecas",
+      "img": "cal-movilidad-munecas",
+      "exists": true
+    },
+    {
+      "name": "L-sit",
+      "img": "skill-lsit",
+      "exists": true
+    },
+    {
+      "name": "De L-sit a tuck planche",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Under switch (cambio de apoyo)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Wall climb (caminata de pared)",
+      "img": "skill-pino-caminata",
+      "exists": true
+    },
+    {
+      "name": "Caminata de pared hasta pino",
+      "img": "skill-pino-caminata",
+      "exists": true
+    },
+    {
+      "name": "Pino contra pared (de espaldas)",
+      "img": "skill-pino-pared-espaldas",
+      "exists": true
+    },
+    {
+      "name": "Pino de cara a la pared",
+      "img": "skill-pino-pared-cara",
+      "exists": true
+    },
+    {
+      "name": "Pino de cara a la pared, con salidas",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Pino contra pared, una pierna despegada",
+      "img": "skill-pino-una-pierna",
+      "exists": true
+    },
+    {
+      "name": "Salidas de pino (práctica 5 min)",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Pino libre o con compañero (intentos)",
+      "img": "skill-pino-libre",
+      "exists": true
+    },
+    {
+      "name": "Flexiones (con o sin rodillas)",
+      "img": "cal-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Flexiones pike",
+      "img": "cal-pike",
+      "exists": true
+    },
+    {
+      "name": "Flexiones en pino contra pared",
+      "img": "skill-pino-flexiones",
+      "exists": true
+    },
+    {
+      "name": "Hollow body hold",
+      "img": "skill-hollow",
+      "exists": true
+    },
+    {
+      "name": "Hollow body con balanceo",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "De L-sit a pino",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Movilidad de muñecas y hombros",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Estiramiento de hombros en pared",
+      "img": "cal-hombros-pared",
+      "exists": true
+    },
+    {
+      "name": "Puente (progresión suave)",
+      "img": "cal-puente",
+      "exists": true
+    },
+    {
+      "name": "Sentadillas sumo con contracción activa",
+      "img": "cal-sumo",
+      "exists": true
+    },
+    {
+      "name": "Sentadillas profundas con pausa de 1 s abajo",
+      "img": "cal-sentadilla",
+      "exists": true
+    },
+    {
+      "name": "Sentadillas explosivas",
+      "img": "cal-sentadilla-salto",
+      "exists": true
+    },
+    {
+      "name": "Zancadas",
+      "img": "cal-zancadas",
+      "exists": true
+    },
+    {
+      "name": "Pistols asistidas (agarrándote)",
+      "img": "cal-pistol-asistida",
+      "exists": true
+    },
+    {
+      "name": "Pistol squat a cajón o silla",
+      "img": "cal-pistol-silla",
+      "exists": true
+    },
+    {
+      "name": "Marcha alta con patada frontal",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Front step + patada frontal",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Front step con salto",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Zancada lateral estática",
+      "img": "cal-zancada-lateral",
+      "exists": true
+    },
+    {
+      "name": "Paso mono lateral",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Paso mono lateral con salto",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Elevaciones de gemelos",
+      "img": "cal-gemelos",
+      "exists": true
+    },
+    {
+      "name": "Gemelos a una pierna",
+      "img": "cal-gemelos-1p",
+      "exists": true
+    },
+    {
+      "name": "Gemelos a una pierna en escalón",
+      "img": "cal-gemelos-escalon",
+      "exists": true
+    },
+    {
+      "name": "Movilidad de tobillo y cadera",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Movilidad de cadera + isquiotibiales",
+      "img": null,
+      "exists": false
+    },
+    {
+      "name": "Movilidad global (flujo completo)",
+      "img": null,
+      "exists": false
+    }
+  ],
+  "pendingMeals": {
+    "d1": "No se ve jamón",
+    "d3": "No se ve jamón",
+    "c2": "No se distingue el pavo",
+    "d5": "No se verifican jamón y pan",
+    "d8": "No se distinguen nueces",
+    "n7": "Parece tortilla sobre pan, no revuelto de setas y pavo",
+    "n13": "No muestra la patata cocida de la receta",
+    "n14": "No muestra la patata cocida; queso fresco no verificable",
+    "n16": "No muestra pavo, huevo ni patata",
+    "r-feb-n": "No muestra pollo",
+    "r-mar-n": "Se ven alubias, no lentejas",
+    "r-may-n": "Muestra pasta; no pisto con huevo y atún",
+    "r-jul-n": "No se distinguen huevo y atún",
+    "r-oct-c": "No se ve calabaza",
+    "r-nov-n": "No muestra pavo",
+    "r-dic-d": "Tostada sin jamón",
+    "r-dic-c": "Se ven rodajas de embutido ajenas al plato de alubias con verduras"
+  }
+}
