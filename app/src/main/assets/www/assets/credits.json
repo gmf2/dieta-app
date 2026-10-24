@@ -444,5 +444,26 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra la postura estática de advanced tuck planche. Comprimida sin recorte."
+  },
+  "ex-cal-australianas-mixtas-ia": {
+    "title": "Australianas mixtas",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra una posición de australiana con agarre mixto, no todo el recorrido. Comprimida sin recorte."
+  },
+  "ex-cal-planchelean-elevados-ia": {
+    "title": "Planche lean con pies elevados",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura estática de planche lean con los pies elevados. Comprimida sin recorte."
+  },
+  "ex-cal-fondoslean-ia": {
+    "title": "Fondos lean planche",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra una posición del fondo lean planche con los pies apoyados; no demuestra todo el recorrido. Comprimida sin recorte."
   }
 }
