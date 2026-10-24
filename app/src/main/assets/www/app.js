@@ -161,7 +161,7 @@
     var html = '';
     try {
       var cr = PHOTO_CREDITS || {};
-      var byIds = Object.keys(cr).filter(function (k) { return true; });
+      var byIds = Object.keys(cr).filter(function (k) { return /CC BY/.test(cr[k].license) || cr[k].generated_ai; });
       if (Object.keys(cr).length) {
         html += '<div class="card"><h2>Créditos de fotos</h2>' +
           '<div class="sub">Fotos de platos y ejercicios de Wikimedia Commons y Unsplash con licencia libre (CC0 / dominio público / CC BY / CC BY-SA / Unsplash License) y fotos generadas por IA. Cada foto con atribución obligatoria lleva su autor y licencia:</div>' +
