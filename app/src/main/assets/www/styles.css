@@ -248,3 +248,5 @@ nav.tabs button { font-size: .66rem; padding: 8px 0 10px; }
 /* Clear audit state for recipes whose inherited image does not match. */
 .photo-pending {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
 .photo-pending small {font:500 12px system-ui;color:var(--muted,#666);}
+
+.lb-credit{font-size:.68rem;line-height:1.35;color:#eee;margin:8px auto 0;max-width:390px}.lb-credit a{color:#b9f6ca}

@@ -144,3 +144,13 @@ Las fotos son ilustraciones, no una demostración técnica certificada. Una foto
 - https://www.bicycling.com/training/a34063049/tips-for-mastering-pistol-squats/
 
 Las referencias de front lever, planche y negativas no validaron las candidatas: no se instalaron esas aproximaciones.
+
+## Pase de fuentes reales, 24 octubre 10:14 (vigente)
+- Dos fotos reales añadidas, tres filas cubiertas: Dominadas arqueras o con lastre (dos filas, muestra opción con lastre) y Muscle up (intentos) (una fila, solo fase superior de intento, no negativa).
+- Estado actual: Calistenia 57/108 filas con ilustración y 51 pendientes (51 nombres). Total ejercicios 131/184 con ilustración y 53 pendientes. 33 imágenes de ejercicios nuevas/sustituidas en esta auditoría. Las 17 comidas siguen ABIERTAS.
+- Créditos visibles restaurados: antes una segunda inicialización de html descartaba la tarjeta de créditos. Cada foto nueva muestra autor, fuente, licencia y cambios en lightbox; créditos completos al final de Perfil.
+- Fotos elegidas: Competición de Fuerza.jpg, FESWC, obra propia, CC BY-SA 4.0; Muscle Up.jpg, Maksim Sokolov (maxergon.com), obra propia, CC BY-SA 4.0. Archivos redimensionados y comprimidos sin recorte, adaptaciones bajo misma licencia.
+- Fuentes: https://commons.wikimedia.org/wiki/File:Competici%C3%B3n_de_Fuerza.jpg y https://commons.wikimedia.org/wiki/File:Muscle_Up.jpg .
+- Biblioteca free-exercise-db RECHAZADA por derechos no acreditados. Su mantenedor declara desconocer origen y licencia de fotos en https://github.com/yuhonas/free-exercise-db/issues/2 ; controversia vigente en https://github.com/yuhonas/free-exercise-db/issues/13 . No se ha instalado ninguna de sus fotos.
+- Contrastes rechazados: Commons planche completa no cubre tuck/advanced/lean; straddle a dos dedos no representa apoyo normal. Front lever completo no cubre tuck, advanced ni una pierna. Muscle-up en anillas no sirve para progresiones en barra. Fotos chest-to-bar no prueban explosividad; siguen pendientes. Dos fotos inicio/fin de retracción escapular coinciden visualmente, pero derechos inciertos, excluidas. Wger 1286 es Dynamic Planche (saltos de rodillas), no planche lean: IDs de un agregador eran erróneos.
+- Cobertura de búsqueda: familias de tirón/muscle-up, front lever, planche, movilidad/muñecas/cadera/animal. No se afirma haber agotado toda fotografía existente. Vía residual: material original o licencia directa con progresión exacta, no capturas de tutoriales sin derechos ni generación indefinida.

@@ -369,5 +369,21 @@
     "license": "Public domain",
     "url": "https://commons.wikimedia.org/wiki/File:Handstand_pushup.jpg",
     "query": "handstand pushup"
+  },
+  "ex-skill-dominada-lastre": {
+    "title": "Competición de Fuerza.jpg",
+    "artist": "FESWC",
+    "license": "CC BY-SA 4.0",
+    "url": "https://commons.wikimedia.org/wiki/File:Competici%C3%B3n_de_Fuerza.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Redimensionada y comprimida, sin recorte. Adaptación CC BY-SA 4.0. Muestra la opción con lastre, no dominada arquera."
+  },
+  "ex-skill-muscleup-real": {
+    "title": "Muscle Up.jpg",
+    "artist": "Maksim Sokolov (maxergon.com)",
+    "license": "CC BY-SA 4.0",
+    "url": "https://commons.wikimedia.org/wiki/File:Muscle_Up.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Redimensionada y comprimida, sin recorte. Adaptación CC BY-SA 4.0. Fase de apoyo/transición: no muestra una repetición completa ni una negativa."
   }
 }

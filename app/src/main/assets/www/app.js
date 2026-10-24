@@ -164,15 +164,18 @@
       var byIds = Object.keys(cr).filter(function (k) { return /CC BY/.test(cr[k].license); });
       if (Object.keys(cr).length) {
         html += '<div class="card"><h2>Créditos de fotos</h2>' +
-          '<div class="sub">Fotos de platos de Wikimedia Commons y Unsplash con licencia libre (CC0 / dominio público / CC BY / CC BY-SA / Unsplash License) y fotos generadas por IA. Cada foto con atribución obligatoria lleva su autor y licencia:</div>' +
+          '<div class="sub">Fotos de platos y ejercicios de Wikimedia Commons y Unsplash con licencia libre (CC0 / dominio público / CC BY / CC BY-SA / Unsplash License) y fotos generadas por IA. Cada foto con atribución obligatoria lleva su autor y licencia:</div>' +
           byIds.map(function (k) {
             var c = cr[k];
-            return '<div class="rev-row" style="font-size:.72rem"><b>' + (c.title || k) + '</b> — ' + (c.artist || 'desconocido') +
-              ' · <a href="' + c.url + '" target="_blank" rel="noopener">' + c.license + '</a></div>';
+            return '<div class="rev-row" style="font-size:.72rem"><b>' + esc(c.title || k) + '</b> - ' + esc(c.artist || 'desconocido') +
+              ' · <a href="' + c.url + '" target="_blank" rel="noopener">Fuente: ' + esc(c.license) + '</a>' +
+              (c.license_url ? ' · <a href="' + c.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') +
+              (c.changes ? '<br>' + esc(c.changes) : '') + '</div>';
           }).join('') + '</div>';
       }
     } catch (e) {}
-    var html = '';
+    var creditsHtml = html;
+    html = '';
     html += '<div class="card"><h2>Tus datos</h2><div class="sub">Escríbelos a mano o usa la barra; todo se recalcula solo.</div>' +
       numField('Peso', 'peso', 40, 150, 'kg') +
       numField('Altura', 'altura', 140, 210, 'cm') +
@@ -216,7 +219,7 @@
         (nextIn != null ? (nextIn === 0 ? ' · ya toca la siguiente' : ' · la siguiente en unos ' + nextIn + ' días') : '') + '.</div>' : '') +
       (checkins.length ? '<button class="btn ghost" id="btnUndoCheckin">Borrar la última revisión</button>' : '') + '</div>';
 
-    document.getElementById('tab-perfil').innerHTML = html;
+    document.getElementById('tab-perfil').innerHTML = html + creditsHtml;
   }
 
   /* ---------- Hoy ---------- */
@@ -559,7 +562,7 @@
           { n: 'Hollow body hold', s: '3 x 15 s', b: 4, lvl: 3, g: 'Core', p: 'plank', img: "skill-hollow" },
           { n: 'Negativas de dominada (baja en 3-4 s)', s: '4 x 4', b: 5, lvl: 1, g: 'Espalda', p: 'pullup', img: null },
           { n: 'Dominadas', s: '4 x 4-6', b: 5, lvl: 2, g: 'Espalda', p: 'pullup', img: "skill-dominadas" },
-          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 5, lvl: 3, g: 'Espalda', p: 'pullup', img: null },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 5, lvl: 3, g: 'Espalda', p: 'pullup', img: "skill-dominada-lastre" },
           { n: 'Fondos asistidos (banco o goma)', s: '3 x 8', b: 6, lvl: 1, g: 'Pecho · Tríceps', p: 'dip', img: "cal-fondos-asistidos" },
           { n: 'Fondos en paralelas', s: '3 x 8-12', b: 6, lvl: 2, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" },
           { n: 'Fondos con pausa abajo', s: '3 x 6-8', b: 6, lvl: 3, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" } ] },
@@ -581,7 +584,7 @@
           { n: 'Fondos en barra recta', s: '3 x 5-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: "skill-fondos-barra" },
           { n: 'Dominada alta con balanceo controlado', s: '3 x 4', b: 6, lvl: 1, g: 'Skill', p: 'pullup', img: null },
           { n: 'Balanceo kipping controlado', s: '3 x 6', b: 6, lvl: 2, g: 'Skill', p: 'pullup', img: "skill-kipping" },
-          { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: null } ] },
+          { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: "skill-muscleup-real" } ] },
         { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META: empieza con soltura en dominadas. Sesión completa por bloques: elige UNA variante por bloque. El trabajo de brazo recto carga tendones más que músculos y los tendones adaptan lento: quédate siempre a 1-2 segundos o reps de tu máximo, y sube de variante solo cuando la actual salga limpia.', ej: [
           { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: "skill-colgado-activo" },
           { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: null },
@@ -594,7 +597,7 @@
           { n: 'Negativa de dominada a front lever', s: '3 x 3', b: 3, lvl: 3, g: 'Fuerza', p: 'pullup', img: null },
           { n: 'Dominadas', s: '3 x 4-8', b: 4, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
           { n: 'Dominadas (volumen)', s: '4 x 5-8', b: 4, lvl: 2, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
-          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 4, lvl: 3, g: 'Tirón', p: 'pullup', img: null },
+          { n: 'Dominadas arqueras o con lastre', s: '4 x 3-5', b: 4, lvl: 3, g: 'Tirón', p: 'pullup', img: "skill-dominada-lastre" },
           { n: 'Remo invertido en barra baja', s: '4 x 8', b: 5, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-mesa" },
           { n: 'Remo en tuck front lever', s: '3 x 5-8', b: 5, lvl: 2, g: 'Espalda', p: 'row', img: null },
           { n: 'Remo en advanced tuck', s: '3 x 5', b: 5, lvl: 3, g: 'Espalda', p: 'row', img: null },
@@ -891,8 +894,11 @@
   function openLightbox(src, alt) {
     var ov = document.createElement('div');
     ov.className = 'lb-overlay';
-    ov.innerHTML = '<span class="lb-close">×</span><figure><img src="' + src + '" alt="' + esc(alt || '') + '"><figcaption>' + esc(alt || '') + '</figcaption></figure>';
-    ov.addEventListener('click', function () { ov.remove(); });
+    var photoKey = src.split('/').pop().replace(/\.jpg$/, '');
+    var credit = PHOTO_CREDITS[photoKey];
+    var creditHtml = credit ? '<div class="lb-credit">' + esc(credit.artist || '') + ' · <a href="' + credit.url + '" target="_blank" rel="noopener">' + esc(credit.license || '') + '</a>' + (credit.license_url ? ' · <a href="' + credit.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') + (credit.changes ? '<br>' + esc(credit.changes) : '') + '</div>' : '';
+    ov.innerHTML = '<span class="lb-close">×</span><figure><img src="' + src + '" alt="' + esc(alt || '') + '"><figcaption>' + esc(alt || '') + '</figcaption>' + creditHtml + '</figure>';
+    ov.addEventListener('click', function (e) { if (!e.target.closest('a')) ov.remove(); });
     document.body.appendChild(ov);
   }
 

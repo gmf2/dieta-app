@@ -98,3 +98,6 @@ Los platos se rediseñaron para cuadrar macros; las fotos existentes ya no muest
 
 ## 2026-10-24 10:10 - Auditoría completa por variante y plato
 El estado vigente es tools/photo-audit-2026-10-24.md y su inventario JSON. 53/70 platos con imagen, 17 pendientes. Calistenia: 54/108 filas con ilustración, 54 pendientes. Total ejercicios: 128/184 con imagen, 56 pendientes. Ningún dato de receta o rutina cambiado. Sin publicar. Se retiran aproximaciones heredadas, no se declara cobertura por mera existencia del archivo.
+
+### Actualización 10:14: fuentes reales
+Dos archivos Commons CC BY-SA 4.0 añadidos, tres filas. Calistenia 57 con ilustración / 51 pendientes; total ejercicios 131 con ilustración / 53 pendientes. 17 comidas ABIERTAS. No importar imágenes de free-exercise-db: derechos no acreditados según su mantenedor. Detalles y procedencia en photo-audit-2026-10-24.md/json.
