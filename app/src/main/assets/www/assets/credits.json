@@ -423,5 +423,26 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra el pino mantenido de cara a la pared; no demuestra las salidas. Comprimida sin recorte."
+  },
+  "ex-gomas-press-inclinado-ia": {
+    "title": "Press inclinado con goma",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra una posición del press inclinado con goma, no todo el recorrido. Comprimida sin recorte."
+  },
+  "ex-cal-muscleup-baja-ia": {
+    "title": "Muscle up en barra baja",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo el apoyo final arriba en la barra baja; no demuestra la transición del muscle up. Comprimida sin recorte."
+  },
+  "ex-cal-advanced-planche-ia": {
+    "title": "Advanced tuck planche",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura estática de advanced tuck planche. Comprimida sin recorte."
   }
 }
