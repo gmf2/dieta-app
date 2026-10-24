@@ -326,10 +326,21 @@
         '<span class="kcal">' + target + ' kcal · ' + Math.round(pgoal * psh[slot]) + ' g prot</span>' +
         '<span class="ses-chevron' + (hOpen ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>';
       html += hOpen ? '<div>' : '<div hidden>';
-      html += '<div class="meal-grid">' + options.map(function (o) {
+      var spSlot = Math.round(pgoal * psh[slot]);
+      var fitOf = function (o) {
+        var pl = computePlan(o, target, spSlot);
+        var nofit = Math.abs(pl.dk) > 150 || Math.abs(pl.dp) > 35 || pl.vol > 1200;
+        if (nofit) return { rank: 2, html: '<div class="m-tag nofit">No cuadra con tu objetivo: ' + (pl.dk > 0 ? '+' : '') + pl.dk + ' kcal' + (Math.abs(pl.dp) > 10 ? ' · ' + (pl.dp > 0 ? '+' : '') + pl.dp + ' g prot' : '') + '</div>' };
+        if (Math.abs(pl.dk) > 60 || Math.abs(pl.dp) > 10)
+          return { rank: 1, html: '<div class="m-tag fitwarn">' + (pl.dk > 0 ? '+' : '') + pl.dk + ' kcal respecto a tu objetivo' + (Math.abs(pl.dp) > 10 ? ' · ' + (pl.dp > 0 ? '+' : '') + pl.dp + ' g prot' : '') + '</div>' };
+        return { rank: 0, html: '' };
+      };
+      var optionsSorted = options.slice().sort(function (a, b) { return fitOf(a).rank - fitOf(b).rank; });
+      html += '<div class="meal-grid">' + optionsSorted.map(function (o) {
         var ph = photoFor(o);
         var isRecipe = o.recipeOfMonth || (monthRecipe && monthRecipe.id === o.id) || o.pasos;
         return '<button class="meal-card' + (o.id === selected.id ? ' selected' : '') + '" data-slot="' + slot + '" data-id="' + o.id + '">' +
+          fitOf(o).html +
           '<span class="check">✓</span>' +
           (ph ? '<img src="' + ph + '" alt="' + esc(o.name) + '" loading="lazy">'
               : '<div class="svg-cover photo-pending">' + ICONS[SLOT_ICON[o.slot]] + '<small>Foto pendiente</small></div>') +
@@ -353,7 +364,8 @@
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
                       avisoHTML(plan) +
-          ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
+          ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>' +
+          (selected.pasos ? '<ol class="steps">' + selected.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '');
       })() : ingredientHTML(selected, target, r.target));
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
         (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + regKcal(dayLog[slot]) + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
@@ -492,7 +504,8 @@
         var did = key + '-' + o.id;
         html += '<button class="hist-meal" data-hmeal="' + did + '">' + esc(o.name) + '</button>' +
           '<div class="hist-meal-detail" id="hmd-' + did + '" hidden>' +
-          (g ? ingredientHTML(o, slotK, g) : baseHTML(o)) + '</div>';
+          (g ? ingredientHTML(o, slotK, g) : baseHTML(o)) +
+          (o.pasos ? '<ol class="steps">' + o.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '') + '</div>';
       });
     });
     html += '</div>';

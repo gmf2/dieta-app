@@ -254,3 +254,8 @@ nav.tabs button { font-size: .66rem; padding: 8px 0 10px; }
 /* Preserve all meal sides rather than centre-cropping them out. */
 .meal-card img{height:auto;aspect-ratio:4/3;object-fit:contain;background:#f4f7f2}
 .recipe-card>img{object-fit:contain;height:auto;max-height:none;aspect-ratio:4/3;background:#f4f7f2}
+
+.m-tag.nofit { background: #fde8e8; color: #b3261e; }
+.m-tag.fitwarn { background: #fff4e0; color: #9a6a00; }
+.hist-meal-detail .steps { margin: 8px 0 4px; padding-left: 20px; font-size: .82rem; color: var(--muted); }
+.hist-meal-detail .steps li { margin-bottom: 4px; }
