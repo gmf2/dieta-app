@@ -490,7 +490,7 @@
         { n: 'Gemelos con goma', s: '4 x 15', g: 'Pierna', p: 'squat', img: 'gomas-gemelos' },
         { n: 'Plancha con toques de hombro', s: '3 x 20', g: 'Core', p: 'plank', img: 'core-plancha-toques' } ] },
       { id: 'T2', nombre: 'Fullbody Torso', ej: [
-        { n: 'Press inclinado con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: null },
+        { n: 'Press inclinado con goma', s: '4 x 12', g: 'Pecho', p: 'press', img: 'gomas-press-inclinado-ia' },
         { n: 'Jalón al pecho con goma', s: '4 x 12', g: 'Espalda', p: 'row', img: 'gomas-jalon-pecho' },
         { n: 'Elevaciones laterales con goma', s: '3 x 15', g: 'Hombro', p: 'curl', img: 'gomas-elev-laterales' },
         { n: 'Face pull con goma', s: '3 x 15', g: 'Espalda', p: 'row', img: 'gomas-face-pull' },
@@ -567,7 +567,7 @@
           { n: 'Fondos en paralelas', s: '3 x 8-12', b: 6, lvl: 2, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" },
           { n: 'Fondos con pausa abajo', s: '3 x 6-8', b: 6, lvl: 3, g: 'Pecho · Tríceps', p: 'dip', img: "skill-fondos" } ] },
         { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida: empieza cuando las dominadas estrictas te resulten cómodas. Sesión completa por bloques: elige UNA variante por bloque (la que te salga limpia) y haz sus series. Las variantes de un bloque no se encadenan.', ej: [
-          { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: 'cal-muscleup-baja-ia' },
           { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: null },
           { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
           { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
@@ -612,7 +612,7 @@
           { n: 'Crow pose (cuervo)', s: '3 x 15-20 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: "skill-frog-stand" },
           { n: 'Tuck planche hold', s: '3 x 8-12 s', b: 2, lvl: 3, g: 'Estático', p: 'plank', img: 'cal-tuckplanche-real' },
           { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: null },
-          { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: null },
+          { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: 'cal-advanced-planche-ia' },
           { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: null },
           { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
           { n: 'Flexiones pseudo-planche', s: '3 x 6-8', b: 4, lvl: 2, g: 'Empuje', p: 'pushup', img: "skill-pseudo-pushup" },
