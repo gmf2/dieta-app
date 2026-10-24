@@ -323,8 +323,6 @@
     }).filter(Boolean);
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
-      '<div class="fact"><span>Desayuno / Comida / Cena</span><b>' + slotTarget(r, 'desayuno') + ' / ' + slotTarget(r, 'comida') + ' / ' + slotTarget(r, 'cena') + ' kcal · ' +
-      Math.round(pgoal * psh.desayuno) + ' / ' + Math.round(pgoal * psh.comida) + ' / ' + Math.round(pgoal * psh.cena) + ' g prot</b></div>' +
       (dayProt >= protGoal * 0.9
         ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
         : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
