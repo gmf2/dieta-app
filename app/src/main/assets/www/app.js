@@ -571,7 +571,7 @@
           { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: null },
           { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
           { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
-          { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: null },
+          { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: 'cal-dominadas-tempo-secuencia' },
           { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: 'cal-dominada-pecho-real' },
           { n: 'Australianas cerradas', s: '3 x 6-12', b: 3, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-cerrado" },
           { n: 'Australianas mixtas', s: '3 x 6-12', b: 3, lvl: 2, g: 'Espalda', p: 'row', img: null },
@@ -659,7 +659,7 @@
           { n: 'Gemelos a una pierna', s: '3 x 12 por pierna', b: 5, lvl: 2, g: 'Gemelo', p: 'squat', img: "cal-gemelos-1p" },
           { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: "cal-gemelos-escalon" },
           { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: 'cal-movilidad-tobillo-cadera' },
-          { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: null },
+          { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: 'cal-cadera-isquio-secuencia' },
           { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: null } ] }
       ],
       B: null
