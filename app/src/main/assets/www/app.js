@@ -649,7 +649,7 @@
           { n: 'Zancadas', s: '3 x 10 por pierna', b: 2, lvl: 1, g: 'Pierna', p: 'squat', img: "cal-zancadas" },
           { n: 'Pistols asistidas (agarrándote)', s: '3 x 6 por pierna', b: 2, lvl: 2, g: 'Pierna', p: 'squat', img: "cal-pistol-asistida" },
           { n: 'Pistol squat a cajón o silla', s: '3 x 4-6 por pierna', b: 2, lvl: 3, g: 'Pierna', p: 'squat', img: "cal-pistol-silla" },
-          { n: 'Marcha alta con patada frontal', s: '3 x 20', b: 3, lvl: 1, g: 'Pierna · Movilidad', p: 'squat', img: null },
+          { n: 'Marcha alta con patada frontal', s: '3 x 20', b: 3, lvl: 1, g: 'Pierna · Movilidad', p: 'squat', img: 'cal-marcha-patada-secuencia' },
           { n: 'Front step + patada frontal', s: '3 x 20', b: 3, lvl: 2, g: 'Pierna · Movilidad', p: 'squat', img: null },
           { n: 'Front step con salto', s: '3 x 15', b: 3, lvl: 3, g: 'Pierna · Movilidad', p: 'squat', img: null },
           { n: 'Zancada lateral estática', s: '3 x 20-30 s por lado', b: 4, lvl: 1, g: 'Pierna · Isométrico', p: 'squat', img: "cal-zancada-lateral" },
@@ -658,7 +658,7 @@
           { n: 'Elevaciones de gemelos', s: '3 x 15', b: 5, lvl: 1, g: 'Gemelo', p: 'squat', img: "cal-gemelos" },
           { n: 'Gemelos a una pierna', s: '3 x 12 por pierna', b: 5, lvl: 2, g: 'Gemelo', p: 'squat', img: "cal-gemelos-1p" },
           { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: "cal-gemelos-escalon" },
-          { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: null },
+          { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: 'cal-movilidad-tobillo-cadera' },
           { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: null },
           { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: null } ] }
       ],
