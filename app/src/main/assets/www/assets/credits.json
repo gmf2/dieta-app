@@ -360,5 +360,26 @@
     "license": "Public domain (U.S. government work)",
     "url": "https://www.dvidshub.net/video/877400/pft-prep-perfect-pull-ups",
     "changes": "Montaje 2x2 de cuatro fotogramas completos, orden izquierda a derecha y arriba a abajo; comprimido sin recorte espacial. La secuencia muestra una dominada; subida rápida y bajada lenta son instrucciones, no tempo demostrado por las fotos. The appearance of U.S. Department of War (DoW) visual information does not imply or constitute DoW endorsement."
+  },
+  "ex-cal-tuck-frontlever-ia": {
+    "title": "Tuck front lever (rodillas al pecho)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Postura estática de tuck front lever en barra; ilustración generada, no fotografía de una persona real. Comprimida sin recorte."
+  },
+  "ex-cal-hollow-balanceo-ia": {
+    "title": "Hollow body con balanceo",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura hollow estática; no demuestra el balanceo. El movimiento se indica en el nombre del ejercicio. Comprimida sin recorte."
+  },
+  "ex-cal-australianas-3pos-ia": {
+    "title": "Australianas 3 posiciones",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra una posición de remo invertido; no muestra las tres posiciones de la progresión. Comprimida sin recorte."
   }
 }
