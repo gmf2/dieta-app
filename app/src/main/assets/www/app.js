@@ -67,6 +67,18 @@
   }
   function classicsFor(m, slot) {
     var pool = MEALS.filter(function (x) { return x.slot === slot; });
+    /* Cena: cada mes ofrece siempre una burger y un wrap, mas un clasico normal y uno rapido */
+    if (slot === 'cena') {
+      var burgers = pool.filter(function (x) { return x.burger; });
+      var wraps = pool.filter(function (x) { return x.wrap; });
+      if (burgers.length && wraps.length) {
+        var rest = pool.filter(function (x) { return !x.burger && !x.wrap; });
+        var rq = rest.filter(function (x) { return x.rapida; });
+        var rn = rest.filter(function (x) { return !x.rapida; });
+        return [burgers[m % burgers.length], wraps[m % wraps.length]]
+          .concat(rotPick(rn, m, 1)).concat(rotPick(rq, m, 1));
+      }
+    }
     var quick = pool.filter(function (x) { return x.rapida; });
     var norm = pool.filter(function (x) { return !x.rapida; });
     if (quick.length < 2) return rotPick(pool, m, 4);

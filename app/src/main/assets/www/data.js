@@ -44,6 +44,10 @@ const ING = {
   'Muesli sin azúcar': { p: 10, k: 360, ug: 80, u: 'vaso' },
   'Nueces': { p: 15.2, k: 654, ug: 15, u: 'puñado' },
   'Pan integral': { p: 13, k: 247, ug: 30, u: 'rebanada' },
+  'Pan de hamburguesa integral': { p: 9, k: 250, ug: 65, u: 'pan' },
+  'Tortilla de trigo integral': { p: 8, k: 300, ug: 60, u: 'tortilla' },
+  'Carne picada de ternera': { p: 20, k: 175, ug: 125, u: 'hamburguesa' },
+  'Pollo picado': { p: 21, k: 145, ug: 125, u: 'hamburguesa' },
   'Pasta (en crudo)': { p: 13, k: 360, ug: 40, u: 'puñado' },
   'Pasta integral (en crudo)': { p: 13.9, k: 350, ug: 40, u: 'puñado' },
   'Patata': { p: 2, k: 77, ug: 150, u: 'patata mediana' },
@@ -152,7 +156,31 @@ let MEALS = [
   { id: 'c10', slot: 'comida', name: 'Tostadas de hummus y pollo asado', kcal: 1030, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Pan integral', grams: 150 }, { name: 'Hummus', grams: 100 }, { name: 'Pollo asado', grams: 130 }, { name: 'Tomate y lechuga', grams: 100 }, { name: 'Patata cocida', grams: 300 } ] },
   { id: 'n8', slot: 'cena', name: 'Requesón con fruta y nueces', kcal: 800, rapida: true, tiempo: '5 min · sin cocinar', components: [
-      { name: 'Requesón', grams: 95 }, { name: 'Fresas', grams: 150 }, { name: 'Nueces', grams: 40 }, { name: 'Pan integral', grams: 160 } ] }
+      { name: 'Requesón', grams: 95 }, { name: 'Fresas', grams: 150 }, { name: 'Nueces', grams: 40 }, { name: 'Pan integral', grams: 160 } ] },
+  { id: 'n17', slot: 'cena', name: 'Burger de ternera con patata', kcal: 745, burger: true, tiempo: '25 min · sartén', components: [
+      { name: 'Carne picada de ternera', grams: 125 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Patata', grams: 300 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Forma una hamburguesa con la carne picada y hazla a la sartén 3-4 min por lado.', 'Monta el pan con el tomate y la ensalada; sirve con la patata asada o cocida.'] },
+  { id: 'n18', slot: 'cena', name: 'Burger de pollo con aguacate', kcal: 770, burger: true, tiempo: '25 min · sartén', components: [
+      { name: 'Pollo picado', grams: 125 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Aguacate', grams: 75 }, { name: 'Tomate', grams: 120 }, { name: 'Boniato', grams: 150 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Forma la burger con el pollo picado y hazla a la sartén 3-4 min por lado.', 'Monta con el aguacate y el tomate; acompaña de boniato asado.'] },
+  { id: 'n19', slot: 'cena', name: 'Burger de pavo con queso fresco', kcal: 755, burger: true, tiempo: '25 min · sartén', components: [
+      { name: 'Pavo picado', grams: 150 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Queso fresco', grams: 40 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Patata', grams: 250 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Forma la burger de pavo picado y hazla a la sartén 3-4 min por lado.', 'Monta con el queso fresco y el tomate; sirve con ensalada y patata.'] },
+  { id: 'n20', slot: 'cena', name: 'Burger vegetal de lentejas', kcal: 755, burger: true, tiempo: '25 min · sartén', components: [
+      { name: 'Lentejas cocidas', grams: 200 }, { name: 'Huevo (1 ud.)', grams: 60 }, { name: 'Pan integral', grams: 30 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Tritura las lentejas con el huevo y la rebanada de pan, forma la burger y dórala en la sartén.', 'Monta el pan de hamburguesa con el tomate y la ensalada.'] },
+  { id: 'n21', slot: 'cena', name: 'Wrap de pollo, aguacate y hummus', kcal: 670, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
+      { name: 'Pollo a la plancha', grams: 120 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Tomate', grams: 120 }, { name: 'Espinacas', grams: 100 }, { name: 'Hummus', grams: 45 } ],
+    pasos: ['Unta la tortilla con el hummus.', 'Rellena con el pollo, el aguacate, el tomate y las espinacas; enrolla y sirve.'] },
+  { id: 'n22', slot: 'cena', name: 'Wrap de atún y huevo', kcal: 620, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
+      { name: 'Atún', grams: 80 }, { name: 'Huevo cocido (1 ud.)', grams: 60 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Tomate', grams: 120 }, { name: 'Espinacas', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Mezcla el atún con el huevo cocido picado y el tomate.', 'Rellena la tortilla con las espinacas y el aguacate; enrolla y sirve.'] },
+  { id: 'n23', slot: 'cena', name: 'Wrap de pavo y queso fresco', kcal: 605, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
+      { name: 'Fiambre de pavo', grams: 100 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Queso fresco', grams: 80 }, { name: 'Tomate', grams: 120 }, { name: 'Aguacate', grams: 75 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Unta la tortilla con el queso fresco.', 'Rellena con el fiambre de pavo, el tomate y el aguacate; enrolla y sirve.'] },
+  { id: 'n24', slot: 'cena', name: 'Wrap de salmón ahumado y huevo', kcal: 600, wrap: true, rapida: true, tiempo: '15 min · sartén', components: [
+      { name: 'Huevo (1 ud.)', grams: 120 }, { name: 'Salmón ahumado', grams: 40 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Queso fresco', grams: 40 } ],
+    pasos: ['Cuaja el huevo en una tortilla francesa fina.', 'Rellena la tortilla de trigo con el salmón, el aguacate, las espinacas y la tortilla de huevo; enrolla y sirve.'] }
 ];
 
 let RECIPES = [
@@ -255,7 +283,7 @@ const PROT_ANCHORS = {
   'Lubina': 1, 'Merluza': 1, 'Pescado blanco': 1, 'Pavo en dados': 1, 'Pavo picado': 1,
   'Pechuga de pavo': 1, 'Pechuga de pollo': 1, 'Pollo': 1, 'Pollo a la plancha': 1,
   'Pollo asado': 1, 'Pollo desmigado': 1, 'Pollo en dados': 1, 'Queso fresco': 1,
-  'Requesón': 1, 'Salmón': 1, 'Salmón ahumado': 1, 'Sepia': 1, 'Calamares': 1,
+  'Requesón': 1, 'Salmón': 1, 'Carne picada de ternera': 1, 'Pollo picado': 1, 'Salmón ahumado': 1, 'Sepia': 1, 'Calamares': 1,
   'Ternera para guisar': 1, 'Yogur griego natural': 1, 'Alubias cocidas': 1, 'Garbanzos cocidas': 1
 };
 
@@ -266,6 +294,8 @@ const PSHARE = { mantener: { desayuno: 0.30, comida: 0.40, cena: 0.30 },
 const OVR = {
   'Aceite de oliva': [10, 25, 5],
   'Canela': [1, 3, 1],
+  'Pan de hamburguesa integral': [65, 130, 65],
+  'Tortilla de trigo integral': [60, 120, 60],
   'Atún': [40, 160, 40],
   'Huevo (1 ud.)': [60, 180, 60], 'Huevos (2 uds.)': [60, 180, 60], 'Huevo cocido (1 ud.)': [60, 120, 60],
   'Jamón cocido': [20, 80, 20], 'Fiambre de pavo': [20, 100, 20], 'Salmón ahumado': [20, 60, 20],
@@ -284,14 +314,15 @@ const OVR = {
 };
 // Rediseño de recetas: overrides de rango y componentes añadidos por plato.
 const RECIPE_OVR = {
-  'r-feb-d': { 'Pan integral': [30, 90, 30], 'Copos de avena': [35, 70, 5] },
+  'n18': { 'Tomate': [60, 120, 25] },
+  'r-feb-d': { 'Pan integral': [30, 90, 30] },
   'c8': { 'Pan integral': [30, 60, 30] },
   'n14': { 'Fiambre de pavo': [60, 100, 20], 'Patata cocida': [150, 300, 75] },
   'n13': { 'Patata cocida': [150, 300, 75], 'Huevos (2 uds.)': [120, 180, 60] },
   'n12': { 'Pan integral': [30, 90, 30] },
   'n8': { 'Pan integral': [30, 60, 30] },
-  'n1': { 'Pan integral': [30, 90, 30] },
-  'd2': { 'Nueces': [15, 30, 15], 'Yogur griego natural': [125, 250, 25], 'Copos de avena': [35, 70, 5] },
+  'n1': { 'Verduras salteadas': [150, 300, 25] },
+  'd2': { 'Nueces': [15, 30, 15], 'Yogur griego natural': [125, 250, 25] },
   'n10': { 'Jamón cocido': [60, 100, 20] },
   'd3': { 'Pan integral': [90, 120, 30], 'Jamón cocido': [40, 80, 20] },
   'c10': { 'Pan integral': [90, 150, 30], 'Hummus': [45, 90, 15], 'Pollo asado': [80, 180, 10], 'Tomate': [100, 150, 25] },
@@ -305,9 +336,9 @@ const RECIPE_OVR = {
   'r-ene-n': { 'Pollo desmigado': [100, 200, 10], 'Patata': [150, 400, 75] },
   'r-jul-n': { 'Pan integral': [60, 120, 30] },
   'r-dic-c': { 'Alubias cocidas': [150, 200, 10], 'Pavo en dados': [80, 130, 10], 'Pan integral': [30, 60, 30], 'Verduras variadas': [150, 300, 25], 'Patata': [150, 450, 75] },
-  'd6': { 'Copos de avena': [40, 70, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
-  'r-sep-d': { 'Copos de avena': [40, 70, 5] },
-  'n11': { 'Copos de avena': [40, 70, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
+  'd6': { 'Copos de avena': [40, 160, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
+  'r-sep-d': { 'Copos de avena': [40, 160, 5] },
+  'n11': { 'Copos de avena': [40, 160, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
   'r-ago-c': { 'Verduras variadas': [150, 300, 25] },
   'r-ene-c': { 'Zanahoria y apio': [150, 250, 25] },
   'r-oct-c2': {  },
@@ -347,7 +378,7 @@ const RECIPE_REPLACE = {
       { name: 'Aceite de oliva', grams: 15 }, { name: 'Pan integral', grams: 30 } ] },
   // d7 era proteico en exceso para cualquier objetivo: tortitas de avena, real y flexible
   'd7': { slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 780,
-    components: [ { name: 'Copos de avena', grams: 70, 'Copos de avena': [70, 70, 5], 'Huevo (1 ud.)': [60, 120, 60], 'Yogur griego natural': [125, 250, 25]}, { name: 'Huevo (1 ud.)', grams: 60 },
+    components: [ { name: 'Copos de avena', grams: 70, 'Huevo (1 ud.)': [60, 120, 60], 'Yogur griego natural': [125, 250, 25]}, { name: 'Huevo (1 ud.)', grams: 60 },
       { name: 'Plátano', grams: 120 }, { name: 'Yogur griego natural', grams: 125 }, { name: 'Miel', grams: 7 } ],
     pasos: ['Tritura avena, huevo y plátano.', 'Cuaja tortitas pequeñas en sartén antiadherente y corona con yogur y miel.'] },
 };
@@ -482,6 +513,7 @@ function computePlan(option0, sk, sp) {
     const saved = comps.map(c => ({ lo: c.lo, hi: c.hi }));
     const hard = (c) => {
       const ing = ING[c.name];
+      if (ing.ug && ing.ug <= 10) return [c.lo, c.hi];  // especias y miel: nunca ensanchar
       if (PROT_ANCHORS[c.name]) return [60, 320, 10];
       if (/^Huevo/.test(c.name)) return [60, 180, 60];
       if (c.name === 'Aceite de oliva') return [5, 30, 5];
