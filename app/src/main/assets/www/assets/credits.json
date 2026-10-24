@@ -316,5 +316,21 @@
     "license": "CC BY 3.0",
     "license_url": "https://creativecommons.org/licenses/by/3.0/",
     "changes": "Recorte y montaje de cuatro fotogramas del descenso. 3-4 s es instrucción, no tempo demostrado por la secuencia."
+  },
+  "ex-cal-lsit-pino-secuencia": {
+    "title": "A gymnast doing exhibition on parallel bars",
+    "artist": "Tima Miroshnichenko",
+    "license": "Pexels License",
+    "license_url": "https://www.pexels.com/license/",
+    "url": "https://www.pexels.com/video/a-gymnast-doing-exhibition-on-a-parallel-bars-6571898/",
+    "changes": "Montaje de cuatro fotogramas originales sin recorte espacial. En el último, los pies salen del encuadre del vídeo fuente."
+  },
+  "ex-cal-dominada-pecho-real": {
+    "title": "2008 CrossFit Games - athletes performing a chest-to-bar pull-up.jpg",
+    "artist": "Brad Greenlee",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "url": "https://commons.wikimedia.org/wiki/File:2008_CrossFit_Games_-_athletes_performing_a_chest-to-bar_pull-up.jpg",
+    "changes": "Comprimida sin recorte. Posición alta con barra junto al pecho; una foto fija no demuestra la velocidad explosiva."
   }
 }
