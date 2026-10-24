@@ -51,9 +51,9 @@ const ING = {
   'Pasta integral (en crudo)': { p: 13.9, k: 350, c: 67, g: 2.5, ug: 40, u: 'puñado' },
   'Patata': { p: 2, k: 77, c: 17.5, g: 0.1, ug: 150, u: 'patata mediana' },
   'Patata cocida': { p: 1.9, k: 87, c: 20.1, g: 0.1, ug: 150, u: 'patata mediana' }, // envasada al vacio o cocida de antes: mantiene el plato sin fogon
-  'Pavo en dados': { p: 27, k: 127, c: 0, g: 2.1, ug: 150, u: 'porción' },
+  'Pavo en dados': { p: 21.5, k: 102, c: 0.1, g: 1.7, ug: 150, u: 'porción' },
   'Pavo picado': { p: 20, k: 150, c: 0, g: 7.5, ug: 150, u: 'porción' },
-  'Pechuga de pavo': { p: 27, k: 127, c: 0, g: 2.1, ug: 150, u: 'filete' },
+  'Pechuga de pavo': { p: 21.5, k: 102, c: 0.1, g: 1.7, ug: 150, u: 'filete' },
   'Pechuga de pollo': { p: 22.5, k: 120, c: 0, g: 2.6, ug: 150, u: 'filete' },
   'Pera': { p: 0.4, k: 57, c: 15.2, g: 0.1, ug: 150, u: 'pera' },
   'Pescado blanco': { p: 17, k: 90, c: 0, g: 2, ug: 150, u: 'filete' },
@@ -61,9 +61,9 @@ const ING = {
   'Pisto casero': { p: 1.2, k: 50, c: 6, g: 2.5, ug: 150, u: 'plato' },
   'Plátano': { p: 1.1, k: 89, c: 22.8, g: 0.3, ug: 120, u: 'plátano' },
   'Pollo': { p: 20, k: 165, c: 0, g: 9, ug: 150, u: 'porción' },
-  'Pollo a la plancha': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
-  'Pollo asado': { p: 29.8, k: 197, c: 0, g: 7.8, ug: 150, u: 'porción' },
-  'Pollo desmigado': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
+  'Pollo a la plancha (cocido)': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
+  'Pollo asado (cocido)': { p: 29.8, k: 197, c: 0, g: 7.8, ug: 150, u: 'porción' },
+  'Pollo desmigado (cocido)': { p: 31, k: 165, c: 0, g: 3.6, ug: 150, u: 'porción' },
   'Pollo en dados': { p: 22.5, k: 120, c: 0, g: 2.6, ug: 150, u: 'porción' },
   'Puerro': { p: 1.5, k: 61, c: 14.2, g: 0.3, ug: 150, u: 'puerro' },
   'Queso fresco': { p: 12, k: 110, c: 3, g: 6, ug: 40, u: 'porción' },
@@ -112,7 +112,7 @@ let MEALS = [
   { id: 'n3', slot: 'cena', name: 'Pavo con boniato', kcal: 860, components: [
       { name: 'Pechuga de pavo', grams: 150 }, { name: 'Boniato', grams: 450 }, { name: 'Ensalada', grams: 100 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ] },
   { id: 'n4', slot: 'cena', name: 'Crema de calabacín', kcal: 865, components: [
-      { name: 'Calabacín', grams: 320 }, { name: 'Pollo desmigado', grams: 130 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ] },
+      { name: 'Calabacín', grams: 320 }, { name: 'Pollo desmigado (cocido)', grams: 130 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ] },
   { id: 'd5', slot: 'desayuno', name: 'Tortilla francesa con jamón y pan', kcal: 815, components: [
       { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 145 }, { name: 'Aceite de oliva', grams: 5 }, { name: 'Leche o bebida vegetal', grams: 400 }, { name: 'Mango', grams: 150 }, { name: 'Jamón cocido', grams: 40 } ] },
   { id: 'd6', slot: 'desayuno', name: 'Avena fría con fresas', kcal: 740, components: [
@@ -154,7 +154,7 @@ let MEALS = [
   { id: 'c9', slot: 'comida', name: 'Ensalada fría de pasta y atún', kcal: 1060, rapida: true, tiempo: '12 min · solo hervir pasta', components: [
       { name: 'Pasta (en crudo)', grams: 160 }, { name: 'Atún', grams: 80 }, { name: 'Tomate', grams: 100 }, { name: 'Maíz dulce', grams: 140 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ] },
   { id: 'c10', slot: 'comida', name: 'Tostadas de hummus y pollo asado', kcal: 1030, rapida: true, tiempo: '5 min · sin cocinar', components: [
-      { name: 'Pan integral', grams: 150 }, { name: 'Hummus', grams: 100 }, { name: 'Pollo asado', grams: 130 }, { name: 'Tomate y lechuga', grams: 100 }, { name: 'Patata cocida', grams: 300 } ] },
+      { name: 'Pan integral', grams: 150 }, { name: 'Hummus', grams: 100 }, { name: 'Pollo asado (cocido)', grams: 130 }, { name: 'Tomate y lechuga', grams: 100 }, { name: 'Patata cocida', grams: 300 } ] },
   { id: 'n8', slot: 'cena', name: 'Requesón con fruta y nueces', kcal: 800, rapida: true, tiempo: '5 min · sin cocinar', components: [
       { name: 'Requesón', grams: 95 }, { name: 'Fresas', grams: 150 }, { name: 'Nueces', grams: 40 }, { name: 'Pan integral', grams: 160 } ] },
   { id: 'n17', slot: 'cena', name: 'Burger de ternera con patata', kcal: 745, burger: true, tiempo: '25 min · sartén', components: [
@@ -170,7 +170,7 @@ let MEALS = [
       { name: 'Lentejas cocidas', grams: 200 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 30 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
     pasos: ['Tritura las lentejas con el huevo y la rebanada de pan, forma la burger y dórala en la sartén con el aceite.', 'Monta el pan de hamburguesa con el tomate y la ensalada.'] },
   { id: 'n21', slot: 'cena', name: 'Wrap de pollo, aguacate y hummus', kcal: 670, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
-      { name: 'Pollo a la plancha', grams: 120 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Hummus', grams: 45 } ],
+      { name: 'Pollo a la plancha (cocido)', grams: 120 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Hummus', grams: 45 } ],
     pasos: ['Unta la tortilla con el hummus.', 'Rellena con el pollo y las espinacas; enrolla y sirve con el aguacate en dados.'] },
   { id: 'n22', slot: 'cena', name: 'Wrap de atún y huevo', kcal: 620, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
       { name: 'Atún', grams: 80 }, { name: 'Huevo cocido', grams: 60 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
@@ -189,7 +189,7 @@ let RECIPES = [
   { id: 'r-ene-c', month: 0, slot: 'comida', name: 'Cocido ligero de garbanzos', kcal: 1075, components: [
       { name: 'Garbanzos cocidos', grams: 400 }, { name: 'Zanahoria y apio', grams: 150 }, { name: 'Patata', grams: 200 }, { name: 'Pavo en dados', grams: 120 } ], pasos: ['Cuece la zanahoria, el apio y la patata 20 minutos.', 'Añade los garbanzos y el pavo, cocina 10 minutos más y sirve con un hilo de aceite.'] },
   { id: 'r-ene-n', month: 0, slot: 'cena', name: 'Sopa de verduras con huevo y pollo', kcal: 810, components: [
-      { name: 'Verduras variadas', grams: 320 }, { name: 'Patata', grams: 470 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 5 }, { name: 'Pollo desmigado', grams: 130 } ], pasos: ['Cuece las verduras y la patata en agua 20 minutos.', 'Añade el pollo desmigado y el huevo escalfado al final; sirve con un hilo de aceite.'] },
+      { name: 'Verduras variadas', grams: 320 }, { name: 'Patata', grams: 470 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 5 }, { name: 'Pollo desmigado (cocido)', grams: 130 } ], pasos: ['Cuece las verduras y la patata en agua 20 minutos.', 'Añade el pollo desmigado y el huevo escalfado al final; sirve con un hilo de aceite.'] },
   { id: 'r-feb-d', month: 1, slot: 'desayuno', name: 'Tostada con hummus y huevo', kcal: 805, components: [
       { name: 'Pan integral', grams: 150 }, { name: 'Hummus', grams: 100 }, { name: 'Huevo cocido', grams: 60 }, { name: 'Tomate', grams: 100 }, { name: 'Copos de avena', grams: 40 } ], pasos: ['Tuesta el pan y unta el hummus.', 'Corona con el huevo cocido en láminas y el tomate; acompaña con un bol de avena.'] },
   { id: 'r-feb-c', month: 1, slot: 'comida', name: 'Estofado de ternera', kcal: 1000, components: [
@@ -223,19 +223,19 @@ let RECIPES = [
   { id: 'r-jul-d', month: 6, slot: 'desayuno', name: 'Tostada fría de yogur y fruta', kcal: 805, components: [
       { name: 'Pan integral', grams: 160 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Fruta de temporada', grams: 150 }, { name: 'Semillas variadas', grams: 25 } ], pasos: ['Tuesta el pan y deja enfriar.', 'Unta el yogur y cubre con fruta y semillas.'] },
   { id: 'r-jul-c', month: 6, slot: 'comida', name: 'Ensalada de pasta con pollo', kcal: 1090, components: [
-      { name: 'Pasta (en crudo)', grams: 160 }, { name: 'Pollo a la plancha', grams: 130 }, { name: 'Verduras crudas', grams: 200 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Cuece la pasta y enfría.', 'Mezcla con el pollo y las verduras, aliña con el aceite y acompaña con el pan.'] },
+      { name: 'Pasta (en crudo)', grams: 160 }, { name: 'Pollo a la plancha (cocido)', grams: 130 }, { name: 'Verduras crudas', grams: 200 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Cuece la pasta y enfría.', 'Mezcla con el pollo y las verduras, aliña con el aceite y acompaña con el pan.'] },
   { id: 'r-jul-n', month: 6, slot: 'cena', name: 'Gazpacho con huevo y atún', kcal: 805, components: [
       { name: 'Gazpacho casero', grams: 300 }, { name: 'Huevo cocido', grams: 60 }, { name: 'Atún', grams: 80 }, { name: 'Pan integral', grams: 150 }, { name: 'Patata', grams: 150 } ], pasos: ['Sirve el gazpacho bien frío.', 'Añade el huevo picado y el atún por encima; acompaña con la patata cocida y el pan.'] },
   { id: 'r-ago-d', month: 7, slot: 'desayuno', name: 'Bol de melón con yogur', kcal: 685, components: [
       { name: 'Melón', grams: 200 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Copos de avena', grams: 110 } ], pasos: ['Sirve el yogur en un bol.', 'Añade el melón en dados, la avena y un hilo de miel.'] },
   { id: 'r-ago-c', month: 7, slot: 'comida', name: 'Pollo frío con tomate y maíz', kcal: 1005, components: [
-      { name: 'Pollo asado', grams: 130 }, { name: 'Maíz dulce', grams: 140 }, { name: 'Tomate y lechuga', grams: 200 }, { name: 'Pan integral', grams: 150 }, { name: 'Patata', grams: 300 } ], pasos: ['Desmenuza el pollo frío.', 'Mezcla con el tomate, la lechuga, el maíz y el aguacate; aliña y sirve con la patata cocida y el pan.'] },
+      { name: 'Pollo asado (cocido)', grams: 130 }, { name: 'Maíz dulce', grams: 140 }, { name: 'Tomate y lechuga', grams: 200 }, { name: 'Pan integral', grams: 150 }, { name: 'Patata', grams: 300 } ], pasos: ['Desmenuza el pollo frío.', 'Mezcla con el tomate, la lechuga, el maíz y el aguacate; aliña y sirve con la patata cocida y el pan.'] },
   { id: 'r-ago-n', month: 7, slot: 'cena', name: 'Salmón a la plancha', kcal: 805, components: [
       { name: 'Salmón', grams: 150 }, { name: 'Ensalada variada', grams: 300 }, { name: 'Pan integral', grams: 140 }, { name: 'Aceite de oliva', grams: 10 } ], pasos: ['Haz el salmón a la plancha 3-4 minutos por lado.', 'Acompaña con la ensalada aliñada con el aceite, la patata cocida y el pan.'] },
   { id: 'r-sep-d', month: 8, slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 795, components: [
       { name: 'Copos de avena', grams: 110 }, { name: 'Plátano', grams: 100 }, { name: 'Huevo', grams: 60 }, { name: 'Yogur griego natural', grams: 250 } ], pasos: ['Tritura la avena, el plátano y el huevo; haz tortitas en una sartén antiadherente.', 'Sirve con el yogur.'] },
   { id: 'r-sep-c', month: 8, slot: 'comida', name: 'Arroz integral con huevo y pollo', kcal: 1060, components: [
-      { name: 'Arroz integral (en crudo)', grams: 160 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Pollo a la plancha', grams: 130 } ], pasos: ['Cuece el arroz y saltea las verduras con el aceite.', 'Haz el pollo y el huevo a la plancha y sirve todo junto.'] },
+      { name: 'Arroz integral (en crudo)', grams: 160 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 10 }, { name: 'Pollo a la plancha (cocido)', grams: 130 } ], pasos: ['Cuece el arroz y saltea las verduras con el aceite.', 'Haz el pollo y el huevo a la plancha y sirve todo junto.'] },
   { id: 'r-sep-n', month: 8, slot: 'cena', name: 'Calamares a la plancha', kcal: 840, components: [
       { name: 'Calamares', grams: 150 }, { name: 'Ensalada variada', grams: 200 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Patata', grams: 150 } ], pasos: ['Haz los calamares a la plancha con el aceite 2-3 minutos.', 'Acompaña con la ensalada, la patata y el pan.'] },
   { id: 'r-oct-d', month: 9, slot: 'desayuno', name: 'Porridge con manzana asada', kcal: 825, components: [
@@ -281,8 +281,8 @@ const PROT_ANCHORS = {
   'Atún': 1, 'Huevo': 1, 'Huevo cocido': 1,
   'Jamón cocido': 1, 'Fiambre de pavo': 1, 'Lentejas cocidas': 1, 'Lentejas (en crudo)': 1,
   'Lubina': 1, 'Merluza': 1, 'Pescado blanco': 1, 'Pavo en dados': 1, 'Pavo picado': 1,
-  'Pechuga de pavo': 1, 'Pechuga de pollo': 1, 'Pollo': 1, 'Pollo a la plancha': 1,
-  'Pollo asado': 1, 'Pollo desmigado': 1, 'Pollo en dados': 1, 'Queso fresco': 1,
+  'Pechuga de pavo': 1, 'Pechuga de pollo': 1, 'Pollo': 1, 'Pollo a la plancha (cocido)': 1,
+  'Pollo asado (cocido)': 1, 'Pollo desmigado (cocido)': 1, 'Pollo en dados': 1, 'Queso fresco': 1,
   'Requesón': 1, 'Salmón': 1, 'Carne picada de ternera': 1, 'Pollo picado': 1, 'Salmón ahumado': 1, 'Sepia': 1, 'Calamares': 1,
   'Ternera para guisar': 1, 'Yogur griego natural': 1, 'Alubias cocidas': 1, 'Garbanzos cocidas': 1
 };
@@ -333,15 +333,15 @@ const RECIPE_OVR = {
   'n12': { 'Pan integral': [30, 90, 30] },
   'n1': { 'Verduras salteadas': [150, 300, 25] },
   'd2': { 'Nueces': [15, 30, 15], 'Yogur griego natural': [125, 250, 25] },
-  'c10': { 'Pan integral': [90, 150, 30], 'Hummus': [45, 90, 15], 'Pollo asado': [80, 180, 10], 'Tomate': [100, 150, 25] },
+  'c10': { 'Pan integral': [90, 150, 30], 'Hummus': [45, 90, 15], 'Pollo asado (cocido)': [80, 180, 10], 'Tomate': [100, 150, 25] },
   'n16': { 'Pavo en dados': [40, 150, 10], 'Pan integral': [60, 120, 30] },
   'n15': { 'Hummus': [45, 60, 15], 'Atún': [40, 80, 40], 'Pan integral': [30, 90, 30] },
   'd5': { 'Jamón cocido': [40, 120, 20], 'Mango': [150, 300, 50], 'Leche o bebida vegetal': [200, 200, 100], 'Huevo': [120, 180, 60] },
   'd1': { 'Leche o bebida vegetal': [200, 200, 100], 'Jamón cocido': [40, 80, 20] },
   'n2': { 'Queso fresco': [40, 150, 20], 'Huevo': [120, 180, 60] },
   'r-mar-c': { 'Pollo': [150, 250, 10], 'Arroz (en crudo)': [40, 160, 10] },
-  'r-oct-n': { 'Huevo': [60, 120, 60], 'Pan integral': [30, 90, 30], 'Pollo desmigado': [60, 130, 10], 'Setas variadas': [200, 300, 25], 'Patata': [150, 300, 75], 'Aceite de oliva': [10, 20, 5] },
-  'r-ene-n': { 'Pollo desmigado': [100, 200, 10], 'Patata': [150, 400, 75] },
+  'r-oct-n': { 'Huevo': [60, 120, 60], 'Pan integral': [30, 90, 30], 'Pollo desmigado (cocido)': [60, 130, 10], 'Setas variadas': [200, 300, 25], 'Patata': [150, 300, 75], 'Aceite de oliva': [10, 20, 5] },
+  'r-ene-n': { 'Pollo desmigado (cocido)': [100, 200, 10], 'Patata': [150, 400, 75] },
   'r-jul-n': { 'Pan integral': [60, 120, 30] },
   'r-dic-c': { 'Alubias cocidas': [150, 200, 10], 'Pavo en dados': [80, 130, 10], 'Pan integral': [30, 60, 30], 'Verduras variadas': [150, 300, 25], 'Patata': [150, 450, 75] },
   'd6': { 'Copos de avena': [40, 160, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
@@ -369,7 +369,7 @@ const RECIPE_ADD = {
   'r-ago-c': [{ name: 'Aguacate', grams: 75 }],
   'r-ene-c': [{ name: 'Aceite de oliva', grams: 15 }],
   'r-ago-n': [{ name: 'Patata', grams: 200 }],
-  'r-oct-n': [{ name: 'Pollo desmigado', grams: 100 }],
+  'r-oct-n': [{ name: 'Pollo desmigado (cocido)', grams: 100 }],
 };
 const RECIPE_REPLACE = {
   'r-abr-d': { slot: 'desayuno', name: 'Tostada de aguacate y salmón',
@@ -382,7 +382,7 @@ const RECIPE_REPLACE = {
     pasos: ['Sofríe el pollo con el aceite, añade la calabaza y el arroz con el doble de agua.', 'Cuece 18 minutos y reposa 5; sirve con el pan.'] },
   'c4': { slot: 'comida', name: 'Garbanzos con espinacas y pollo', kcal: 1000, rapida: false,
     components: [ { name: 'Garbanzos cocidos', grams: 200 }, { name: 'Espinacas', grams: 250 },
-      { name: 'Pollo a la plancha', grams: 120 }, { name: 'Patata', grams: 300 },
+      { name: 'Pollo a la plancha (cocido)', grams: 120 }, { name: 'Patata', grams: 300 },
       { name: 'Aceite de oliva', grams: 15 }, { name: 'Pan integral', grams: 30 } ] },
   // d7 era proteico en exceso para cualquier objetivo: tortitas de avena, real y flexible
   'd7': { slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 780,
