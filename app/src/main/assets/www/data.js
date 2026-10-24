@@ -176,8 +176,8 @@ let MEALS = [
       { name: 'Atún', grams: 80 }, { name: 'Huevo cocido', grams: 60 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
     pasos: ['Mezcla el atún con el huevo cocido picado y el aceite.', 'Rellena la tortilla con la mezcla y las espinacas; enrolla y sirve con el aguacate en dados.'] },
   { id: 'n23', slot: 'cena', name: 'Wrap de pavo y queso fresco', kcal: 605, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
-      { name: 'Fiambre de pavo', grams: 100 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Queso fresco', grams: 80 }, { name: 'Tomate', grams: 120 }, { name: 'Aguacate', grams: 75 }, { name: 'Aceite de oliva', grams: 10 } ],
-    pasos: ['Unta la tortilla con el queso fresco.', 'Rellena con el fiambre de pavo y el tomate; enrolla y sirve con el aguacate en dados aliñado con el aceite.'] },
+      { name: 'Fiambre de pavo', grams: 100 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Queso fresco', grams: 80 }, { name: 'Tomate', grams: 120 }, { name: 'Aceite de oliva', grams: 10 } ],
+    pasos: ['Unta la tortilla con el queso fresco y un hilo de aceite.', 'Rellena con el fiambre de pavo y el tomate; enrolla y sirve.'] },
   { id: 'n24', slot: 'cena', name: 'Wrap de salmón ahumado y huevo', kcal: 600, wrap: true, rapida: true, tiempo: '15 min · sartén', components: [
       { name: 'Huevo', grams: 120 }, { name: 'Salmón ahumado', grams: 40 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Queso fresco', grams: 40 } ],
     pasos: ['Cuaja el huevo en una tortilla francesa fina.', 'Rellena la tortilla de trigo con el salmón, las espinacas, el queso fresco y la tortilla de huevo; enrolla y sirve con el aguacate en dados.'] }
@@ -314,21 +314,24 @@ const OVR = {
 };
 // Rediseño de recetas: overrides de rango y componentes añadidos por plato.
 const RECIPE_OVR = {
+  'n8': { 'Nueces': [15, 30, 15], 'Pan integral': [30, 60, 30] },
+  'n10': { 'Nueces': [15, 30, 15], 'Jamón cocido': [60, 100, 20] },
+  'd8': { 'Nueces': [15, 30, 15] },
+  'd3': { 'Aguacate': [75, 75, 75], 'Pan integral': [90, 120, 30], 'Jamón cocido': [40, 80, 20] },
+  'n18': { 'Aceite de oliva': [5, 10, 5], 'Aguacate': [75, 75, 75], 'Tomate': [60, 120, 25] },
+  'n22': { 'Aguacate': [75, 75, 75], 'Huevo cocido': [60, 120, 60], 'Espinacas': [100, 100, 25], 'Aceite de oliva': [5, 10, 5], 'Tortilla de trigo integral': [60, 180, 60] },
+  'n24': { 'Salmón ahumado': [40, 160, 20], 'Huevo': [60, 120, 60], 'Aguacate': [75, 75, 75], 'Espinacas': [100, 100, 25], 'Queso fresco': [40, 40, 20] },
+  'n6': { 'Aceite de oliva': [5, 15, 5] },
+  'r-sep-c': { 'Aceite de oliva': [5, 15, 5] },
   'n21': { 'Espinacas': [100, 100, 25], 'Hummus': [45, 60, 15] },
-  'n22': { 'Huevo cocido': [60, 120, 60], 'Espinacas': [100, 100, 25] },
   'n23': { 'Fiambre de pavo': [60, 100, 20], 'Queso fresco': [40, 80, 20], 'Tomate': [120, 120, 25] },
-  'n24': { 'Espinacas': [100, 100, 25], 'Queso fresco': [40, 40, 20] },
-  'n18': { 'Tomate': [60, 120, 25] },
   'r-feb-d': { 'Pan integral': [30, 90, 30] },
   'c8': { 'Pan integral': [30, 60, 30] },
   'n14': { 'Fiambre de pavo': [60, 100, 20], 'Patata cocida': [150, 300, 75] },
   'n13': { 'Patata cocida': [150, 300, 75], 'Huevo': [120, 180, 60] },
   'n12': { 'Pan integral': [30, 90, 30] },
-  'n8': { 'Pan integral': [30, 60, 30] },
   'n1': { 'Verduras salteadas': [150, 300, 25] },
   'd2': { 'Nueces': [15, 30, 15], 'Yogur griego natural': [125, 250, 25] },
-  'n10': { 'Jamón cocido': [60, 100, 20] },
-  'd3': { 'Pan integral': [90, 120, 30], 'Jamón cocido': [40, 80, 20] },
   'c10': { 'Pan integral': [90, 150, 30], 'Hummus': [45, 90, 15], 'Pollo asado': [80, 180, 10], 'Tomate': [100, 150, 25] },
   'n16': { 'Pavo en dados': [40, 150, 10], 'Pan integral': [60, 120, 30] },
   'n15': { 'Hummus': [45, 60, 15], 'Atún': [40, 80, 40], 'Pan integral': [30, 90, 30] },
@@ -346,9 +349,9 @@ const RECIPE_OVR = {
   'r-ago-c': { 'Verduras variadas': [150, 300, 25] },
   'r-ene-c': { 'Zanahoria y apio': [150, 250, 25] },
   'r-oct-c2': {  },
-  'c5': { 'Verduras variadas': [150, 300, 25], },
-  'r-feb-c': { 'Verduras variadas': [150, 300, 25], },
-  'c6': { 'Verduras variadas': [150, 300, 25], },
+  'c5': { 'Verduras variadas': [150, 300, 25] },
+  'r-feb-c': { 'Verduras variadas': [150, 300, 25] },
+  'c6': { 'Verduras variadas': [150, 300, 25] },
   'n4': { 'Verduras variadas': [150, 300, 25], 'Calabacín': [150, 300, 25] },
   'n5': { 'Verduras variadas': [150, 300, 25], 'Patata': [150, 300, 75] },
   'n7': { 'Setas variadas': [150, 300, 25], 'Pavo en dados': [80, 170, 10], 'Patata': [150, 300, 75] },
@@ -409,6 +412,7 @@ function rangeFor(name, authored) {
   if (ing.ug && ['pieza','plátano','manzana','pera','mango','tajada','fresa','tomate','calabacín','puerro','boniato mediano'].includes(u)) {
     return [ing.ug, Math.min(ing.ug * 3, Math.round(authored * 1.5 / ing.ug) * ing.ug || ing.ug), ing.ug];
   }
+  if (name === 'Aceite de oliva') return [5, 20, 5];
   if (['puñado','cucharada','cucharadita','pizca'].includes(u)) {
     return [Math.max(ing.ug, Math.round(authored * 0.5 / ing.ug) * ing.ug), Math.round(authored * 2 / ing.ug) * ing.ug || ing.ug * 2, ing.ug];
   }
@@ -450,13 +454,15 @@ function computePlan(option0, sk, sp) {
     }
   }
   function stats() {
-    let k = 0, p = 0, v = 0;
-    comps.forEach(c => { k += ING[c.name].k * c.g / 100; p += ING[c.name].p * c.g / 100; v += c.g; });
-    return { k, p, v };
+    let k = 0, p = 0, v = 0, f = 0;
+    comps.forEach(c => { k += ING[c.name].k * c.g / 100; p += ING[c.name].p * c.g / 100; v += c.g; f += (ING[c.name].g || 0) * c.g / 100; });
+    return { k, p, v, f };
   }
   function cost() {
     const s = stats();
-    return Math.pow((s.k - sk) / 25, 2) + Math.pow((s.p - sp) / 3, 2) + Math.pow(Math.max(0, s.v - 1000) / 100, 2);
+    const fatPct = s.k > 0 ? s.f * 9 / s.k * 100 : 0;
+    return Math.pow((s.k - sk) / 25, 2) + Math.pow((s.p - sp) / 3, 2) + Math.pow(Math.max(0, s.v - 1000) / 100, 2) +
+      Math.pow(Math.max(0, fatPct - 40) / 5, 2);
   }
   let best = cost();
   for (let sweep = 0; sweep < 6; sweep++) {
@@ -573,7 +579,8 @@ function computePlan(option0, sk, sp) {
       c.g = n * ing.ug;
     }
   });
-  const errU = () => { const t = stats(); return Math.abs(t.k - sk) + 3 * Math.abs(t.p - sp); };
+  const errU = () => { const t = stats(); const fp = t.k > 0 ? t.f * 9 / t.k * 100 : 0;
+    return Math.abs(t.k - sk) + 3 * Math.abs(t.p - sp) + 8 * Math.max(0, fp - 40); };
   for (let sweep = 0; sweep < 4; sweep++) {
     let improved = false;
     for (const c of comps) {
