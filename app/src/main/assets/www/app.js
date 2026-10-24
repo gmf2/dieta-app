@@ -569,7 +569,7 @@
         { id: 'b2', nombre: 'Meta: Muscle up', nota: 'El muscle up es la META, no el punto de partida: empieza cuando las dominadas estrictas te resulten cómodas. Sesión completa por bloques: elige UNA variante por bloque (la que te salga limpia) y haz sus series. Las variantes de un bloque no se encadenan.', ej: [
           { n: 'Muscle up en barra baja', s: '3 x 5-8', b: 1, lvl: 1, g: 'Técnica', p: 'pullup', img: 'cal-muscleup-baja-ia' },
           { n: 'Muscle up con goma', s: '3 x 2-4', b: 1, lvl: 2, g: 'Técnica', p: 'pullup', img: 'cal-muscleup-goma-ia' },
-          { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up con parada abajo', s: '3 x 2-3', b: 1, lvl: 3, g: 'Técnica', p: 'pullup', img: 'cal-muscleup-parada-ia' },
           { n: 'Dominadas', s: '3 x 4-8', b: 2, lvl: 1, g: 'Tirón', p: 'pullup', img: "skill-dominadas" },
           { n: 'Dominadas rápidas subiendo, bajada lenta', s: '3 x 4-6', b: 2, lvl: 2, g: 'Tirón', p: 'pullup', img: 'cal-dominadas-tempo-secuencia' },
           { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: 'cal-dominada-pecho-real' },
@@ -616,7 +616,7 @@
           { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'cal-straddle-planche-ia' },
           { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
           { n: 'Flexiones pseudo-planche', s: '3 x 6-8', b: 4, lvl: 2, g: 'Empuje', p: 'pushup', img: "skill-pseudo-pushup" },
-          { n: 'Flexiones pseudo-planche con pies elevados', s: '3 x 5-8', b: 4, lvl: 3, g: 'Empuje', p: 'pushup', img: null },
+          { n: 'Flexiones pseudo-planche con pies elevados', s: '3 x 5-8', b: 4, lvl: 3, g: 'Empuje', p: 'pushup', img: 'cal-pseudo-planche-elevados-ia' },
           { n: 'Fondos asistidos', s: '3 x 8', b: 5, lvl: 1, g: 'Empuje', p: 'dip', img: "cal-fondos-asistidos" },
           { n: 'Fondos lean planche', s: '3 x 6-8', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: 'cal-fondoslean-ia' },
           { n: 'Fondos lean planche con piernas elevadas', s: '4 x 6-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: 'cal-fondoslean-elevados-ia' },
