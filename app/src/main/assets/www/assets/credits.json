@@ -323,7 +323,7 @@
     "license": "Pexels License",
     "license_url": "https://www.pexels.com/license/",
     "url": "https://www.pexels.com/video/a-gymnast-doing-exhibition-on-a-parallel-bars-6571898/",
-    "changes": "Montaje de cuatro fotogramas originales sin recorte espacial. En el último, los pies salen del encuadre del vídeo fuente."
+    "changes": "Montaje en cuadrícula 2x2, orden 1→2→3→4, de cuatro fotogramas originales sin recorte espacial. En el último, los pies salen del encuadre del vídeo fuente."
   },
   "ex-cal-dominada-pecho-real": {
     "title": "2008 CrossFit Games - athletes performing a chest-to-bar pull-up.jpg",
