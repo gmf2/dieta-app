@@ -125,6 +125,7 @@
     } else if (plan.dk > 60) {
       sug.push('puedes dejar parte del acompañamiento (pan, patata o arroz)');
     }
+    if (!sug.length && plan.dp < -10) sug.push('suma un yogur griego o un huevo (~10 g de proteína)');
     if (sug.length) s += ' Para acercarte a tu objetivo: ' + sug.join('') + '.';
     return s;
   }
