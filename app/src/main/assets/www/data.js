@@ -265,6 +265,7 @@ const PSHARE = { mantener: { desayuno: 0.30, comida: 0.40, cena: 0.30 },
 // Rangos culinarios [min, max, paso] por ingrediente (reglas + overrides)
 const OVR = {
   'Aceite de oliva': [10, 25, 5],
+  'Canela': [1, 3, 1],
   'Atún': [40, 160, 40],
   'Huevo (1 ud.)': [60, 180, 60], 'Huevos (2 uds.)': [60, 180, 60], 'Huevo cocido (1 ud.)': [60, 120, 60],
   'Jamón cocido': [20, 80, 20], 'Fiambre de pavo': [20, 100, 20], 'Salmón ahumado': [20, 60, 20],
@@ -283,29 +284,39 @@ const OVR = {
 };
 // Rediseño de recetas: overrides de rango y componentes añadidos por plato.
 const RECIPE_OVR = {
+  'r-feb-d': { 'Pan integral': [30, 90, 30], 'Copos de avena': [35, 70, 5] },
+  'c8': { 'Pan integral': [30, 60, 30] },
+  'n14': { 'Fiambre de pavo': [60, 100, 20], 'Patata cocida': [150, 300, 75] },
+  'n13': { 'Patata cocida': [150, 300, 75], 'Huevos (2 uds.)': [120, 180, 60] },
+  'n12': { 'Pan integral': [30, 90, 30] },
+  'n8': { 'Pan integral': [30, 60, 30] },
+  'n1': { 'Pan integral': [30, 90, 30] },
+  'd2': { 'Nueces': [15, 30, 15], 'Yogur griego natural': [125, 250, 25], 'Copos de avena': [35, 70, 5] },
+  'n10': { 'Jamón cocido': [60, 100, 20] },
+  'd3': { 'Pan integral': [90, 120, 30], 'Jamón cocido': [40, 80, 20] },
   'c10': { 'Pan integral': [90, 150, 30], 'Hummus': [45, 90, 15], 'Pollo asado': [80, 180, 10], 'Tomate': [100, 150, 25] },
   'n16': { 'Pavo en dados': [40, 150, 10], 'Pan integral': [60, 120, 30] },
-  'n15': { 'Hummus': [45, 60, 15], 'Atún': [40, 80, 40] },
-  'd5': { 'Jamón cocido': [40, 120, 20], 'Mango': [150, 300, 50] },
-  'd1': { 'Leche o bebida vegetal': [200, 300, 100] },
-  'n2': { 'Queso fresco': [40, 150, 20] },
+  'n15': { 'Hummus': [45, 60, 15], 'Atún': [40, 80, 40], 'Pan integral': [30, 90, 30] },
+  'd5': { 'Jamón cocido': [40, 120, 20], 'Mango': [150, 300, 50], 'Leche o bebida vegetal': [200, 200, 100], 'Huevos (2 uds.)': [120, 180, 60] },
+  'd1': { 'Leche o bebida vegetal': [200, 200, 100], 'Jamón cocido': [40, 80, 20] },
+  'n2': { 'Queso fresco': [40, 150, 20], 'Huevos (2 uds.)': [120, 180, 60] },
   'r-mar-c': { 'Pollo': [150, 250, 10], 'Arroz (en crudo)': [40, 160, 10] },
   'r-oct-n': { 'Huevo (1 ud.)': [60, 120, 60], 'Pan integral': [30, 90, 30], 'Pollo desmigado': [60, 130, 10], 'Setas variadas': [200, 300, 25], 'Patata': [150, 300, 75], 'Aceite de oliva': [10, 20, 5] },
   'r-ene-n': { 'Pollo desmigado': [100, 200, 10], 'Patata': [150, 400, 75] },
   'r-jul-n': { 'Pan integral': [60, 120, 30] },
   'r-dic-c': { 'Alubias cocidas': [150, 200, 10], 'Pavo en dados': [80, 130, 10], 'Pan integral': [30, 60, 30], 'Verduras variadas': [150, 300, 25], 'Patata': [150, 450, 75] },
-  'd6': { 'Copos de avena': [40, 160, 5] },
-  'r-sep-d': { 'Copos de avena': [40, 160, 5] },
-  'n11': { 'Copos de avena': [40, 160, 5] },
+  'd6': { 'Copos de avena': [40, 70, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
+  'r-sep-d': { 'Copos de avena': [40, 70, 5] },
+  'n11': { 'Copos de avena': [40, 70, 5], 'Yogur griego natural': [125, 250, 25], 'Miel': [7, 14, 7] },
   'r-ago-c': { 'Verduras variadas': [150, 300, 25] },
   'r-ene-c': { 'Zanahoria y apio': [150, 250, 25] },
-  'r-oct-c2': {},
-  'c5': { 'Verduras variadas': [150, 300, 25] },
-  'r-feb-c': { 'Verduras variadas': [150, 300, 25] },
-  'c6': { 'Verduras variadas': [150, 300, 25] },
+  'r-oct-c2': {  },
+  'c5': { 'Verduras variadas': [150, 300, 25], },
+  'r-feb-c': { 'Verduras variadas': [150, 300, 25], },
+  'c6': { 'Verduras variadas': [150, 300, 25], },
   'n4': { 'Verduras variadas': [150, 300, 25], 'Calabacín': [150, 300, 25] },
-  'n5': { 'Verduras variadas': [150, 300, 25] },
-  'n7': { 'Setas variadas': [150, 300, 25], 'Pavo en dados': [80, 170, 10] },
+  'n5': { 'Verduras variadas': [150, 300, 25], 'Patata': [150, 300, 75] },
+  'n7': { 'Setas variadas': [150, 300, 25], 'Pavo en dados': [80, 170, 10], 'Patata': [150, 300, 75] },
   'r-abr-n': { 'Verduras variadas': [150, 300, 25] },
 };
 const RECIPE_ADD = {
@@ -336,7 +347,7 @@ const RECIPE_REPLACE = {
       { name: 'Aceite de oliva', grams: 15 }, { name: 'Pan integral', grams: 30 } ] },
   // d7 era proteico en exceso para cualquier objetivo: tortitas de avena, real y flexible
   'd7': { slot: 'desayuno', name: 'Tortitas de avena y plátano', kcal: 780,
-    components: [ { name: 'Copos de avena', grams: 70 }, { name: 'Huevo (1 ud.)', grams: 60 },
+    components: [ { name: 'Copos de avena', grams: 70, 'Copos de avena': [70, 70, 5], 'Huevo (1 ud.)': [60, 120, 60], 'Yogur griego natural': [125, 250, 25]}, { name: 'Huevo (1 ud.)', grams: 60 },
       { name: 'Plátano', grams: 120 }, { name: 'Yogur griego natural', grams: 125 }, { name: 'Miel', grams: 7 } ],
     pasos: ['Tritura avena, huevo y plátano.', 'Cuaja tortitas pequeñas en sartén antiadherente y corona con yogur y miel.'] },
 };
@@ -474,9 +485,9 @@ function computePlan(option0, sk, sp) {
       if (PROT_ANCHORS[c.name]) return [60, 320, 10];
       if (/^Huevo/.test(c.name)) return [60, 180, 60];
       if (c.name === 'Aceite de oliva') return [5, 30, 5];
-      if (ing.k >= 200 && ing.p < 18) return [40, 500, 10];   // arroz/pasta/copos/pan
-      if (ing.k >= 60 && ing.p < 8) return [80, 500, 25];     // patata, boniato, fruta, maiz
-      if (ing.k < 40) return [50, 400, 25];                   // verduras
+      if (ing.k >= 200 && ing.p < 18) return [40, 250, 10];   // arroz/pasta/copos/pan
+      if (ing.k >= 60 && ing.p < 8) return [80, 375, 25];     // patata, boniato, fruta, maiz
+      if (ing.k < 40) return [50, 300, 25];                   // verduras
       if (ing.p >= 8) return [60, 300, 10];                   // lacteos altos en prot, legumbres
       return [c.lo, c.hi];
     };
@@ -506,11 +517,19 @@ function computePlan(option0, sk, sp) {
   // se ajustan a unidades completas (minimo 1) para que la etiqueta y los
   // gramos cuadren. Despues se prueba subir/bajar una unidad por ingrediente
   // y se reequilibra el granel, para seguir cerca del objetivo de kcal/prot.
+  const unitBounds = (c) => {
+    const ug = ING[c.name].ug;
+    const nMax = Math.max(1, Math.floor(c.hi / ug));
+    const nMin = Math.min(nMax, Math.max(1, Math.ceil(c.lo / ug)));
+    return [nMin, nMax];
+  };
   comps.forEach(c => {
     const ing = ING[c.name];
     if (ing && ing.ug) {
+      const [nMin, nMax] = unitBounds(c);
       let n = Math.round(c.g / ing.ug);
-      if (n < 1) n = 1;
+      if (n < nMin) n = nMin;
+      if (n > nMax) n = nMax;
       c.g = n * ing.ug;
     }
   });
@@ -522,8 +541,9 @@ function computePlan(option0, sk, sp) {
       if (!ing || !ing.ug) continue;
       const n0 = Math.round(c.g / ing.ug);
       let bestN = n0, bestE = errU();
+      const [nLo, nHi] = unitBounds(c);
       [n0 - 1, n0 + 1].forEach(n => {
-        if (n < 1 || n > 8) return;
+        if (n < nLo || n > Math.min(8, nHi)) return;
         c.g = n * ing.ug;
         const e = errU();
         if (e < bestE - 1e-9) { bestE = e; bestN = n; }
