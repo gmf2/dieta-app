@@ -381,5 +381,26 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra una posición de remo invertido; no muestra las tres posiciones de la progresión. Comprimida sin recorte."
+  },
+  "ex-cal-retracciones-ia": {
+    "title": "Retracciones escapulares en barra",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra el colgado activo con brazos rectos; no demuestra la secuencia de subida y bajada de la retracción. Comprimida sin recorte."
+  },
+  "ex-cal-advanced-tuck-ia": {
+    "title": "Advanced tuck (espalda plana)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura estática de advanced tuck, con la espalda plana y las rodillas separadas del pecho. Comprimida sin recorte."
+  },
+  "ex-cal-frontlever-1pierna-ia": {
+    "title": "Front lever a una pierna",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura estática de front lever con una pierna extendida y la otra recogida. Comprimida sin recorte."
   }
 }
