@@ -112,6 +112,23 @@
   function fmtDate(iso) { return iso.slice(5).split('-').reverse().join('/'); }
 
   /* Ingredientes: nombre + medida casera | gramos + kcal (valores USDA) */
+  function avisoHTML(plan) {
+    if (Math.abs(plan.dk) <= 60 && Math.abs(plan.dp) <= 10) return '';
+    var s = ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.';
+    var sug = [];
+    if (plan.dk < -60) {
+      var falta = -plan.dk;
+      if (plan.dp < -10) sug.push(falta <= 150 ? 'un yogur griego natural (~75 kcal y 10 g de proteína)' : 'un yogur griego y una pieza de fruta (~155 kcal y 10 g de proteína)');
+      else if (falta <= 110) sug.push('una pieza de fruta (~80 kcal)');
+      else if (falta <= 200) sug.push('una pieza de fruta y un yogur (~150 kcal)');
+      else sug.push('una pieza de fruta, un yogur y un puñado de nueces (~250 kcal)');
+    } else if (plan.dk > 60) {
+      sug.push('puedes dejar parte del acompañamiento (pan, patata o arroz)');
+    }
+    if (sug.length) s += ' Para acercarte a tu objetivo: ' + sug.join('') + '.';
+    return s;
+  }
+
   function ingredientHTML(option, targetKcal, dayTarget, protOverride) {
     var protSlot = protOverride || Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
     var plan = computePlan(option, targetKcal, protSlot);
@@ -126,9 +143,7 @@
     return '<div class="ing">' + rows +
       '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
       ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
-      (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
-        ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
-        : '') +
+              avisoHTML(plan) +
       ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
   }
 
@@ -308,9 +323,7 @@
         return '<div class="ing">' + rows +
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
-          (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
-            ? ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.'
-            : '') +
+                      avisoHTML(plan) +
           ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
       })() : ingredientHTML(selected, target, r.target));
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
