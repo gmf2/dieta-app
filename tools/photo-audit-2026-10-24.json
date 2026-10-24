@@ -1387,46 +1387,10 @@
       "img": null
     }
   ],
-  "pendingMeals": {
-    "d1": "No se ve jamón",
-    "d3": "No se ve jamón",
-    "c2": "No se distingue el pavo",
-    "d5": "No se verifican jamón y pan",
-    "d8": "No se distinguen nueces",
-    "n7": "Parece tortilla sobre pan, no revuelto de setas y pavo",
-    "n13": "No muestra la patata cocida de la receta",
-    "n14": "No muestra la patata cocida; queso fresco no verificable",
-    "n16": "No muestra pavo, huevo ni patata",
-    "r-feb-n": "No muestra pollo",
-    "r-mar-n": "Se ven alubias, no lentejas",
-    "r-may-n": "Muestra pasta; no pisto con huevo y atún",
-    "r-jul-n": "No se distinguen huevo y atún",
-    "r-oct-c": "No se ve calabaza",
-    "r-nov-n": "No muestra pavo",
-    "r-dic-d": "Tostada sin jamón",
-    "r-dic-c": "Se ven rodajas de embutido ajenas al plato de alubias con verduras"
-  },
+  "pendingMeals": {},
   "openWork": {
     "status": "open",
-    "pendingMealIds": [
-      "d1",
-      "d3",
-      "c2",
-      "d5",
-      "d8",
-      "n7",
-      "n13",
-      "n14",
-      "n16",
-      "r-feb-n",
-      "r-mar-n",
-      "r-may-n",
-      "r-jul-n",
-      "r-oct-c",
-      "r-nov-n",
-      "r-dic-d",
-      "r-dic-c"
-    ],
+    "pendingMealIds": [],
     "pendingCalisthenicsNames": [
       "Australianas 3 posiciones",
       "Negativas de dominada (baja en 3-4 s)",
@@ -1480,10 +1444,133 @@
       "Movilidad de cadera + isquiotibiales",
       "Movilidad global (flujo completo)"
     ],
-    "note": "Pending means open work, not closed by fallback. Real-photo source search not exhausted."
+    "note": "53 exercise rows remain open. All 17 previous meal gaps now have checked generated illustrations, not photographs of real servings."
   },
   "sourceChecks": {
     "free-exercise-db": "REJECTED: upstream maintainer does not know image origins/rights; issues/2 and issues/13",
     "Commons": "Two individual CC BY-SA 4.0 own-work files installed: weighted pull-up and muscle-up attempt phase. Others inspected but not mapped to wrong progression."
+  },
+  "resolvedMeals": [
+    {
+      "id": "d1",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-d1.png"
+    },
+    {
+      "id": "d3",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-d3.png"
+    },
+    {
+      "id": "c2",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-c2.png"
+    },
+    {
+      "id": "d5",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-d5.png"
+    },
+    {
+      "id": "d8",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-d8.png"
+    },
+    {
+      "id": "n7",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-n7.png"
+    },
+    {
+      "id": "n13",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-n13.png"
+    },
+    {
+      "id": "n14",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-n14.png"
+    },
+    {
+      "id": "n16",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-n16.png"
+    },
+    {
+      "id": "r-feb-n",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-final-r-feb-n.png"
+    },
+    {
+      "id": "r-mar-n",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-r-mar-n.png"
+    },
+    {
+      "id": "r-may-n",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-r-may-n.png"
+    },
+    {
+      "id": "r-jul-n",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-r-jul-n.png"
+    },
+    {
+      "id": "r-oct-c",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-final-r-oct-c.png"
+    },
+    {
+      "id": "r-nov-n",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-final-r-nov-n.png"
+    },
+    {
+      "id": "r-dic-d",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-r-dic-d.png"
+    },
+    {
+      "id": "r-dic-c",
+      "status": "illustration",
+      "provenance": "AI-generated, visually checked against final applyRedesign recipe. Not a real prepared serving.",
+      "sourceFile": "meal-audit-r-dic-c.png"
+    }
+  ],
+  "previousMealRejections": {
+    "d1": "No se ve jamón",
+    "d3": "No se ve jamón",
+    "c2": "No se distingue el pavo",
+    "d5": "No se verifican jamón y pan",
+    "d8": "No se distinguen nueces",
+    "n7": "Parece tortilla sobre pan, no revuelto de setas y pavo",
+    "n13": "No muestra la patata cocida de la receta",
+    "n14": "No muestra la patata cocida; queso fresco no verificable",
+    "n16": "No muestra pavo, huevo ni patata",
+    "r-feb-n": "No muestra pollo",
+    "r-mar-n": "Se ven alubias, no lentejas",
+    "r-may-n": "Muestra pasta; no pisto con huevo y atún",
+    "r-jul-n": "No se distinguen huevo y atún",
+    "r-oct-c": "No se ve calabaza",
+    "r-nov-n": "No muestra pavo",
+    "r-dic-d": "Tostada sin jamón",
+    "r-dic-c": "Se ven rodajas de embutido ajenas al plato de alubias con verduras"
   }
 }

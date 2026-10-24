@@ -101,3 +101,7 @@ El estado vigente es tools/photo-audit-2026-10-24.md y su inventario JSON. 53/70
 
 ### Actualización 10:14: fuentes reales
 Dos archivos Commons CC BY-SA 4.0 añadidos, tres filas. Calistenia 57 con ilustración / 51 pendientes; total ejercicios 131 con ilustración / 53 pendientes. 17 comidas ABIERTAS. No importar imágenes de free-exercise-db: derechos no acreditados según su mantenedor. Detalles y procedencia en photo-audit-2026-10-24.md/json.
+
+### 24 octubre 2026, 10:20 CEST: comidas recuperadas
+
+Lote de 17 ilustraciones generadas, contrastadas con receta final incluida applyRedesign. 70/70 comidas con imagen, cero pendientes de comida. No son raciones fotografiadas y la app muestra la advertencia de ilustración/cantidades. Ver photo-audit-2026-10-24.md/json para detalle y rechazos anteriores preservados. Ejercicios sin cambio en este lote: 131/184 ilustrados, 53 pendientes abiertos, de ellos 51 calistenia. Sin merge ni release.

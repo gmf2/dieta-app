@@ -1,11 +1,4 @@
 {
-  "d5": {
-    "title": "Restaurant Menta (Esnazu) - Omelette aux cèpes.jpg",
-    "artist": "Tangopaso",
-    "license": "Public domain",
-    "url": "https://commons.wikimedia.org/wiki/File:Restaurant_Menta_(Esnazu)_-_Omelette_aux_c%C3%A8pes.jpg",
-    "query": "french omelette ham"
-  },
   "c5": {
     "title": "Claypot beef stew with potatoes and mushrooms.jpg",
     "artist": "Andrea Nguyen",
@@ -26,20 +19,6 @@
     "license": "CC BY-SA 2.0",
     "url": "https://commons.wikimedia.org/wiki/File:Tuna_pasta_salad.jpg",
     "query": "pasta salad tuna cold"
-  },
-  "n7": {
-    "title": "Mushrooms with 2 Scrambled Eggs On Toast - Snais's Cafe 2025-11-26.jpg",
-    "artist": "Andy Li",
-    "license": "CC0",
-    "url": "https://commons.wikimedia.org/wiki/File:Mushrooms_with_2_Scrambled_Eggs_On_Toast_-_Snais%27s_Cafe_2025-11-26.jpg",
-    "query": "mushroom scrambled eggs"
-  },
-  "n14": {
-    "title": "Turkey and cheese sandwich.jpg",
-    "artist": "Djoker180",
-    "license": "CC0",
-    "url": "https://commons.wikimedia.org/wiki/File:Turkey_and_cheese_sandwich.jpg",
-    "query": "turkey cheese sandwich"
   },
   "r-ene-c": {
     "title": "Callos con garbanzos.jpg",
@@ -83,13 +62,6 @@
     "url": "https://commons.wikimedia.org/wiki/File:Orata_al_Cartoccio.jpg",
     "query": "fish en papillote"
   },
-  "r-may-n": {
-    "title": "Ratatouille pasta (4655596856).jpg",
-    "artist": "pelican from Tokyo, Japan",
-    "license": "CC BY-SA 2.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Ratatouille_pasta_(4655596856).jpg",
-    "query": "ratatouille egg"
-  },
   "r-jul-d": {
     "title": "In suite breakfast experience (3119861609).jpg",
     "artist": "Matt @ PEK from Taipei, Taiwan",
@@ -118,34 +90,6 @@
     "url": "https://commons.wikimedia.org/wiki/File:Calamares_a_la_plancha_(Alicante).jpg",
     "query": "Calamares a la plancha"
   },
-  "r-nov-n": {
-    "title": "Pumpkin Cream Soup.jpg",
-    "artist": "SoHome Jacaranda Lilau, So Home Recreation Club (蘇戶康樂會) / PropLuxurians Health S",
-    "license": "CC BY-SA 3.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Pumpkin_Cream_Soup.jpg",
-    "query": "pumpkin soup cream"
-  },
-  "r-dic-d": {
-    "title": "Toast-2.jpg",
-    "artist": "Rainer Z ...",
-    "license": "CC BY-SA 3.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Toast-2.jpg",
-    "query": "toast ham"
-  },
-  "r-dic-c": {
-    "title": "Cocido de alubias pintas con verduras y arroz.jpg",
-    "artist": "Juan Emilio Prades Bel",
-    "license": "CC BY 4.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Cocido_de_alubias_pintas_con_verduras_y_arroz.jpg",
-    "query": "Alubias con verduras"
-  },
-  "d8": {
-    "title": "Yogurt fruit bowl.jpg",
-    "artist": "Jumbocombo0811",
-    "license": "CC BY-SA 4.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Yogurt_fruit_bowl.jpg",
-    "query": "yogurt bowl banana"
-  },
   "c8": {
     "title": "Hummus salad.jpg",
     "artist": "Canbel",
@@ -153,26 +97,12 @@
     "url": "https://commons.wikimedia.org/wiki/File:Hummus_salad.jpg",
     "query": "chickpea salad"
   },
-  "n16": {
-    "title": "Gazpacho Cazuela Barro.jpg",
-    "artist": "Bocadorada",
-    "license": "CC BY-SA 2.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Gazpacho_Cazuela_Barro.jpg",
-    "query": "gazpacho"
-  },
   "r-ene-d": {
     "title": "Oatmeal (4365201561).jpg",
     "artist": "Katrin Gilger",
     "license": "CC BY-SA 2.0",
     "url": "https://commons.wikimedia.org/wiki/File:Oatmeal_(4365201561).jpg",
     "query": "porridge pear"
-  },
-  "r-feb-n": {
-    "title": "Mon Plaisir, Covent Garden, London (3717184145).jpg",
-    "artist": "Ewan Munro from London, UK",
-    "license": "CC BY-SA 2.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Mon_Plaisir,_Covent_Garden,_London_(3717184145).jpg",
-    "query": "leek soup"
   },
   "r-may-d": {
     "title": "Yogurt fruit bowl.jpg",
@@ -194,13 +124,6 @@
     "license": "CC BY-SA 4.0",
     "url": "https://commons.wikimedia.org/wiki/File:Hummus_salad.jpg",
     "query": "chickpea salad"
-  },
-  "r-jul-n": {
-    "title": "Gazpacho in a white bowl.jpg",
-    "artist": "E4024",
-    "license": "CC BY-SA 3.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Gazpacho_in_a_white_bowl.jpg",
-    "query": "gazpacho bowl"
   },
   "r-nov-c": {
     "title": "Sticky rice meatballs at Huayanjie, Lize (20211119172350).jpg",
@@ -291,14 +214,6 @@
     "license": "CC0 1.0",
     "url": "https://commons.wikimedia.org/wiki/File:Smoky_Houmous_on_Toast_-_The_Shed_2025-07-26.jpg"
   },
-  "r-oct-c": {
-    "title": "Arroz-con-Pollo.jpg",
-    "artist": "Kobako (Wikimedia Commons)",
-    "license": "CC BY-SA 2.5",
-    "url": "https://commons.wikimedia.org/wiki/File:Arroz-con-Pollo.jpg",
-    "query": "arroz con pollo",
-    "note": "Muestra arroz con pollo (pimientos); la calabaza no es visible - plato base correcto (arroz+pollo). Sustituye a la foto del guiso que ya no correspondia al rediseno."
-  },
   "d7": {
     "title": "Banana egg pancakes (17024234376).jpg",
     "artist": "sunny mama (Wikimedia Commons)",
@@ -331,14 +246,6 @@
     "query": "mango yogurt bowl",
     "note": "stock: mango con yogur en bol (avena y coco no visibles)"
   },
-  "r-mar-n": {
-    "title": "Lentil salad with black olives, carrot, tomato and red pepper",
-    "artist": "Lablascovegmenu",
-    "license": "CC BY 2.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Lentil_salad_with_black_olives,_carrot,_tomatoand_red_pepper_(7520199672).jpg",
-    "query": "lentil salad",
-    "note": "stock: ensalada de lentejas con verduras y aceitunas"
-  },
   "d6": {
     "title": "Porridge with strawberries",
     "artist": "Robert Orzanna",
@@ -346,14 +253,6 @@
     "url": "https://commons.wikimedia.org/wiki/File:Porridge_with_strawberries.jpg",
     "query": "porridge strawberries",
     "note": "stock: avena con fresas"
-  },
-  "n13": {
-    "title": "Tortilla de Atún",
-    "artist": "Marco Antonio Correa Flores",
-    "license": "CC BY-SA 4.0",
-    "url": "https://commons.wikimedia.org/wiki/File:Tortilla_de_At%C3%BAn.JPG",
-    "query": "tortilla de atun",
-    "note": "stock: tortilla de atun con ensalada"
   },
   "n6": {
     "title": "A bowl of beef and broccoli with white rice",
