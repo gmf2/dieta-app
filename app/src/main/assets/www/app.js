@@ -115,18 +115,32 @@
   function avisoHTML(plan) {
     if (Math.abs(plan.dk) <= 60 && Math.abs(plan.dp) <= 10) return '';
     var s = ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.';
-    var sug = [];
+    var items = [], alt = null;
     if (plan.dk < -60) {
       var falta = -plan.dk;
-      if (plan.dp < -10) sug.push(falta <= 150 ? 'un yogur griego natural (~75 kcal y 10 g de proteína)' : 'un yogur griego y una pieza de fruta (~155 kcal y 10 g de proteína)');
-      else if (falta <= 110) sug.push('una pieza de fruta (~80 kcal)');
-      else if (falta <= 200) sug.push('una pieza de fruta y un yogur (~150 kcal)');
-      else sug.push('una pieza de fruta, un yogur y un puñado de nueces (~250 kcal)');
-    } else if (plan.dk > 60) {
-      sug.push('puedes dejar parte del acompañamiento (pan, patata o arroz)');
+      if (plan.dp < -10) items = falta <= 150 ? [['Yogur griego natural', 125, 'un yogur griego natural']] : [['Yogur griego natural', 125, 'un yogur griego natural'], ['Fruta de temporada', 150, 'una pieza de fruta']];
+      else if (falta <= 110) items = [['Fruta de temporada', 150, 'una pieza de fruta']];
+      else if (falta <= 200) items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur']];
+      else items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur'], ['Nueces', 15, 'un puñado de nueces']];
+    } else if (plan.dp < -10) {
+      items = [['Yogur griego natural', 125, 'un yogur griego natural']];
+      alt = ['Huevo', 60, 'un huevo'];
     }
-    if (!sug.length && plan.dp < -10) sug.push('suma un yogur griego o un huevo (~10 g de proteína)');
-    if (sug.length) s += ' Para acercarte a tu objetivo: ' + sug.join('') + '.';
+    if (items.length) {
+      var k = 0, p = 0, desc = [];
+      items.concat(alt ? [alt] : []).forEach(function (it, i) {
+        var ing = ING[it[0]];
+        var kk = Math.round(ing.k * it[1] / 100), pp = Math.round(ing.p * it[1] / 100);
+        if (i < items.length) { k += kk; p += pp; }
+        desc.push(it[2] + ' (' + it[1] + ' g, +' + kk + ' kcal' + (pp ? ' y +' + pp + ' g de proteína' : '') + ')');
+      });
+      var dk2 = plan.dk + k, dp2 = plan.dp + p;
+      s += ' Puedes acercarte añadiendo ' + desc.slice(0, items.length).join(' y ') +
+        (alt ? ' o ' + desc[desc.length - 1] : '') +
+        ': con ' + (items.length > 1 ? 'esto' : items[0][2]) + ', el plato quedaría a ' + (dk2 > 0 ? '+' : '') + dk2 + ' kcal y ' + (dp2 > 0 ? '+' : '') + dp2 + ' g de proteína.';
+    } else if (plan.dk > 60) {
+      s += ' Puedes acercarte dejando parte del acompañamiento (pan, patata o arroz).';
+    }
     return s;
   }
 

@@ -27,7 +27,6 @@ const ING = {
   'Gazpacho casero': { p: 0.9, k: 45, ug: 200, u: 'vaso' },
   'Huevo': { p: 12.6, k: 155, ug: 60, u: 'huevo' },
   'Huevo cocido': { p: 12.6, k: 155, ug: 60, u: 'huevo' },
-  'Huevo': { p: 12.6, k: 155, ug: 60, u: 'huevo' },
   'Hummus': { p: 7.9, k: 166, ug: 15, u: 'cucharada' },
   'Fiambre de pavo': { p: 18, k: 105, ug: 20, u: 'loncha' },
   'Jamón cocido': { p: 16, k: 110, ug: 20, u: 'loncha' },
@@ -74,6 +73,7 @@ const ING = {
   'Semillas variadas': { p: 18, k: 550, ug: 10, u: 'cucharada' },
   'Sepia': { p: 16, k: 79, ug: 150, u: 'porción' },
   'Setas variadas': { p: 3, k: 22, ug: 100, u: 'plato' },
+  'Tinta de sepia': { p: 0, k: 5, ug: 4, u: 'sobre' },
   'Ternera para guisar': { p: 21, k: 170, ug: 150, u: 'porción' },
   'Tomate': { p: 0.9, k: 18, ug: 120, u: 'tomate' },
   'Tomate natural': { p: 0.9, k: 18, ug: 120, u: 'tomate' },
@@ -189,7 +189,7 @@ let RECIPES = [
   { id: 'r-ene-c', month: 0, slot: 'comida', name: 'Cocido ligero de garbanzos', kcal: 1075, components: [
       { name: 'Garbanzos cocidos', grams: 400 }, { name: 'Zanahoria y apio', grams: 150 }, { name: 'Patata', grams: 200 }, { name: 'Pavo en dados', grams: 120 } ], pasos: ['Cuece la zanahoria, el apio y la patata 20 minutos.', 'Añade los garbanzos y el pavo, cocina 10 minutos más y sirve con un hilo de aceite.'] },
   { id: 'r-ene-n', month: 0, slot: 'cena', name: 'Sopa de verduras con huevo y pollo', kcal: 810, components: [
-      { name: 'Verduras variadas', grams: 320 }, { name: 'Patata', grams: 470 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 5 }, { name: 'Pollo desmigado', grams: 130 } ], pasos: ['Cuece las verduras y la patata en caldo 20 minutos.', 'Añade el pollo desmigado y el huevo escalfado al final; sirve con un hilo de aceite.'] },
+      { name: 'Verduras variadas', grams: 320 }, { name: 'Patata', grams: 470 }, { name: 'Huevo', grams: 60 }, { name: 'Aceite de oliva', grams: 5 }, { name: 'Pollo desmigado', grams: 130 } ], pasos: ['Cuece las verduras y la patata en agua 20 minutos.', 'Añade el pollo desmigado y el huevo escalfado al final; sirve con un hilo de aceite.'] },
   { id: 'r-feb-d', month: 1, slot: 'desayuno', name: 'Tostada con hummus y huevo', kcal: 805, components: [
       { name: 'Pan integral', grams: 150 }, { name: 'Hummus', grams: 100 }, { name: 'Huevo cocido', grams: 60 }, { name: 'Tomate', grams: 100 }, { name: 'Copos de avena', grams: 40 } ], pasos: ['Tuesta el pan y unta el hummus.', 'Corona con el huevo cocido en láminas y el tomate; acompaña con un bol de avena.'] },
   { id: 'r-feb-c', month: 1, slot: 'comida', name: 'Estofado de ternera', kcal: 1000, components: [
@@ -199,13 +199,13 @@ let RECIPES = [
   { id: 'r-mar-d', month: 2, slot: 'desayuno', name: 'Bizcocho de avena en taza', kcal: 795, components: [
       { name: 'Copos de avena', grams: 110 }, { name: 'Huevo', grams: 60 }, { name: 'Yogur natural', grams: 375 }, { name: 'Plátano', grams: 50 } ], pasos: ['Mezcla avena, huevo y plátano en una taza.', 'Microondas 2-3 minutos y acompaña con el yogur.'] },
   { id: 'r-mar-c', month: 2, slot: 'comida', name: 'Paella de pollo y verduras', kcal: 1030, components: [
-      { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Pollo', grams: 185 }, { name: 'Verduras variadas', grams: 200 }, { name: 'Aceite de oliva', grams: 10 } ], pasos: ['Sofríe el pollo y las verduras con el aceite.', 'Añade arroz y caldo (doble de volumen) y cuece 18 minutos.'] },
+      { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Pollo', grams: 185 }, { name: 'Verduras variadas', grams: 200 }, { name: 'Aceite de oliva', grams: 10 } ], pasos: ['Sofríe el pollo y las verduras con el aceite.', 'Añade el arroz y agua (el doble de volumen) y cuece 18 minutos.'] },
   { id: 'r-mar-n', month: 2, slot: 'cena', name: 'Ensalada tibia de lentejas', kcal: 695, components: [
       { name: 'Lentejas cocidas', grams: 210 }, { name: 'Queso fresco', grams: 80 }, { name: 'Verduras crudas', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 60 } ], pasos: ['Mezcla las lentejas templadas con las verduras.', 'Añade el queso fresco, aliña con el aceite y acompaña con el pan.'] },
   { id: 'r-abr-d', month: 3, slot: 'desayuno', name: 'Tostada de aguacate y salmón', kcal: 805, components: [
       { name: 'Pan integral', grams: 140 }, { name: 'Aguacate', grams: 140 }, { name: 'Salmón ahumado', grams: 80 }, { name: 'Yogur natural', grams: 235 } ], pasos: ['Tuesta el pan y unta el aguacate.', 'Corona con el salmón y acompaña con el yogur.'] },
   { id: 'r-abr-c', month: 3, slot: 'comida', name: 'Arroz negro con sepia', kcal: 1050, components: [
-      { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Sepia', grams: 215 }, { name: 'Pimiento y cebolla', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Sofríe la sepia con el pimiento y la cebolla en el aceite.', 'Añade el arroz, el caldo y la tinta; cuece 18 minutos y acompaña con el pan.'] },
+      { name: 'Arroz (en crudo)', grams: 160 }, { name: 'Sepia', grams: 215 }, { name: 'Pimiento y cebolla', grams: 150 }, { name: 'Tinta de sepia', grams: 4 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Sofríe la sepia con el pimiento y la cebolla en el aceite.', 'Añade el arroz, la tinta y agua (el doble de volumen); cuece 18 minutos y acompaña con el pan.'] },
   { id: 'r-abr-n', month: 3, slot: 'cena', name: 'Pescado en papillote', kcal: 820, components: [
       { name: 'Pescado blanco', grams: 150 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Coloca el pescado, las verduras y la patata en papel de horno con un hilo de aceite.', 'Hornea 20 minutos a 180 °C y sirve con el pan.'] },
   { id: 'r-may-d', month: 4, slot: 'desayuno', name: 'Yogur con fresas y avena', kcal: 795, components: [
@@ -217,7 +217,7 @@ let RECIPES = [
   { id: 'r-jun-d', month: 5, slot: 'desayuno', name: 'Bol de mango y yogur', kcal: 805, components: [
       { name: 'Mango', grams: 150 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Copos de avena', grams: 110 }, { name: 'Coco rallado', grams: 15 } ], pasos: ['Tritura medio mango con el yogur.', 'Añade el resto en dados con avena y coco.'] },
   { id: 'r-jun-c', month: 5, slot: 'comida', name: 'Ensalada de garbanzos y atún', kcal: 1050, components: [
-      { name: 'Garbanzos cocidos', grams: 400 }, { name: 'Atún', grams: 80 }, { name: 'Verduras crudas', grams: 200 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Mezcla los garbanzos, el atún y las verduras en un bol grande.', 'Aliña con aceite, limón y sal; acompaña con el pan.'] },
+      { name: 'Garbanzos cocidos', grams: 400 }, { name: 'Atún', grams: 80 }, { name: 'Verduras crudas', grams: 200 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 30 } ], pasos: ['Mezcla los garbanzos, el atún y las verduras en un bol grande.', 'Aliña con el aceite y sal; acompaña con el pan.'] },
   { id: 'r-jun-n', month: 5, slot: 'cena', name: 'Brocheta de pollo y verduras', kcal: 965, components: [
       { name: 'Pollo en dados', grams: 130 }, { name: 'Verduras variadas', grams: 300 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Patata', grams: 150 } ], pasos: ['Ensarta el pollo y las verduras alternados.', 'Haz a la plancha con el aceite 10-12 minutos girando; sirve con la patata y el pan.'] },
   { id: 'r-jul-d', month: 6, slot: 'desayuno', name: 'Tostada fría de yogur y fruta', kcal: 805, components: [
@@ -241,9 +241,9 @@ let RECIPES = [
   { id: 'r-oct-d', month: 9, slot: 'desayuno', name: 'Porridge con manzana asada', kcal: 825, components: [
       { name: 'Copos de avena', grams: 110 }, { name: 'Manzana', grams: 150 }, { name: 'Yogur griego natural', grams: 250 }, { name: 'Nueces', grams: 20 } ], pasos: ['Cuece la avena 5 minutos y deja templar.', 'Añade el yogur, la manzana salteada con canela y las nueces.'] },
   { id: 'r-oct-c', month: 9, slot: 'comida', name: 'Guiso de pollo y calabaza', kcal: 1000, components: [
-      { name: 'Pollo', grams: 160 }, { name: 'Calabaza', grams: 250 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 60 } ], pasos: ['Dora el pollo y añade calabaza y patata.', 'Cubre con caldo y guisa 25 minutos.'] },
-  { id: 'r-oct-n', month: 9, slot: 'cena', name: 'Setas salteadas con huevo', kcal: 820, components: [
-      { name: 'Setas variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Patata', grams: 150 } ], pasos: ['Saltea las setas y el pollo desmigado con el aceite y el ajo.', 'Añade el huevo y remueve hasta cuajar; sirve con la patata cocida y el pan.'] },
+      { name: 'Pollo', grams: 160 }, { name: 'Calabaza', grams: 250 }, { name: 'Patata', grams: 450 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Pan integral', grams: 60 } ], pasos: ['Dora el pollo y añade calabaza y patata.', 'Cubre con agua y guisa 25 minutos.'] },
+  { id: 'r-oct-n', month: 9, slot: 'cena', name: 'Salteado de setas, pollo y huevo con patata', kcal: 820, components: [
+      { name: 'Setas variadas', grams: 300 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 150 }, { name: 'Aceite de oliva', grams: 20 }, { name: 'Patata', grams: 150 } ], pasos: ['Saltea las setas y el pollo desmigado con el aceite.', 'Añade el huevo y remueve hasta cuajar; sirve con la patata cocida y el pan.'] },
   { id: 'r-nov-d', month: 10, slot: 'desayuno', name: 'Tostada con requesón y nueces', kcal: 805, components: [
       { name: 'Pan integral', grams: 160 }, { name: 'Requesón', grams: 95 }, { name: 'Nueces', grams: 40 }, { name: 'Fruta de temporada', grams: 100 } ], pasos: ['Tuesta el pan y unta el requesón.', 'Añade las nueces y acompaña con fruta.'] },
   { id: 'r-nov-c', month: 10, slot: 'comida', name: 'Albóndigas de pavo con arroz', kcal: 1115, components: [
@@ -375,7 +375,7 @@ const RECIPE_REPLACE = {
   'r-oct-c': { slot: 'comida', name: 'Arroz con pollo y calabaza', kcal: 1050,
     components: [ { name: 'Arroz integral (en crudo)', grams: 100 }, { name: 'Pollo', grams: 180 },
       { name: 'Calabaza', grams: 250 }, { name: 'Aceite de oliva', grams: 15 }, { name: 'Pan integral', grams: 30 } ],
-    pasos: ['Sofríe el pollo con el aceite, añade la calabaza y el arroz con el doble de caldo.', 'Cuece 18 minutos y reposa 5; sirve con el pan.'] },
+    pasos: ['Sofríe el pollo con el aceite, añade la calabaza y el arroz con el doble de agua.', 'Cuece 18 minutos y reposa 5; sirve con el pan.'] },
   'c4': { slot: 'comida', name: 'Garbanzos con espinacas y pollo', kcal: 1000, rapida: false,
     components: [ { name: 'Garbanzos cocidos', grams: 200 }, { name: 'Espinacas', grams: 250 },
       { name: 'Pollo a la plancha', grams: 120 }, { name: 'Patata', grams: 300 },
