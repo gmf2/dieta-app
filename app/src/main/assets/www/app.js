@@ -161,14 +161,14 @@
     var html = '';
     try {
       var cr = PHOTO_CREDITS || {};
-      var byIds = Object.keys(cr).filter(function (k) { return /CC BY/.test(cr[k].license); });
+      var byIds = Object.keys(cr).filter(function (k) { return true; });
       if (Object.keys(cr).length) {
         html += '<div class="card"><h2>Créditos de fotos</h2>' +
           '<div class="sub">Fotos de platos y ejercicios de Wikimedia Commons y Unsplash con licencia libre (CC0 / dominio público / CC BY / CC BY-SA / Unsplash License) y fotos generadas por IA. Cada foto con atribución obligatoria lleva su autor y licencia:</div>' +
           byIds.map(function (k) {
             var c = cr[k];
             return '<div class="rev-row" style="font-size:.72rem"><b>' + esc(c.title || k) + '</b> - ' + esc(c.artist || 'desconocido') +
-              ' · <a href="' + c.url + '" target="_blank" rel="noopener">Fuente: ' + esc(c.license) + '</a>' +
+              (c.url ? ' · <a href="' + c.url + '" target="_blank" rel="noopener">Fuente: ' + esc(c.license) + '</a>' : ' · ' + esc(c.license)) +
               (c.license_url ? ' · <a href="' + c.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') +
               (c.changes ? '<br>' + esc(c.changes) : '') + '</div>';
           }).join('') + '</div>';
@@ -553,7 +553,7 @@
           { n: 'Flexiones diamante o declinadas', s: '3 x 8-10', b: 1, lvl: 3, g: 'Pecho', p: 'pushup', img: "cal-flexiones-diamante" },
           { n: 'Remo invertido en mesa o barra baja', s: '4 x 8', b: 2, lvl: 1, g: 'Espalda', p: 'row', img: 'cal-remo-barra-real' },
           { n: 'Remo invertido con pies elevados', s: '4 x 8', b: 2, lvl: 2, g: 'Espalda', p: 'row', img: "cal-remo-elevado" },
-          { n: 'Australianas 3 posiciones', s: '3 x 10 s por posición', b: 2, lvl: 3, g: 'Espalda', p: 'row', img: null },
+          { n: 'Australianas 3 posiciones', s: '3 x 10 s por posición', b: 2, lvl: 3, g: 'Espalda', p: 'row', img: 'cal-australianas-3pos-ia' },
           { n: 'Sentadilla al aire', s: '3 x 15', b: 3, lvl: 1, g: 'Pierna', p: 'squat', img: "cal-sentadilla" },
           { n: 'Sentadilla profunda con pausa abajo', s: '3 x 12', b: 3, lvl: 2, g: 'Pierna', p: 'squat', img: "cal-sentadilla" },
           { n: 'Zancadas', s: '3 x 10 por pierna', b: 3, lvl: 3, g: 'Pierna', p: 'squat', img: "cal-zancadas" },
@@ -589,7 +589,7 @@
           { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: "skill-colgado-activo" },
           { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: null },
           { n: 'Retracciones escapulares en barra', s: '3 x 6-8', b: 1, lvl: 3, g: 'Base', p: 'pullup', img: null },
-          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: null },
+          { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: 'cal-tuck-frontlever-ia' },
           { n: 'Advanced tuck (espalda plana)', s: '3 x 8-15 s', b: 2, lvl: 2, g: 'Estático', p: 'pullup', img: null },
           { n: 'Front lever a una pierna', s: '3 x 5-10 s', b: 2, lvl: 3, g: 'Estático', p: 'pullup', img: null },
           { n: 'Subidas a tuck front lever', s: '3 x 3-4', b: 3, lvl: 1, g: 'Fuerza', p: 'pullup', img: null },
@@ -637,7 +637,7 @@
           { n: 'Flexiones pike', s: '3 x 8', b: 4, lvl: 2, g: 'Hombro', p: 'pushup', img: "cal-pike" },
           { n: 'Flexiones en pino contra pared', s: '3 x 5', b: 4, lvl: 3, g: 'Hombro', p: 'pushup', img: "skill-pino-flexiones" },
           { n: 'Hollow body hold', s: '3 x 15 s', b: 5, lvl: 1, g: 'Core', p: 'plank', img: "skill-hollow" },
-          { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: null },
+          { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: 'cal-hollow-balanceo-ia' },
           { n: 'De L-sit a pino', s: '3 x 3-4', b: 5, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'cal-lsit-pino-secuencia' },
           { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: null },
           { n: 'Estiramiento de hombros en pared', s: '2 x 30 s', b: 6, lvl: 2, g: 'Preparación', p: 'plank', img: "cal-hombros-pared" },
@@ -897,7 +897,7 @@
     var photoKey = src.split('/').pop().replace(/\.jpg$/, '');
     var credit = PHOTO_CREDITS[photoKey];
     var mealIllustration = ["d1", "d3", "c2", "d5", "d8", "n7", "n13", "n14", "n16", "r-feb-n", "r-mar-n", "r-may-n", "r-jul-n", "r-oct-c", "r-nov-n", "r-dic-d", "r-dic-c"].indexOf(photoKey) !== -1;
-    var creditHtml = credit ? '<div class="lb-credit">' + esc(credit.artist || '') + ' · <a href="' + credit.url + '" target="_blank" rel="noopener">' + esc(credit.license || '') + '</a>' + (credit.license_url ? ' · <a href="' + credit.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') + (credit.changes ? '<br>' + esc(credit.changes) : '') + '</div>' : (mealIllustration ? '<div class="lb-credit">Imagen ilustrativa generada. Ingredientes según la receta; cantidades de la foto no equivalen a la ración calculada.</div>' : '');
+    var creditHtml = credit ? '<div class="lb-credit">' + esc(credit.artist || '') + (credit.url ? ' · <a href="' + credit.url + '" target="_blank" rel="noopener">' + esc(credit.license || '') + '</a>' : ' · ' + esc(credit.license || '')) + (credit.license_url ? ' · <a href="' + credit.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') + (credit.changes ? '<br>' + esc(credit.changes) : '') + '</div>' : (mealIllustration ? '<div class="lb-credit">Imagen ilustrativa generada. Ingredientes según la receta; cantidades de la foto no equivalen a la ración calculada.</div>' : '');
     ov.innerHTML = '<span class="lb-close">×</span><figure><img src="' + src + '" alt="' + esc(alt || '') + '"><figcaption>' + esc(alt || '') + '</figcaption>' + creditHtml + '</figure>';
     ov.addEventListener('click', function (e) { if (!e.target.closest('a')) ov.remove(); });
     document.body.appendChild(ov);
