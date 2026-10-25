@@ -131,6 +131,7 @@
       items = [['Yogur griego natural', 125, 'un yogur griego natural']];
       alt = ['Huevo', 60, 'un huevo'];
     }
+    if (plan.dp > 10) items = items.filter(function (it) { return Math.round(ING[it[0]].p * it[1] / 100) <= 1; });
     if (items.length) {
       var k = 0, p = 0, desc = [];
       items.concat(alt ? [alt] : []).forEach(function (it, i) {
@@ -144,7 +145,9 @@
         (alt ? ' o ' + desc[desc.length - 1] : '') +
         ': con ' + (items.length > 1 ? 'esto' : items[0][2]) + ', el plato quedaría a ' + (dk2 > 0 ? '+' : '') + dk2 + ' kcal y ' + (dp2 > 0 ? '+' : '') + dp2 + ' g de proteína.';
     } else if (plan.dk > 60) {
-      s += ' Puedes acercarte dejando parte del acompañamiento (pan, patata o arroz).';
+      var sides = plan.items.filter(function (it) { return /pan|patata|boniato|arroz|pasta|tortilla de trigo|avena|copos|maíz|quinoa/i.test(it.name); })
+        .map(function (it) { return it.name.toLowerCase(); });
+      s += ' Puedes acercarte dejando parte del acompañamiento' + (sides.length ? ' (' + sides.join(' o ') + ').' : '.');
     }
     return s;
   }
@@ -340,7 +343,7 @@
       var optionsSorted = options.slice().sort(function (a, b) { return fitOf(a).rank - fitOf(b).rank; });
       html += '<div class="meal-grid">' + optionsSorted.map(function (o) {
         var ph = photoFor(o);
-        var isRecipe = o.recipeOfMonth || (monthRecipe && monthRecipe.id === o.id) || o.pasos;
+        var isRecipe = o.recipeOfMonth || (monthRecipe && monthRecipe.id === o.id);
         return '<button class="meal-card' + (o.id === selected.id ? ' selected' : '') + '" data-slot="' + slot + '" data-id="' + o.id + '">' +
           fitOf(o).html +
           '<span class="check">✓</span>' +
