@@ -184,7 +184,7 @@
     var colors = { desayuno: '#ffd166', comida: '#ff9f5a', cena: '#a7f3d0' };
     document.getElementById('heroSplit').innerHTML = ['desayuno', 'comida', 'cena'].map(function (s) {
       return '<div class="split-row"><span><span class="dot" style="background:' + colors[s] + '"></span>' +
-        SLOT_LABEL[s] + '</span><b>' + slotTarget(r, s) + ' kcal · ' + Math.round(proteinGoal(profile) * PSHARE[profile.objetivo][s]) + ' g prot</b></div>';
+        SLOT_LABEL[s] + '</span><b>obj. ' + slotTarget(r, s) + ' kcal · ' + Math.round(proteinGoal(profile) * PSHARE[profile.objetivo][s]) + ' g</b></div>';
     }).join('');
   }
 
@@ -520,7 +520,7 @@
 
       var hOpen = !!hoyOpen[slot];
       html += '<div class="slot-head" data-hoy-toggle="' + slot + '">' + ICONS[SLOT_ICON[slot]] + '<h3>' + SLOT_LABEL[slot] + '</h3>' +
-        '<span class="kcal">' + target + ' kcal · ' + Math.round(pgoal * psh[slot]) + ' g prot</span>' +
+        '<span class="kcal">' + (dayPlans[slot] ? dayPlans[slot].plan.kcal + ' kcal · ' + dayPlans[slot].plan.protein + ' g prot' : '…') + '</span>' +
         '<span class="ses-chevron' + (hOpen ? ' open' : '') + '"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></div>';
       html += hOpen ? '<div>' : '<div hidden>';
       var fitOf = function (o) {
