@@ -116,10 +116,10 @@
 
   /* Ingredientes: nombre + medida casera | gramos + kcal (valores USDA) */
   function avisoHTML(plan) {
-    if (Math.abs(plan.dk) <= 60 && Math.abs(plan.dp) <= 10) return '';
+    if (Math.abs(plan.dk) <= 70 && Math.abs(plan.dp) <= 10) return '';
     var s = ' <b>Aviso:</b> no hay combinación de cantidades razonables que acerque más este plato a tu objetivo: queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína de lo ideal.';
     var items = [], alt = null;
-    if (plan.dk < -60) {
+    if (plan.dk < -70) {
       var falta = -plan.dk;
       if (plan.dp < -10) items = falta <= 150 ? [['Yogur griego natural', 125, 'un yogur griego natural']] : [['Yogur griego natural', 125, 'un yogur griego natural'], ['Fruta de temporada', 150, 'una pieza de fruta']];
       else if (falta <= 110) items = [['Fruta de temporada', 150, 'una pieza de fruta']];
@@ -144,7 +144,7 @@
       s += ' Puedes acercarte añadiendo ' + desc.slice(0, items.length).join(' y ') +
         (alt ? ' o ' + desc[desc.length - 1] : '') +
         ': con ' + (items.length > 1 ? 'esto' : items[0][2]) + ', el plato quedaría a ' + (dk2 > 0 ? '+' : '') + dk2 + ' kcal y ' + (dp2 > 0 ? '+' : '') + dp2 + ' g de proteína.';
-    } else if (plan.dk > 60) {
+    } else if (plan.dk > 70) {
       var sides = plan.items.filter(function (it) { return /pan|patata|boniato|arroz|pasta|tortilla de trigo|avena|copos|maíz|quinoa/i.test(it.name); })
         .map(function (it) { return it.name.toLowerCase(); });
       s += ' Puedes acercarte dejando parte del acompañamiento' + (sides.length ? ' (' + sides.join(' o ') + ').' : '.');
@@ -303,7 +303,7 @@
       var entry;
       if (Math.abs(ev.dk) > 150 || Math.abs(ev.dp) > 35 || ev.plan.vol > 1200)
         entry = { rank: 2, html: '<div class="m-tag nofit">No cierra tu día: quedaría a ' + desv(ev.dk, ev.dp) + '</div>', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
-      else if (Math.abs(ev.dk) > 60 || Math.abs(ev.dp) > 10)
+      else if (Math.abs(ev.dk) > 70 || Math.abs(ev.dp) > 10)
         entry = { rank: 1, html: '<div class="m-tag fitwarn">Con este plato, tu día queda a ' + desv(ev.dk, ev.dp) + '</div>', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
       else
         entry = { rank: 0, html: '', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
@@ -324,7 +324,7 @@
     var cacheKey = window.__dayPlanCache && window.__dayPlanCache.key;
     if (!cacheKey) return;
     var dia = window.__dayPlans && window.__dayPlans.__dia;
-    if (!dia || (Math.abs(dia.dk) <= 60 && Math.abs(dia.dp) <= 10)) return; // dia ajustado: no hace falta
+    if (!dia || (Math.abs(dia.dk) <= 70 && Math.abs(dia.dp) <= 10)) return; // dia ajustado: no hace falta
     var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
     var options = classicsFor(month, slot);
     if (monthRecipe) options = options.concat([monthRecipe]);
@@ -332,7 +332,7 @@
     options.forEach(function (o) {
       if (o.id === picks[slot]) return;
       var ev = window.__fitCache[cacheKey][slot + '/' + o.id];
-      if (!ev || Math.abs(ev.dk) > 60 || Math.abs(ev.dp) > 10 || ev.vol > 1200) return;
+      if (!ev || Math.abs(ev.dk) > 70 || Math.abs(ev.dp) > 10 || ev.vol > 1200) return;
       var sc = Math.abs(ev.dk) + 3 * Math.abs(ev.dp);
       if (!bestAlt || sc < bestAlt.sc) bestAlt = { o: o, dk: ev.dk, dp: ev.dp, sc: sc };
     });
@@ -350,7 +350,7 @@
   function jointProposal(cacheKey) {
     var dia = window.__dayPlans && window.__dayPlans.__dia;
     if (!dia) return;
-    if (Math.abs(dia.dk) <= 60 && Math.abs(dia.dp) <= 10) return; // dia ajustado: sin propuesta
+    if (Math.abs(dia.dk) <= 70 && Math.abs(dia.dp) <= 10) return; // dia ajustado: sin propuesta
     var ctx = window.__ctx;
     var slots = ['desayuno', 'comida', 'cena'];
     var labels = { desayuno: 'Desayuno', comida: 'Comida', cena: 'Cena' };
@@ -378,12 +378,11 @@
       });
     }
     var html;
-    if (best && best.volOK && Math.abs(best.dk) <= 60 && Math.abs(best.dp) <= 10) {
-      html = '<div class="note">Propuesta de dos cambios: ' + labels[best.si] + ' → <b>' + esc(best.oA.name) + '</b> y ' + labels[best.sj] + ' → <b>' + esc(best.oB.name) + '</b>. ' +
-        'Tu día quedaría a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína de tu objetivo (ajuste dentro de la tolerancia de ±60 kcal y ±10 g, no igualdad exacta).</div>' +
+    if (best && best.volOK && Math.abs(best.dk) <= 70 && Math.abs(best.dp) <= 10) {
+      html = '<div class="note">Con dos cambios se ajusta: ' + labels[best.si] + ' → <b>' + esc(best.oA.name) + '</b> y ' + labels[best.sj] + ' → <b>' + esc(best.oB.name) + '</b> (tu día quedaría a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína).</div>' +
         '<button class="btn soft" data-apply-prop="' + best.si + ':' + best.oA.id + ',' + best.sj + ':' + best.oB.id + '">Usar esta propuesta</button>';
     } else if (best) {
-      html = '<div class="note">Ni cambiando dos comidas hay una combinación con porciones normales que ajuste tu día; la mejor (' + labels[best.si] + ' → ' + esc(best.oA.name) + ', ' + labels[best.sj] + ' → ' + esc(best.oB.name) + ') queda a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína de tu objetivo.</div>';
+      html = '<div class="note">Ni cambiando dos comidas se ajusta tu día con porciones normales; la mejor opción queda a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína.</div>';
     }
     window.__fitCache[cacheKey].__joint = html || '';
     var box = document.getElementById('jointProp');
@@ -395,7 +394,7 @@
     var tIso = todayIso();
     var dayLog = registro[tIso] || {};
     var html = '<div class="card"><h2>Tu dieta de hoy</h2>' +
-      '<div class="sub">Elige una opción en cada comida. Las cantidades se ajustan a tu objetivo de ' + r.target + ' kcal; si una opción no encaja con raciones normales, la verás marcada, y cuando otra opción de esa comida sí cierre tu día, te la propone.</div></div>';
+      '<div class="sub">Elige una opción en cada comida: las cantidades se ajustan a tu objetivo de ' + r.target + ' kcal y, si una no encaja, te propongo otra.</div></div>';
 
     /* Cada plato se resuelve contra el objetivo de su franja, sin compensación entre
        comidas. Los platos que no pueden acercarse con raciones normales se muestran
@@ -489,7 +488,7 @@
     window.__dayPlans = dayPlans;
     // Dia cerrado = la compensacion entre comidas logra el objetivo del dia;
     // las desviaciones por franja son entonces deliberadas, no avisos.
-    var dayClosed = dayReady && Math.abs(dayPlans.__dia.dk) <= 60 && Math.abs(dayPlans.__dia.dp) <= 10;
+    var dayClosed = dayReady && Math.abs(dayPlans.__dia.dk) <= 70 && Math.abs(dayPlans.__dia.dp) <= 10;
     window.__ctx = { target: r.target, pgoal: pgoal };
     if (!window.__fitCache) window.__fitCache = {};
     if (!window.__fitCache[cacheKeyHoy]) window.__fitCache[cacheKeyHoy] = {};
@@ -560,14 +559,14 @@
             '<div class="ing-right"><b>' + g + ' g</b><span>' + kcal + ' kcal · ' + prot + ' g prot</span></div></div>';
         }).join('');
         return '<div class="ing">' + rows +
-          '<div class="cap" id="cap-' + slot + '">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
-          ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
+          '<div class="cap" id="cap-' + slot + '">Este plato suma ~' + plan.kcal +
+          ' kcal y ~' + plan.protein + ' g de proteína con tu objetivo actual. Las piezas van enteras.' +
                       (dayClosed
-                        ? (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
-                          ? ' <b>Cantidades compensadas:</b> este plato queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal' + (Math.abs(plan.dp) > 10 ? ' y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína' : '') + ' de su franja, compensado con el resto de comidas: tu día queda ajustado a tu objetivo.'
+                        ? (Math.abs(plan.dk) > 70 || Math.abs(plan.dp) > 10
+                          ? ' <b>Cantidades compensadas</b> con el resto de comidas para ajustar tu día (queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal' + (Math.abs(plan.dp) > 10 ? ' y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína' : '') + ' de su franja).'
                           : '')
                         : avisoHTML(plan)) + altLine +
-          ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>' +
+          ' <details class="muted"><summary>Notas</summary>Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</details></div></div>' +
           (selected.pasos ? '<ol class="steps">' + selected.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '');
       })() : (dayReady
         ? ingredientHTML(selected, target, r.target)
@@ -595,29 +594,28 @@
     var offNotes = ['desayuno', 'comida', 'cena'].map(function (s) {
       var d = dayPlans2[s];
       if (!d || !d.plan) return null;
-      if (Math.abs(d.plan.dk) <= 60 && Math.abs(d.plan.dp) <= 10) return null;
+      if (Math.abs(d.plan.dk) <= 70 && Math.abs(d.plan.dp) <= 10) return null;
       var o = findOption(picks[s]);
       return (o ? o.name : s) + ': ' + (d.plan.dk > 0 ? '+' : '') + d.plan.dk + ' kcal' + (Math.abs(d.plan.dp) > 10 ? ' · ' + (d.plan.dp > 0 ? '+' : '') + d.plan.dp + ' g prot' : '') + ' respecto a su franja';
     }).filter(Boolean);
+    var fmtS = function (n) { return (n > 0 ? '+' : '') + n; };
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
-      (Math.abs(dayProt - protGoal) <= 10
-        ? '<div class="note green">Proteína ajustada a tu objetivo con estas elecciones (' + dayProt + ' g frente a ' + protGoal + ' g).</div>'
-        : dayProt < protGoal
-          ? '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>'
-          : '<div class="note">Con estas elecciones te pasas de proteína: ~' + dayProt + ' g frente a tu objetivo de ' + protGoal + ' g (+' + (dayProt - protGoal) + ' g).</div>') +
-      (offNotes.length
-        ? (dayClosed
-          ? '<div class="note">Cantidades compensadas entre comidas para ajustar tu día a tu objetivo sin cambiar tus platos: ' + offNotes.join('; ') + '.</div>'
-          : '<div class="note">Ni compensando cantidades entre comidas se cierra tu día con estos platos: ' + offNotes.join('; ') + '. El día queda a ' + ((dayKcal - r.target) > 0 ? '+' : '') + (dayKcal - r.target) + ' kcal y ' + ((dayProt - protGoal) > 0 ? '+' : '') + (dayProt - protGoal) + ' g de proteína de tu objetivo.</div>')
-        : '') +
+      (dayClosed
+        ? '<div class="note green">Proteína ajustada: ~' + dayProt + ' g de ' + protGoal + ' g.</div>' +
+          (offNotes.length ? '<div class="note">Cantidades compensadas entre comidas para ajustar tu día a tu objetivo.</div>' : '')
+        : '<div class="note">Tu día queda a ' + fmtS(dayKcal - r.target) + ' kcal y ' + fmtS(dayProt - protGoal) + ' g de proteína de tu objetivo.' +
+          (dayProt < protGoal - 10 ? ' Huevo, pavo, pollo, pescado o legumbres suben la proteína.' : '') + '</div>') +
       (!dayClosed
         ? '<div id="jointProp">' + (window.__fitCache[cacheKeyHoy].__joint || '<div class="note js-pending">Buscando si cambiando dos comidas tu día queda ajustado…</div>') + '</div>'
         : '') +
       (window.__prevPicks
         ? '<button class="btn ghost" data-revert-picks="1">Volver a mi menú anterior</button>'
         : '') +
-      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual y se compensan entre comidas para ajustar el día a tu objetivo, sin cambiar los platos que eliges. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
+      '<details class="muted mt8"><summary>Ver detalles</summary>' +
+      (offNotes.length ? '<div>Por franja: ' + offNotes.join('; ') + '.</div>' : '<div>Cada franja queda dentro de su objetivo.</div>') +
+      '<div class="mt8">Ajuste dentro de la tolerancia de ±70 kcal y ±10 g de proteína, no igualdad exacta. Las cantidades se calculan para tu objetivo actual y se compensan entre comidas sin cambiar tus platos; si cambias peso u objetivo en Perfil, se recalcula solo. Pesos en crudo salvo que ponga «cocido». Valores de composición del USDA.</div>' +
+      '</details></div>';
 
     document.getElementById('tab-hoy').innerHTML = html;
     window.__markFull = performance.now(); // prototipo: medir pintado con dia calculado
