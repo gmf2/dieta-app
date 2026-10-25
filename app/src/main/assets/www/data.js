@@ -327,7 +327,7 @@ const RECIPE_OVR = {
   'n21': { 'Espinacas': [100, 100, 25], 'Hummus': [45, 60, 15] },
   'n23': { 'Fiambre de pavo': [60, 100, 20], 'Queso fresco': [40, 80, 20], 'Tomate': [120, 120, 25] },
   'r-feb-d': { 'Pan integral': [30, 90, 30] },
-  'c8': { 'Pan integral': [30, 60, 30] },
+  'c8': { 'Pan integral': [30, 90, 30], 'Atún': [40, 160, 40] },  // sin 3-4 latas: tope culinario 2 latas; el pan absorbe kcal en perfiles altos
   'n14': { 'Fiambre de pavo': [60, 100, 20], 'Patata cocida': [150, 300, 75] },
   'n13': { 'Patata cocida': [150, 300, 75], 'Huevo': [120, 180, 60] },
   'n12': { 'Pan integral': [30, 90, 30] },
