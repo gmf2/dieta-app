@@ -278,11 +278,11 @@
     var tIso = todayIso();
     var dayLog = registro[tIso] || {};
     var html = '<div class="card"><h2>Tu dieta de hoy</h2>' +
-      '<div class="sub">Elige una opción en cada comida. Las cantidades se ajustan solas para sumar tu objetivo de ' + r.target + ' kcal.</div></div>';
+      '<div class="sub">Elige una opción en cada comida. Las cantidades se ajustan a tu objetivo de ' + r.target + ' kcal; si una opción no encaja con raciones normales, la verás marcada, y cuando otra opción de esa comida sí cierre tu día, te la propone.</div></div>';
 
-    /* Plan del día con compensación: la comida absorbe la mitad del desvío del desayuno
-       y la cena absorbe el resto, para que el DÍA completo quede cerca del objetivo
-       con cualquier combinación de platos. */
+    /* Cada plato se resuelve contra el objetivo de su franja, sin compensación entre
+       comidas. Los platos que no pueden acercarse con raciones normales se muestran
+       marcados y con alternativa verificada contra el día completo. */
     var pgoal = proteinGoal(profile);
     var psh = PSHARE[profile.objetivo] || PSHARE.mantener;
     // Validar picks ANTES de precomputar planes: un pick obsoleto (otro mes)
@@ -425,7 +425,7 @@
       (offNotes.length
         ? '<div class="note">Ajuste aproximado: ' + offNotes.join('; ') + '. No existen cantidades razonables que lo acerquen más a tu objetivo, y el resto del día no se retoca para compensar.</div>'
         : '') +
-      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual, de modo que el día queda cerca del objetivo con cualquier combinación. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
+      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
 
     document.getElementById('tab-hoy').innerHTML = html;
   }
