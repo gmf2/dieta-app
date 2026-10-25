@@ -304,18 +304,34 @@
         picks[slot] = bestO.id;
       }
     });
-    // Cada plato se resuelve contra el objetivo de su franja (sin compensacion
-    // entre comidas): el solver garantiza las cantidades por plato.
+    // Ajuste a nivel de dia (prototipo exp-ajuste-diario): los platos elegidos
+    // nunca cambian; solo se compensan las CANTIDADES entre comidas para cerrar
+    // el dia. Cacheado por perfil+picks+mes para no recalcular en cada render.
     var dayPlans = {};
-    ['desayuno', 'comida', 'cena'].forEach(function (slot) {
-      var o0 = findOption(picks[slot]);
-      if (!o0) return;
-      var sk = slotTarget(r, slot);
-      var sp = Math.round(pgoal * psh[slot]);
-      var pl = computePlan(o0, sk, sp);
-      dayPlans[slot] = { kcal: sk, prot: sp, plan: pl };
-    });
+    (function () {
+      var cacheKey = JSON.stringify({ t: r.target, p: pgoal, pk: picks, m: month });
+      if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKey) {
+        var res = window.DayPlan.dayPlan(picks, findOption, {
+          ING: ING, PROT_ANCHORS: PROT_ANCHORS, computePlan: computePlan,
+          dayTarget: r.target, proteinTarget: pgoal
+        });
+        window.__dayPlanCache = { key: cacheKey, res: res };
+      }
+      var best = window.__dayPlanCache.res.best;
+      ['desayuno', 'comida', 'cena'].forEach(function (slot) {
+        var pl = best[slot];
+        var sk = slotTarget(r, slot);
+        var sp = Math.round(pgoal * psh[slot]);
+        pl.dk = pl.kcal - sk;
+        pl.dp = pl.protein - sp;
+        dayPlans[slot] = { kcal: sk, prot: sp, plan: pl };
+      });
+      dayPlans.__dia = { dk: window.__dayPlanCache.res.best.dk, dp: window.__dayPlanCache.res.best.dp };
+    })();
     window.__dayPlans = dayPlans;
+    // Dia cerrado = la compensacion entre comidas logra el objetivo del dia;
+    // las desviaciones por franja son entonces deliberadas, no avisos.
+    var dayClosed = Math.abs(dayPlans.__dia.dk) <= 60 && Math.abs(dayPlans.__dia.dp) <= 10;
 
     ['desayuno', 'comida', 'cena'].forEach(function (slot) {
       var target = slotTarget(r, slot);
@@ -356,7 +372,7 @@
       }).join('') + '</div>';
       var dp = window.__dayPlans && window.__dayPlans[slot];
       var altLine = '';
-      if (dp && dp.plan && (Math.abs(dp.plan.dk) > 150 || Math.abs(dp.plan.dp) > 35 || dp.plan.vol > 1200)) {
+      if (!dayClosed && dp && dp.plan && (Math.abs(dp.plan.dk) > 150 || Math.abs(dp.plan.dp) > 35 || dp.plan.vol > 1200)) {
         var spSlot2 = Math.round(pgoal * psh[slot]);
         var opts2 = classicsFor(month, slot);
         if (monthRecipe) opts2 = opts2.concat([monthRecipe]);
@@ -393,7 +409,11 @@
         return '<div class="ing">' + rows +
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
-                      avisoHTML(plan) + altLine +
+                      (dayClosed
+                        ? (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
+                          ? ' <b>Cantidades compensadas:</b> este plato queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal' + (Math.abs(plan.dp) > 10 ? ' y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína' : '') + ' de su franja, compensado con el resto de comidas: tu día cierra en tu objetivo.'
+                          : '')
+                        : avisoHTML(plan)) + altLine +
           ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>' +
           (selected.pasos ? '<ol class="steps">' + selected.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '');
       })() : ingredientHTML(selected, target, r.target));
@@ -415,7 +435,7 @@
       if (!d || !d.plan) return null;
       if (Math.abs(d.plan.dk) <= 60 && Math.abs(d.plan.dp) <= 10) return null;
       var o = findOption(picks[s]);
-      return (o ? o.name : s) + ' queda a ' + (d.plan.dk > 0 ? '+' : '') + d.plan.dk + ' kcal (' + (d.plan.dp > 0 ? '+' : '') + d.plan.dp + ' g prot) de lo ideal';
+      return (o ? o.name : s) + ': ' + (d.plan.dk > 0 ? '+' : '') + d.plan.dk + ' kcal' + (Math.abs(d.plan.dp) > 10 ? ' · ' + (d.plan.dp > 0 ? '+' : '') + d.plan.dp + ' g prot' : '') + ' respecto a su franja';
     }).filter(Boolean);
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
@@ -423,12 +443,15 @@
         ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
         : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
       (offNotes.length
-        ? '<div class="note">Ajuste aproximado: ' + offNotes.join('; ') + '. No existen cantidades razonables que lo acerquen más a tu objetivo, y el resto del día no se retoca para compensar.</div>'
+        ? (dayClosed
+          ? '<div class="note">Cantidades compensadas entre comidas para cerrar tu día sin cambiar tus platos: ' + offNotes.join('; ') + '.</div>'
+          : '<div class="note">Ni compensando cantidades entre comidas se cierra tu día con estos platos: ' + offNotes.join('; ') + '. El día queda a ' + ((dayKcal - r.target) > 0 ? '+' : '') + (dayKcal - r.target) + ' kcal y ' + ((dayProt - protGoal) > 0 ? '+' : '') + (dayProt - protGoal) + ' g de proteína de tu objetivo.</div>')
         : '') +
-      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
+      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual y se compensan entre comidas para cerrar el día, sin cambiar los platos que eliges. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
 
     document.getElementById('tab-hoy').innerHTML = html;
   }
+  window.__renderHoy = renderHoy; // prototipo: medir coste del ajuste de dia
 
   /* ---------- Recetas e historial (vista unificada por mes) ---------- */
   var viewY = new Date().getFullYear(), viewM = new Date().getMonth();

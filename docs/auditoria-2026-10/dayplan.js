@@ -8,20 +8,49 @@
 // Porcion razonable por componente (gramos). Lo que no esta en la tabla
 // mantiene los topes propios del solver por franja.
 const RACION_MAX = {
-  'Atún': 160,                    // 2 latas
-  'Pan integral': 90,             // 3 rebanadas
+  // grasas
+  'Aceite de oliva': 20,            // 2 cucharadas
+  // proteinas ancla (carne/pescado/huevo/quesos): pieza grande
+  'Atún': 160,                      // 2 latas
+  'Huevo': 180, 'Huevo cocido': 180, // 3 huevos
+  'Fiambre de pavo': 100, 'Jamón cocido': 80, 'Salmón ahumado': 160,
+  'Queso fresco': 100, 'Requesón': 200,   // 2 cazos
+  'Yogur natural': 250, 'Yogur griego natural': 250, // 2 yogures
+  // pan y cereales
+  'Pan integral': 90,               // 3 rebanadas
   'Pan de hamburguesa integral': 65, // 1 pan
-  'Patata': 450, 'Patata cocida': 450, 'Boniato': 300,   // 3 medianas / 2 boniatos
-  'Aguacate': 150,                // 2 medios aguacates
-  'Plátano': 240, 'Manzana': 300, 'Pera': 300, 'Mango': 300, // 2 piezas
-  'Yogur natural': 250, 'Yogur griego natural': 250,      // 2 yogures
-  'Huevo': 180, 'Huevo cocido': 180,                      // 3 huevos
-  'Aceite de oliva': 20,          // 2 cucharadas
-  'Nueces': 30,                   // 1 punado grande
-  'Copos de avena': 140, 'Muesli sin azúcar': 120,        // ~2 vasos
-  'Arroz (en crudo)': 160, 'Arroz integral (en crudo)': 160, 'Pasta (en crudo)': 160,
+  'Tortilla de trigo integral': 180, // 3 tortillas
+  'Copos de avena': 140, 'Muesli sin azúcar': 160, // 2 vasos
+  'Arroz (en crudo)': 160, 'Arroz integral (en crudo)': 160,
+  'Pasta (en crudo)': 160, 'Pasta integral (en crudo)': 160,
+  // legumbres
   'Garbanzos cocidos': 400, 'Lentejas cocidas': 400, 'Alubias cocidas': 400,
-  'Fiambre de pavo': 100, 'Jamón cocido': 80
+  'Lentejas (en crudo)': 160, 'Hummus': 90,
+  // tuberculos
+  'Patata': 450, 'Patata cocida': 450,   // 3 medianas
+  'Boniato': 300,                        // 2 boniatos
+  // fruta (2 piezas/tajadas)
+  'Fruta de temporada': 300, 'Manzana': 300, 'Pera': 300, 'Mango': 400,
+  'Plátano': 240, 'Melón': 300, 'Fresas': 200,
+  // frutos secos y semillas
+  'Nueces': 30, 'Semillas variadas': 30, 'Coco rallado': 30,
+  // verduras y hortalizas (2 platos / 2 unidades)
+  'Ensalada': 300, 'Ensalada mixta': 300, 'Ensalada variada': 300,
+  'Espinacas': 200, 'Brócoli': 300, 'Setas variadas': 200,
+  'Verduras crudas': 300, 'Verduras salteadas': 300, 'Verduras variadas': 300,
+  'Pimiento y cebolla': 300, 'Pisto casero': 300,
+  'Zanahoria y apio': 300, 'Zanahoria y calabacín': 300,
+  'Calabacín': 400, 'Calabaza': 400, 'Puerro': 300,
+  'Tomate': 240, 'Tomate natural': 240,     // 2 tomates
+  'Tomate triturado': 150,                  // 7-8 cucharadas
+  'Tomate y lechuga': 300,
+  'Maíz dulce': 240,                        // 3 cazos
+  'Aguacate': 150,                          // 2 medios
+  // bebidas y otros
+  'Leche o bebida vegetal': 400,            // 2 vasos
+  'Gazpacho casero': 400,                   // 2 vasos
+  'Miel': 21,                               // 3 cucharaditas
+  'Canela': 3, 'Tinta de sepia': 8
 };
 const PROT_ANCHOR_MAX = 250;      // pieza grande de carne/pescado
 
@@ -36,7 +65,7 @@ function clampPlan(plan, ING, PROT_ANCHORS) {
   });
   let k = 0, p = 0, v = 0;
   items.forEach(it => { k += ING[it.name].k * it.grams / 100; p += ING[it.name].p * it.grams / 100; v += it.grams; });
-  return { items, kcal: Math.round(k), protein: Math.round(p), vol: v, clamped };
+  return { items, kcal: Math.round(k), protein: Math.round(p), kcalRaw: k, proteinRaw: p, vol: v, clamped };
 }
 
 /* Candidatos por franja: el plato elegido resuelto a distintos objetivos
@@ -71,7 +100,7 @@ function dayPlan(picks, optionsById, ctx) {
     const dk = d.kcal + c.kcal + n.kcal - dayTarget;
     const dp = d.protein + c.protein + n.protein - proteinTarget;
     const e = Math.abs(dk) + 3 * Math.abs(dp);
-    if (!best || e < best.e - 1e-9) best = { e, dk, dp, desayuno: d, comida: c, cena: n };
+    if (!best || e < best.e - 1e-9) best = { e, dk, dp, dkRaw: d.kcalRaw + c.kcalRaw + n.kcalRaw - dayTarget, dpRaw: d.proteinRaw + c.proteinRaw + n.proteinRaw - proteinTarget, desayuno: d, comida: c, cena: n };
   }
   return { dayTarget, proteinTarget, best, combos };
 }
