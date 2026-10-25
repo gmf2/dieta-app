@@ -83,27 +83,49 @@ function slotCandidates(option, ING, PROT_ANCHORS, computePlan, skBase, spBase) 
   return [...seen.values()];
 }
 
-/* Ajuste de dia: elige la combinacion de planes (uno por franja, siempre del
-   plato elegido) que minimiza la desviacion del DIA (kcal + 3*proteina). */
-function dayPlan(picks, optionsById, ctx) {
-  const { ING, PROT_ANCHORS, computePlan, dayTarget, proteinTarget } = ctx;
-  const KSH = { desayuno: 0.30, comida: 0.40, cena: 0.30 };
-  const cand = {};
-  ['desayuno', 'comida', 'cena'].forEach(slot => {
-    const o = optionsById(picks[slot]);
-    cand[slot] = slotCandidates(o, ING, PROT_ANCHORS, computePlan,
-      Math.round(dayTarget * KSH[slot] / 10) * 10, Math.round(proteinTarget * KSH[slot]));
-  });
+const KSH = { desayuno: 0.30, comida: 0.40, cena: 0.30 };
+
+/* Combina candidatos de las tres franjas y devuelve la combinacion que
+   minimiza la desviacion del DIA (kcal + 3*proteina). */
+function bestCombo(candD, candC, candN, dayTarget, proteinTarget) {
   let best = null, combos = 0;
-  for (const d of cand.desayuno) for (const c of cand.comida) for (const n of cand.cena) {
+  for (const d of candD) for (const c of candC) for (const n of candN) {
     combos++;
     const dk = d.kcal + c.kcal + n.kcal - dayTarget;
     const dp = d.protein + c.protein + n.protein - proteinTarget;
     const e = Math.abs(dk) + 3 * Math.abs(dp);
     if (!best || e < best.e - 1e-9) best = { e, dk, dp, dkRaw: d.kcalRaw + c.kcalRaw + n.kcalRaw - dayTarget, dpRaw: d.proteinRaw + c.proteinRaw + n.proteinRaw - proteinTarget, desayuno: d, comida: c, cena: n };
   }
-  return { dayTarget, proteinTarget, best, combos };
+  return { best, combos };
 }
 
-if (typeof module !== 'undefined' && module.exports) module.exports = { dayPlan, slotCandidates, clampPlan, RACION_MAX };
-if (typeof window !== 'undefined') window.DayPlan = { dayPlan, slotCandidates, clampPlan, RACION_MAX };
+/* Ajuste de dia: elige la combinacion de planes (uno por franja, siempre del
+   plato elegido) que minimiza la desviacion del DIA (kcal + 3*proteina). */
+function dayPlan(picks, optionsById, ctx) {
+  const { ING, PROT_ANCHORS, computePlan, dayTarget, proteinTarget } = ctx;
+  const cand = {};
+  ['desayuno', 'comida', 'cena'].forEach(slot => {
+    const o = optionsById(picks[slot]);
+    cand[slot] = slotCandidates(o, ING, PROT_ANCHORS, computePlan,
+      Math.round(dayTarget * KSH[slot] / 10) * 10, Math.round(proteinTarget * KSH[slot]));
+  });
+  const { best, combos } = bestCombo(cand.desayuno, cand.comida, cand.cena, dayTarget, proteinTarget);
+  return { dayTarget, proteinTarget, best, combos, cand };
+}
+
+/* Evaluacion de dia para UNA opcion concreta de una franja, conservando los
+   candidatos de las otras dos (los platos elegidos no cambian): sirve para
+   clasificar tarjetas y buscar alternativas con el mismo criterio del dia. */
+function dayWith(slot, option, cand, ctx) {
+  const { ING, PROT_ANCHORS, computePlan, dayTarget, proteinTarget } = ctx;
+  const candO = slotCandidates(option, ING, PROT_ANCHORS, computePlan,
+    Math.round(dayTarget * KSH[slot] / 10) * 10, Math.round(proteinTarget * KSH[slot]));
+  const cd = slot === 'desayuno' ? candO : cand.desayuno;
+  const cc = slot === 'comida' ? candO : cand.comida;
+  const cn = slot === 'cena' ? candO : cand.cena;
+  const { best } = bestCombo(cd, cc, cn, dayTarget, proteinTarget);
+  return { dk: best.dk, dp: best.dp, dkRaw: best.dkRaw, dpRaw: best.dpRaw, plan: best[slot], e: best.e };
+}
+
+if (typeof module !== 'undefined' && module.exports) module.exports = { dayPlan, dayWith, bestCombo, slotCandidates, clampPlan, RACION_MAX, KSH };
+if (typeof window !== 'undefined') window.DayPlan = { dayPlan, dayWith, bestCombo, slotCandidates, clampPlan, RACION_MAX, KSH };
