@@ -273,6 +273,123 @@
   }
 
   /* ---------- Hoy ---------- */
+
+  /* Clasificacion asincrona de tarjetas: pinta primero y etiqueta despues,
+     para no bloquear la interfaz con el barrido de candidatos en frio.
+     Resultados en window.__fitCache[cacheKey]; parches solo si el render
+     actual sigue correspondiendo a esa clave. */
+  function scheduleFit(cacheKey) {
+    if (window.__fitRunning === cacheKey) return;
+    window.__fitRunning = cacheKey;
+    var queue = [];
+    ['desayuno', 'comida', 'cena'].forEach(function (slot) {
+      var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
+      var options = classicsFor(month, slot);
+      if (monthRecipe) options = options.concat([monthRecipe]);
+      options.forEach(function (o) { if (o.id !== picks[slot]) queue.push({ slot: slot, o: o }); });
+    });
+    var desv = function (dk, dp) { return (dk > 0 ? '+' : '') + dk + ' kcal' + (Math.abs(dp) > 10 ? ' · ' + (dp > 0 ? '+' : '') + dp + ' g prot' : ''); };
+    var step = function () {
+      if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKey) { window.__fitRunning = null; return; }
+      var item = queue.shift();
+      if (!item) {
+        window.__fitRunning = null;
+        ['desayuno', 'comida', 'cena'].forEach(altLineFor);
+        jointProposal(cacheKey);
+        window.__markTags = performance.now(); // prototipo: medir fin de etiquetas
+        return;
+      }
+      var ev = window.__dayEval(item.slot, item.o);
+      var entry;
+      if (Math.abs(ev.dk) > 150 || Math.abs(ev.dp) > 35 || ev.plan.vol > 1200)
+        entry = { rank: 2, html: '<div class="m-tag nofit">No cierra tu día: quedaría a ' + desv(ev.dk, ev.dp) + '</div>', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
+      else if (Math.abs(ev.dk) > 60 || Math.abs(ev.dp) > 10)
+        entry = { rank: 1, html: '<div class="m-tag fitwarn">Con este plato, tu día queda a ' + desv(ev.dk, ev.dp) + '</div>', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
+      else
+        entry = { rank: 0, html: '', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
+      window.__fitCache[cacheKey][item.slot + '/' + item.o.id] = entry;
+      var btn = document.querySelector('.meal-card[data-slot="' + item.slot + '"][data-id="' + item.o.id + '"]');
+      if (btn) {
+        var old2 = btn.querySelector('.m-tag.js-pending'); if (old2) old2.remove();
+        if (entry.html) btn.insertAdjacentHTML('afterbegin', entry.html);
+      }
+      setTimeout(step, 0);
+    };
+    setTimeout(step, 0);
+  }
+
+  /* Alternativa por franja calculada con los resultados de la clasificacion
+     (mismo criterio del dia); se parchea en el detalle del plato elegido. */
+  function altLineFor(slot) {
+    var cacheKey = window.__dayPlanCache && window.__dayPlanCache.key;
+    if (!cacheKey) return;
+    var dia = window.__dayPlans && window.__dayPlans.__dia;
+    if (!dia || (Math.abs(dia.dk) <= 60 && Math.abs(dia.dp) <= 10)) return; // dia ajustado: no hace falta
+    var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
+    var options = classicsFor(month, slot);
+    if (monthRecipe) options = options.concat([monthRecipe]);
+    var bestAlt = null;
+    options.forEach(function (o) {
+      if (o.id === picks[slot]) return;
+      var ev = window.__fitCache[cacheKey][slot + '/' + o.id];
+      if (!ev || Math.abs(ev.dk) > 60 || Math.abs(ev.dp) > 10 || ev.vol > 1200) return;
+      var sc = Math.abs(ev.dk) + 3 * Math.abs(ev.dp);
+      if (!bestAlt || sc < bestAlt.sc) bestAlt = { o: o, dk: ev.dk, dp: ev.dp, sc: sc };
+    });
+    var html = bestAlt
+      ? ' Con <b>' + esc(bestAlt.o.name) + '</b> en lugar de este plato, tu día quedaría a ' + (bestAlt.dk > 0 ? '+' : '') + bestAlt.dk + ' kcal y ' + (bestAlt.dp > 0 ? '+' : '') + bestAlt.dp + ' g de proteína de tu objetivo.'
+      : ' Ninguna otra opción de esta franja deja tu día ajustado a tu objetivo; la diferencia queda reflejada arriba.';
+    window.__fitCache[cacheKey]['__alt/' + slot] = html;
+    var span = document.querySelector('#cap-' + slot + ' .js-alt');
+    if (span) { span.innerHTML = html; span.classList.remove('js-pending'); }
+  }
+
+  /* Propuesta conjunta de DOS comidas (prototipo reversible): solo cuando ni
+     las cantidades ni un cambio de una franja ajustan el dia. Nunca se aplica
+     sola: requiere pulsar "Usar esta propuesta" y se puede deshacer. */
+  function jointProposal(cacheKey) {
+    var dia = window.__dayPlans && window.__dayPlans.__dia;
+    if (!dia) return;
+    if (Math.abs(dia.dk) <= 60 && Math.abs(dia.dp) <= 10) return; // dia ajustado: sin propuesta
+    var ctx = window.__ctx;
+    var slots = ['desayuno', 'comida', 'cena'];
+    var labels = { desayuno: 'Desayuno', comida: 'Comida', cena: 'Cena' };
+    var optsBySlot = {};
+    slots.forEach(function (slot) {
+      var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
+      var options = classicsFor(month, slot);
+      if (monthRecipe) options = options.concat([monthRecipe]);
+      optsBySlot[slot] = options.filter(function (o) { return o.id !== picks[slot]; });
+    });
+    var best = null;
+    for (var i = 0; i < 3; i++) for (var j = i + 1; j < 3; j++) {
+      var si = slots[i], sj = slots[j], sk2 = slots[3 - i - j];
+      optsBySlot[si].forEach(function (oA) {
+        var cA = window.__candOf(oA, si);
+        optsBySlot[sj].forEach(function (oB) {
+          var cB = window.__candOf(oB, sj);
+          var cd = si === 'desayuno' ? cA : (sj === 'desayuno' ? cB : window.__candOf(findOption(picks.desayuno), 'desayuno'));
+          var cc = si === 'comida' ? cA : (sj === 'comida' ? cB : window.__candOf(findOption(picks.comida), 'comida'));
+          var cn = si === 'cena' ? cA : (sj === 'cena' ? cB : window.__candOf(findOption(picks.cena), 'cena'));
+          var b = window.DayPlan.bestCombo(cd, cc, cn, ctx.target, ctx.pgoal).best;
+          var e = Math.abs(b.dk) + 3 * Math.abs(b.dp);
+          if (!best || e < best.e - 1e-9) best = { e: e, dk: b.dk, dp: b.dp, si: si, sj: sj, oA: oA, oB: oB, volOK: b.desayuno.vol <= 1200 && b.comida.vol <= 1200 && b.cena.vol <= 1200 };
+        });
+      });
+    }
+    var html;
+    if (best && best.volOK && Math.abs(best.dk) <= 60 && Math.abs(best.dp) <= 10) {
+      html = '<div class="note">Propuesta de dos cambios: ' + labels[best.si] + ' → <b>' + esc(best.oA.name) + '</b> y ' + labels[best.sj] + ' → <b>' + esc(best.oB.name) + '</b>. ' +
+        'Tu día quedaría a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína de tu objetivo (ajuste dentro de la tolerancia de ±60 kcal y ±10 g, no igualdad exacta).</div>' +
+        '<button class="btn soft" data-apply-prop="' + best.si + ':' + best.oA.id + ',' + best.sj + ':' + best.oB.id + '">Usar esta propuesta</button>';
+    } else if (best) {
+      html = '<div class="note">Ni cambiando dos comidas hay una combinación con porciones normales que ajuste tu día; la mejor (' + labels[best.si] + ' → ' + esc(best.oA.name) + ', ' + labels[best.sj] + ' → ' + esc(best.oB.name) + ') queda a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína de tu objetivo.</div>';
+    }
+    window.__fitCache[cacheKey].__joint = html || '';
+    var box = document.getElementById('jointProp');
+    if (box) box.innerHTML = html || '';
+  }
+
   function renderHoy() {
     var r = compute(profile);
     var tIso = todayIso();
@@ -308,6 +425,8 @@
     // nunca cambian; solo se compensan las CANTIDADES entre comidas para cerrar
     // el dia. Cacheado por perfil+picks+mes para no recalcular en cada render.
     var dayPlans = {};
+    var dayReady = false;
+    var cacheKeyHoy = JSON.stringify({ t: r.target, p: pgoal, pk: picks, m: month });
     (function () {
       // Candidatos por opcion memoizados por objetivo: NO dependen de los picks,
       // asi que cambiar de plato solo recalcula la combinacion del dia.
@@ -323,16 +442,39 @@
         }
         return hit;
       };
-      var cacheKey = JSON.stringify({ t: r.target, p: pgoal, pk: picks, m: month });
-      if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKey) {
-        var cand = {
-          desayuno: window.__candOf(findOption(picks.desayuno), 'desayuno'),
-          comida: window.__candOf(findOption(picks.comida), 'comida'),
-          cena: window.__candOf(findOption(picks.cena), 'cena')
-        };
-        var bc = window.DayPlan.bestCombo(cand.desayuno, cand.comida, cand.cena, r.target, pgoal);
-        window.__dayPlanCache = { key: cacheKey, res: { best: bc.best, combos: bc.combos, cand: cand } };
+      if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKeyHoy) {
+        // Construccion asincrona por pasos: la interfaz pinta el esqueleto ya
+        // (sin cantidades ni etiquetas definitivas) y el calculo no la bloquea.
+        if (window.__dayBuilding !== cacheKeyHoy) {
+          window.__dayBuilding = cacheKeyHoy;
+          var steps = [
+            function () { window.__candOf(findOption(picks.desayuno), 'desayuno'); },
+            function () { window.__candOf(findOption(picks.comida), 'comida'); },
+            function () { window.__candOf(findOption(picks.cena), 'cena'); },
+            function () {
+              var cand = {
+                desayuno: window.__candOf(findOption(picks.desayuno), 'desayuno'),
+                comida: window.__candOf(findOption(picks.comida), 'comida'),
+                cena: window.__candOf(findOption(picks.cena), 'cena')
+              };
+              var bc = window.DayPlan.bestCombo(cand.desayuno, cand.comida, cand.cena, r.target, pgoal);
+              window.__dayPlanCache = { key: cacheKeyHoy, res: { best: bc.best, combos: bc.combos, cand: cand } };
+              window.__dayBuilding = null;
+              renderHoy();
+            }
+          ];
+          var runStep = function () {
+            if (window.__dayBuilding !== cacheKeyHoy) return; // obsoleto: otro render manda
+            var s = steps.shift();
+            if (!s) return;
+            s();
+            if (steps.length) setTimeout(runStep, 0);
+          };
+          setTimeout(runStep, 0);
+        }
+        return; // esqueleto provisional
       }
+      dayReady = true;
       var best = window.__dayPlanCache.res.best;
       ['desayuno', 'comida', 'cena'].forEach(function (slot) {
         var pl = best[slot];
@@ -347,19 +489,25 @@
     window.__dayPlans = dayPlans;
     // Dia cerrado = la compensacion entre comidas logra el objetivo del dia;
     // las desviaciones por franja son entonces deliberadas, no avisos.
-    var dayClosed = Math.abs(dayPlans.__dia.dk) <= 60 && Math.abs(dayPlans.__dia.dp) <= 10;
+    var dayClosed = dayReady && Math.abs(dayPlans.__dia.dk) <= 60 && Math.abs(dayPlans.__dia.dp) <= 10;
+    window.__ctx = { target: r.target, pgoal: pgoal };
+    if (!window.__fitCache) window.__fitCache = {};
+    if (!window.__fitCache[cacheKeyHoy]) window.__fitCache[cacheKeyHoy] = {};
 
     // Evalua una opcion con el criterio del DIA (las otras franjas conservan
     // su plato elegido): asi las tarjetas se clasifican como el ajuste actua.
-    var __candDay = window.__dayPlanCache.res.cand;
-    var dayEval = function (slot, o) {
-      var cO = window.__candOf(o, slot);
-      var cd = slot === 'desayuno' ? cO : __candDay.desayuno;
-      var cc = slot === 'comida' ? cO : __candDay.comida;
-      var cn = slot === 'cena' ? cO : __candDay.cena;
-      var b = window.DayPlan.bestCombo(cd, cc, cn, r.target, pgoal).best;
-      return { dk: b.dk, dp: b.dp, plan: b[slot] };
-    };
+    // Solo con el dia calculado (en el esqueleto provisional no hay cache).
+    if (dayReady) {
+      var __candDay = window.__dayPlanCache.res.cand;
+      window.__dayEval = function (slot, o) {
+        var cO = window.__candOf(o, slot);
+        var cd = slot === 'desayuno' ? cO : __candDay.desayuno;
+        var cc = slot === 'comida' ? cO : __candDay.comida;
+        var cn = slot === 'cena' ? cO : __candDay.cena;
+        var b = window.DayPlan.bestCombo(cd, cc, cn, r.target, pgoal).best;
+        return { dk: b.dk, dp: b.dp, plan: b[slot] };
+      };
+    }
 
     ['desayuno', 'comida', 'cena'].forEach(function (slot) {
       var target = slotTarget(r, slot);
@@ -377,13 +525,10 @@
       html += hOpen ? '<div>' : '<div hidden>';
       var fitOf = function (o) {
         if (o.id === selected.id) return { rank: 0, html: '' }; // el elegido se explica en su detalle
-        var ev = dayEval(slot, o);
-        var desv = (ev.dk > 0 ? '+' : '') + ev.dk + ' kcal' + (Math.abs(ev.dp) > 10 ? ' · ' + (ev.dp > 0 ? '+' : '') + ev.dp + ' g prot' : '');
-        if (Math.abs(ev.dk) > 150 || Math.abs(ev.dp) > 35 || ev.plan.vol > 1200)
-          return { rank: 2, html: '<div class="m-tag nofit">No cierra tu día: quedaría a ' + desv + '</div>' };
-        if (Math.abs(ev.dk) > 60 || Math.abs(ev.dp) > 10)
-          return { rank: 1, html: '<div class="m-tag fitwarn">Con este plato, tu día queda a ' + desv + '</div>' };
-        return { rank: 0, html: '' };
+        var hit = window.__fitCache[cacheKeyHoy][slot + '/' + o.id];
+        if (hit) return hit;
+        window.__fitPending = true; // etiqueta neutral mientras se calcula
+        return { rank: 0, html: '<div class="m-tag js-pending">Calculando ajuste…</div>' };
       };
       var optionsSorted = options.slice().sort(function (a, b) { return fitOf(a).rank - fitOf(b).rank; });
       html += '<div class="meal-grid">' + optionsSorted.map(function (o) {
@@ -400,22 +545,10 @@
           '</div></button>';
       }).join('') + '</div>';
       var dp = window.__dayPlans && window.__dayPlans[slot];
-      var altLine = '';
-      if (!dayClosed && dp && dp.plan) {
-        var opts2 = classicsFor(month, slot);
-        if (monthRecipe) opts2 = opts2.concat([monthRecipe]);
-        var bestAlt = null;
-        opts2.forEach(function (o2) {
-          if (o2.id === selected.id) return;
-          var ev2 = dayEval(slot, o2);
-          if (Math.abs(ev2.dk) > 60 || Math.abs(ev2.dp) > 10 || ev2.plan.vol > 1200) return;
-          var sc = Math.abs(ev2.dk) + 3 * Math.abs(ev2.dp);
-          if (!bestAlt || sc < bestAlt.sc) bestAlt = { o2: o2, dk: ev2.dk, dp: ev2.dp, sc: sc };
-        });
-        altLine = bestAlt
-          ? ' Alternativa que sí cierra tu día: <b>' + esc(bestAlt.o2.name) + '</b> (el día quedaría a ' + (bestAlt.dk > 0 ? '+' : '') + bestAlt.dk + ' kcal y ' + (bestAlt.dp > 0 ? '+' : '') + bestAlt.dp + ' g de proteína).'
-          : ' Ninguna otra opción de esta franja cierra hoy tu objetivo; la diferencia queda reflejada arriba.';
-      }
+      var altCached = dayReady && !dayClosed && window.__fitCache[cacheKeyHoy]['__alt/' + slot];
+      var altLine = dayReady && !dayClosed
+        ? '<span class="js-alt' + (altCached ? '' : ' js-pending') + '">' + (altCached || ' Buscando si otra opción de esta franja ajusta tu día…') + '</span>'
+        : '';
       html += (dp && dp.plan ? (function () {
         var plan = dp.plan;
         var rows = plan.items.map(function (it) {
@@ -427,16 +560,18 @@
             '<div class="ing-right"><b>' + g + ' g</b><span>' + kcal + ' kcal · ' + prot + ' g prot</span></div></div>';
         }).join('');
         return '<div class="ing">' + rows +
-          '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
+          '<div class="cap" id="cap-' + slot + '">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
                       (dayClosed
                         ? (Math.abs(plan.dk) > 60 || Math.abs(plan.dp) > 10
-                          ? ' <b>Cantidades compensadas:</b> este plato queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal' + (Math.abs(plan.dp) > 10 ? ' y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína' : '') + ' de su franja, compensado con el resto de comidas: tu día cierra en tu objetivo.'
+                          ? ' <b>Cantidades compensadas:</b> este plato queda a ' + (plan.dk > 0 ? '+' : '') + plan.dk + ' kcal' + (Math.abs(plan.dp) > 10 ? ' y ' + (plan.dp > 0 ? '+' : '') + plan.dp + ' g de proteína' : '') + ' de su franja, compensado con el resto de comidas: tu día queda ajustado a tu objetivo.'
                           : '')
                         : avisoHTML(plan)) + altLine +
           ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>' +
           (selected.pasos ? '<ol class="steps">' + selected.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '');
-      })() : ingredientHTML(selected, target, r.target));
+      })() : (dayReady
+        ? ingredientHTML(selected, target, r.target)
+        : '<div class="ing"><div class="cap js-pending">Calculando cantidades para tu día…</div></div>'));
       html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
         (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + regKcal(dayLog[slot]) + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
       html += '</div>';
@@ -450,6 +585,13 @@
       return acc + (dayPlans2[s] ? dayPlans2[s].plan.kcal : 0);
     }, 0);
     var protGoal = proteinGoal(profile);
+    if (!dayReady) {
+      html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
+        '<div class="note js-pending">Calculando tu día…</div></div>';
+      document.getElementById('tab-hoy').innerHTML = html;
+      window.__markSkeleton = performance.now(); // prototipo: medir pintado provisional
+      return;
+    }
     var offNotes = ['desayuno', 'comida', 'cena'].map(function (s) {
       var d = dayPlans2[s];
       if (!d || !d.plan) return null;
@@ -459,17 +601,37 @@
     }).filter(Boolean);
     html += '<div class="card mt12"><div class="fact"><span>Objetivo del día</span><b>' + r.target + ' kcal · ' + protGoal + ' g proteína</b></div>' +
       '<div class="fact"><span>Menú elegido</span><b>~' + dayKcal + ' kcal · ~' + dayProt + ' g</b></div>' +
-      (dayProt >= protGoal * 0.9
-        ? '<div class="note green">Proteína cubierta con estas elecciones.</div>'
-        : '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>') +
+      (Math.abs(dayProt - protGoal) <= 10
+        ? '<div class="note green">Proteína ajustada a tu objetivo con estas elecciones (' + dayProt + ' g frente a ' + protGoal + ' g).</div>'
+        : dayProt < protGoal
+          ? '<div class="note">Con estas elecciones llegas a ~' + dayProt + ' g de proteína, por debajo de tu objetivo de ' + protGoal + ' g. Elige opciones con huevo, pavo, pollo, pescado o legumbres para subirla.</div>'
+          : '<div class="note">Con estas elecciones te pasas de proteína: ~' + dayProt + ' g frente a tu objetivo de ' + protGoal + ' g (+' + (dayProt - protGoal) + ' g).</div>') +
       (offNotes.length
         ? (dayClosed
-          ? '<div class="note">Cantidades compensadas entre comidas para cerrar tu día sin cambiar tus platos: ' + offNotes.join('; ') + '.</div>'
+          ? '<div class="note">Cantidades compensadas entre comidas para ajustar tu día a tu objetivo sin cambiar tus platos: ' + offNotes.join('; ') + '.</div>'
           : '<div class="note">Ni compensando cantidades entre comidas se cierra tu día con estos platos: ' + offNotes.join('; ') + '. El día queda a ' + ((dayKcal - r.target) > 0 ? '+' : '') + (dayKcal - r.target) + ' kcal y ' + ((dayProt - protGoal) > 0 ? '+' : '') + (dayProt - protGoal) + ' g de proteína de tu objetivo.</div>')
         : '') +
-      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual y se compensan entre comidas para cerrar el día, sin cambiar los platos que eliges. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
+      (!dayClosed
+        ? '<div id="jointProp">' + (window.__fitCache[cacheKeyHoy].__joint || '<div class="note js-pending">Buscando si cambiando dos comidas tu día queda ajustado…</div>') + '</div>'
+        : '') +
+      (window.__prevPicks
+        ? '<button class="btn ghost" data-revert-picks="1">Volver a mi menú anterior</button>'
+        : '') +
+      '<div class="muted mt8">Las cantidades de cada plato se calculan para tu objetivo actual y se compensan entre comidas para ajustar el día a tu objetivo, sin cambiar los platos que eliges. Si un plato no puede acercarse con raciones normales, lo verás marcado; cuando otra opción de la misma comida sí cuadra tu día, te la propone, y si ninguna cuadra, te lo dice. Si cambias tu peso u objetivo en Perfil, todo se recalcula solo. Las cantidades son en peso crudo salvo que ponga «cocido».</div></div>';
 
     document.getElementById('tab-hoy').innerHTML = html;
+    window.__markFull = performance.now(); // prototipo: medir pintado con dia calculado
+    if (window.__fitPending) { window.__fitPending = false; scheduleFit(cacheKeyHoy); }
+    else if (!dayClosed && !window.__fitCache[cacheKeyHoy].__joint && window.__fitRunning !== cacheKeyHoy) {
+      // etiquetas en cache pero falta alternativa/propuesta: completar en async
+      window.__fitRunning = cacheKeyHoy;
+      setTimeout(function () {
+        if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKeyHoy) { window.__fitRunning = null; return; }
+        ['desayuno', 'comida', 'cena'].forEach(altLineFor);
+        jointProposal(cacheKeyHoy);
+        window.__fitRunning = null;
+      }, 0);
+    }
   }
   window.__renderHoy = renderHoy; // prototipo: medir coste del ajuste de dia
 
@@ -1104,6 +1266,28 @@
       profile[seg.parentElement.getAttribute('data-seg')] = seg.getAttribute('data-v');
       save('dieta.perfil.v1', profile);
       renderAll();
+      return;
+    }
+    var applyProp = t.closest && t.closest('[data-apply-prop]');
+    if (applyProp) {
+      // Propuesta conjunta: solo se aplica con esta pulsacion explicita y es reversible.
+      window.__prevPicks = JSON.parse(JSON.stringify(picks));
+      applyProp.getAttribute('data-apply-prop').split(',').forEach(function (pair) {
+        var kv = pair.split(':');
+        picks[kv[0]] = kv[1];
+      });
+      save('dieta.picks.v1', picks);
+      renderHoy();
+      return;
+    }
+    var revertPicks = t.closest && t.closest('[data-revert-picks]');
+    if (revertPicks) {
+      if (window.__prevPicks) {
+        picks = window.__prevPicks;
+        window.__prevPicks = null;
+        save('dieta.picks.v1', picks);
+        renderHoy();
+      }
       return;
     }
     var card = t.closest && t.closest('.meal-card');
