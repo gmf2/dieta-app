@@ -159,16 +159,16 @@ let MEALS = [
       { name: 'Requesón', grams: 95 }, { name: 'Fresas', grams: 150 }, { name: 'Nueces', grams: 40 }, { name: 'Pan integral', grams: 160 } ] },
   { id: 'n17', slot: 'cena', name: 'Burger de ternera con patata', kcal: 745, burger: true, tiempo: '25 min · sartén', components: [
       { name: 'Carne picada de ternera', grams: 125 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Patata', grams: 300 }, { name: 'Aceite de oliva', grams: 10 } ],
-    pasos: ['Forma una hamburguesa con la carne picada y hazla a la sartén con el aceite, 3-4 min por lado.', 'Monta el pan con el tomate y la ensalada; sirve con la patata asada o cocida.'] },
+    pasos: ['Forma una hamburguesa con la carne picada y hazla a la sartén con el aceite, 3-4 min por lado, hasta que el centro alcance 71 °C (termómetro de cocina).', 'Monta el pan con el tomate y la ensalada; sirve con la patata asada o cocida.'] },
   { id: 'n18', slot: 'cena', name: 'Burger de pollo con aguacate', kcal: 770, burger: true, tiempo: '25 min · sartén', components: [
       { name: 'Pollo picado', grams: 125 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Aguacate', grams: 75 }, { name: 'Tomate', grams: 120 }, { name: 'Boniato', grams: 150 }, { name: 'Aceite de oliva', grams: 10 } ],
-    pasos: ['Forma la burger con el pollo picado y hazla a la sartén con el aceite, 3-4 min por lado.', 'Monta con el aguacate y el tomate; acompaña de boniato asado.'] },
+    pasos: ['Forma la burger con el pollo picado y hazla a la sartén con el aceite, 3-4 min por lado, hasta que el centro alcance 74 °C (termómetro de cocina).', 'Monta el pan con el aguacate y el tomate; acompaña de boniato asado.'] },
   { id: 'n19', slot: 'cena', name: 'Burger de pavo con queso fresco', kcal: 755, burger: true, tiempo: '25 min · sartén', components: [
       { name: 'Pavo picado', grams: 150 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Queso fresco', grams: 40 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Patata', grams: 250 }, { name: 'Aceite de oliva', grams: 10 } ],
-    pasos: ['Forma la burger de pavo picado y hazla a la sartén con el aceite, 3-4 min por lado.', 'Monta con el queso fresco y el tomate; sirve con ensalada y patata.'] },
+    pasos: ['Forma la burger de pavo picado y hazla a la sartén con el aceite, 3-4 min por lado, hasta que el centro alcance 74 °C (termómetro de cocina).', 'Monta el pan con el queso fresco y el tomate; sirve con ensalada y patata.'] },
   { id: 'n20', slot: 'cena', name: 'Burger vegetal de lentejas', kcal: 755, burger: true, tiempo: '25 min · sartén', components: [
       { name: 'Lentejas cocidas', grams: 200 }, { name: 'Huevo', grams: 60 }, { name: 'Pan integral', grams: 30 }, { name: 'Pan de hamburguesa integral', grams: 65 }, { name: 'Tomate', grams: 120 }, { name: 'Ensalada', grams: 100 }, { name: 'Aceite de oliva', grams: 10 } ],
-    pasos: ['Tritura las lentejas con el huevo y la rebanada de pan, forma la burger y dórala en la sartén con el aceite.', 'Monta el pan de hamburguesa con el tomate y la ensalada.'] },
+    pasos: ['Tritura las lentejas con el huevo y la rebanada de pan, forma la burger y hazla a la sartén con el aceite, 3-4 min por lado, hasta que esté firme y el huevo bien cuajado.', 'Monta el pan de hamburguesa con el tomate y la ensalada.'] },
   { id: 'n21', slot: 'cena', name: 'Wrap de pollo, aguacate y hummus', kcal: 670, wrap: true, rapida: true, tiempo: '10 min · sin cocinar', components: [
       { name: 'Pollo a la plancha (cocido)', grams: 120 }, { name: 'Tortilla de trigo integral', grams: 60 }, { name: 'Aguacate', grams: 75 }, { name: 'Espinacas', grams: 100 }, { name: 'Hummus', grams: 45 } ],
     pasos: ['Unta la tortilla con el hummus.', 'Rellena con el pollo y las espinacas; enrolla y sirve con el aguacate en dados.'] },
