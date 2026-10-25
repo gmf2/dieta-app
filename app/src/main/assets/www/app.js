@@ -124,7 +124,9 @@
       if (plan.dp < -10) items = falta <= 150 ? [['Yogur griego natural', 125, 'un yogur griego natural']] : [['Yogur griego natural', 125, 'un yogur griego natural'], ['Fruta de temporada', 150, 'una pieza de fruta']];
       else if (falta <= 110) items = [['Fruta de temporada', 150, 'una pieza de fruta']];
       else if (falta <= 200) items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur']];
-      else items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur'], ['Nueces', 15, 'un puñado de nueces']];
+      else if (falta <= 320) items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur'], ['Nueces', 15, 'un puñado de nueces']];
+      else if (falta <= 410) items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur'], ['Pan integral', 60, 'dos rebanadas de pan integral'], ['Nueces', 15, 'un puñado de nueces']];
+      else items = [['Fruta de temporada', 150, 'una pieza de fruta'], ['Yogur natural', 125, 'un yogur'], ['Pan integral', 60, 'dos rebanadas de pan integral'], ['Nueces', 30, 'un puñado grande de nueces']];
     } else if (plan.dp < -10) {
       items = [['Yogur griego natural', 125, 'un yogur griego natural']];
       alt = ['Huevo', 60, 'un huevo'];
@@ -350,6 +352,31 @@
           '</div></button>';
       }).join('') + '</div>';
       var dp = window.__dayPlans && window.__dayPlans[slot];
+      var altLine = '';
+      if (dp && dp.plan && (Math.abs(dp.plan.dk) > 150 || Math.abs(dp.plan.dp) > 35 || dp.plan.vol > 1200)) {
+        var spSlot2 = Math.round(pgoal * psh[slot]);
+        var opts2 = classicsFor(month, slot);
+        if (monthRecipe) opts2 = opts2.concat([monthRecipe]);
+        var dayK = 0, dayP = 0;
+        ['desayuno', 'comida', 'cena'].forEach(function (s2) {
+          if (s2 === slot) return;
+          var d2 = window.__dayPlans[s2];
+          if (d2 && d2.plan) { dayK += d2.plan.kcal; dayP += d2.plan.protein; }
+        });
+        var bestAlt = null;
+        opts2.forEach(function (o2) {
+          if (o2.id === selected.id) return;
+          var pl2 = computePlan(o2, target, spSlot2);
+          if (Math.abs(pl2.dk) > 60 || Math.abs(pl2.dp) > 10 || pl2.vol > 1200) return;
+          var dK2 = dayK + pl2.kcal - r.target, dP2 = dayP + pl2.protein - pgoal;
+          if (Math.abs(dK2) > 100 || Math.abs(dP2) > 15) return;
+          var sc = Math.abs(pl2.dk) + 3 * Math.abs(pl2.dp);
+          if (!bestAlt || sc < bestAlt.sc) bestAlt = { o2: o2, dK2: dK2, dP2: dP2, sc: sc };
+        });
+        altLine = bestAlt
+          ? ' Alternativa que sí cuadra hoy con tu objetivo: <b>' + esc(bestAlt.o2.name) + '</b> (el día quedaría a ' + (bestAlt.dK2 > 0 ? '+' : '') + bestAlt.dK2 + ' kcal y ' + (bestAlt.dP2 > 0 ? '+' : '') + bestAlt.dP2 + ' g de proteína).'
+          : ' Ninguna otra opción de esta franja cierra hoy tu objetivo; la diferencia queda reflejada arriba.';
+      }
       html += (dp && dp.plan ? (function () {
         var plan = dp.plan;
         var rows = plan.items.map(function (it) {
@@ -363,7 +390,7 @@
         return '<div class="ing">' + rows +
           '<div class="cap">Cantidades calculadas para tu objetivo actual: este plato suma ~' + plan.kcal +
           ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
-                      avisoHTML(plan) +
+                      avisoHTML(plan) + altLine +
           ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>' +
           (selected.pasos ? '<ol class="steps">' + selected.pasos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' : '');
       })() : ingredientHTML(selected, target, r.target));
