@@ -937,7 +937,7 @@
           { n: 'Hollow body hold', s: '3 x 15 s', b: 5, lvl: 1, g: 'Core', p: 'plank', img: "skill-hollow" },
           { n: 'Hollow body con balanceo', s: '3 x 15 s', b: 5, lvl: 2, g: 'Core', p: 'plank', img: 'cal-hollow-balanceo-ia' },
           { n: 'De L-sit a pino', s: '3 x 3-4', b: 5, lvl: 3, g: 'Core · Skill', p: 'plank', img: 'cal-lsit-pino-secuencia' },
-          { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: null },
+          { n: 'Movilidad de muñecas y hombros', s: '2-3 min', b: 6, lvl: 1, g: 'Preparación', p: 'plank', img: 'cal-movilidad-munecas-hombros-ia' },
           { n: 'Estiramiento de hombros en pared', s: '2 x 30 s', b: 6, lvl: 2, g: 'Preparación', p: 'plank', img: "cal-hombros-pared" },
           { n: 'Puente (progresión suave)', s: '3 x 10 s', b: 6, lvl: 3, g: 'Preparación', p: 'plank', img: "cal-puente" } ] },
         { id: 'b6', nombre: 'Pierna y movilidad', nota: 'Sesión completa de pierna con calistenia. Elige UNA variante por bloque. Si tienes alguna lesión: limita el recorrido en sentadillas profundas y paso mono, y cambia las explosivas por la versión sin impacto (rápidas sin salto).', ej: [
