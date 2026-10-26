@@ -873,10 +873,10 @@
           { n: 'Dominada explosiva al pecho', s: '4 x 3-4', b: 2, lvl: 3, g: 'Tirón', p: 'pullup', img: 'cal-dominada-pecho-real' },
           { n: 'Australianas cerradas', s: '3 x 6-12', b: 3, lvl: 1, g: 'Espalda', p: 'row', img: "cal-remo-cerrado" },
           { n: 'Australianas mixtas', s: '3 x 6-12', b: 3, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-australianas-mixtas-ia' },
-          { n: 'Dominadas comando', s: '3 x 4-8', b: 3, lvl: 3, g: 'Espalda', p: 'pullup', img: null },
-          { n: 'Transición con pies apoyados', s: '3 x 4-6', b: 4, lvl: 1, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Dominadas comando', s: '3 x 4-8', b: 3, lvl: 3, g: 'Espalda', p: 'pullup', img: 'cal-comando-ia' },
+          { n: 'Transición con pies apoyados', s: '3 x 4-6', b: 4, lvl: 1, g: 'Técnica', p: 'pullup', img: 'cal-transicion-pies-ia' },
           { n: 'Transición con goma', s: '3 x 4-5', b: 4, lvl: 2, g: 'Técnica', p: 'pullup', img: null },
-          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', b: 4, lvl: 3, g: 'Técnica', p: 'pullup', img: null },
+          { n: 'Muscle up negativo (bajada lenta)', s: '3 x 3', b: 4, lvl: 3, g: 'Técnica', p: 'pullup', img: 'cal-muscleup-negativo-inicio-ia' },
           { n: 'Flexiones con parada abajo 2-3 s', s: '3 x 6-10', b: 5, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
           { n: 'Fondos en paralelas', s: '3 x 8-12', b: 5, lvl: 2, g: 'Empuje', p: 'dip', img: "skill-fondos" },
           { n: 'Fondos en barra recta', s: '3 x 5-8', b: 5, lvl: 3, g: 'Empuje', p: 'dip', img: "skill-fondos-barra" },
@@ -900,7 +900,7 @@
           { n: 'Remo en tuck front lever', s: '3 x 5-8', b: 5, lvl: 2, g: 'Espalda', p: 'row', img: 'cal-remo-tuck-ia' },
           { n: 'Remo en advanced tuck', s: '3 x 5', b: 5, lvl: 3, g: 'Espalda', p: 'row', img: 'cal-remo-advanced-ia' },
           { n: 'Negativa lenta de tuck a colgado (3-4 s)', s: '3 x 3', b: 6, lvl: 1, g: 'Excéntrico', p: 'pullup', img: null },
-          { n: 'Negativa de front lever (unos 5 s)', s: '3 x 3', b: 6, lvl: 2, g: 'Excéntrico', p: 'pullup', img: null },
+          { n: 'Negativa de front lever (unos 5 s)', s: '3 x 3', b: 6, lvl: 2, g: 'Excéntrico', p: 'pullup', img: 'cal-negativa-frontlever-5s-ia' },
           { n: 'Negativa de front lever (8-10 s)', s: '3 x 3', b: 6, lvl: 3, g: 'Excéntrico', p: 'pullup', img: null } ] },
         { id: 'b4', nombre: 'Meta: Straddle planche', nota: 'La straddle planche es la META: empieza cuando las flexiones te resulten fáciles. Sesión completa por bloques: elige UNA variante por bloque. Aquí la unidad es el mes, no la semana: paciencia, y cuida las muñecas (calienta antes).', ej: [
           { n: 'Planche lean (peso al frente, brazos rectos)', s: '4 x 15 s', b: 1, lvl: 1, g: 'Empuje', p: 'plank', img: 'cal-planchelean-real' },
@@ -909,7 +909,7 @@
           { n: 'Frog stand (equilibrio de rana)', s: '4 x 10-15 s', b: 2, lvl: 1, g: 'Equilibrio', p: 'plank', img: "skill-frog-stand" },
           { n: 'Crow pose (cuervo)', s: '3 x 15-20 s', b: 2, lvl: 2, g: 'Equilibrio', p: 'plank', img: "skill-frog-stand" },
           { n: 'Tuck planche hold', s: '3 x 8-12 s', b: 2, lvl: 3, g: 'Estático', p: 'plank', img: 'cal-tuckplanche-real' },
-          { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: null },
+          { n: 'Subidas a tuck planche', s: '3 x 3', b: 3, lvl: 1, g: 'Fuerza', p: 'plank', img: 'cal-subidas-tuck-planche-ia' },
           { n: 'Advanced tuck planche', s: '3 x 5-8 s', b: 3, lvl: 2, g: 'Estático', p: 'plank', img: 'cal-advanced-planche-ia' },
           { n: 'Straddle planche (intentos)', s: '5 intentos cortos', b: 3, lvl: 3, g: 'Skill', p: 'plank', img: 'cal-straddle-planche-ia' },
           { n: 'Flexiones', s: '3 x 10-15', b: 4, lvl: 1, g: 'Empuje', p: 'pushup', img: "cal-flexiones" },
@@ -958,7 +958,7 @@
           { n: 'Gemelos a una pierna en escalón', s: '3 x 10 por pierna', b: 5, lvl: 3, g: 'Gemelo', p: 'squat', img: "cal-gemelos-escalon" },
           { n: 'Movilidad de tobillo y cadera', s: '2-3 min', b: 6, lvl: 1, g: 'Movilidad', p: 'squat', img: 'cal-movilidad-tobillo-cadera' },
           { n: 'Movilidad de cadera + isquiotibiales', s: '2-3 min', b: 6, lvl: 2, g: 'Movilidad', p: 'squat', img: 'cal-cadera-isquio-secuencia' },
-          { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: null } ] }
+          { n: 'Movilidad global (flujo completo)', s: '5 min', b: 6, lvl: 3, g: 'Movilidad', p: 'squat', img: 'cal-movilidad-global-ia' } ] }
       ],
       B: null
     }
