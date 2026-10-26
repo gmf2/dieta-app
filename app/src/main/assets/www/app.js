@@ -885,7 +885,7 @@
           { n: 'Muscle up (intentos)', s: '5 intentos', b: 6, lvl: 3, g: 'Skill', p: 'pullup', img: "skill-muscleup-real" } ] },
         { id: 'b3', nombre: 'Meta: Front lever', nota: 'El front lever es la META: empieza con soltura en dominadas. Sesión completa por bloques: elige UNA variante por bloque. El trabajo de brazo recto carga tendones más que músculos y los tendones adaptan lento: quédate siempre a 1-2 segundos o reps de tu máximo, y sube de variante solo cuando la actual salga limpia.', ej: [
           { n: 'Colgado de barra con escápulas activas', s: '4 x 8-10 s', b: 1, lvl: 1, g: 'Base', p: 'pullup', img: "skill-colgado-activo" },
-          { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: null },
+          { n: 'Colgado en arco (arch hang)', s: '3 x 10-15 s', b: 1, lvl: 2, g: 'Base', p: 'pullup', img: 'cal-arch-hang-ia' },
           { n: 'Retracciones escapulares en barra', s: '3 x 6-8', b: 1, lvl: 3, g: 'Base', p: 'pullup', img: 'cal-retracciones-ia' },
           { n: 'Tuck front lever (rodillas al pecho)', s: '4 x 8-10 s', b: 2, lvl: 1, g: 'Estático', p: 'pullup', img: 'cal-tuck-frontlever-ia' },
           { n: 'Advanced tuck (espalda plana)', s: '3 x 8-15 s', b: 2, lvl: 2, g: 'Estático', p: 'pullup', img: 'cal-advanced-tuck-ia' },

@@ -500,5 +500,12 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra solo la posición de arriba de la flexión; no demuestra el recorrido de la flexión. Comprimida sin recorte."
+  },
+  "ex-cal-arch-hang-ia": {
+    "title": "Colgado en arco (arch hang)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra una postura de colgado en arco; no demuestra movimiento, duración ni activación muscular. Comprimida sin recorte."
   }
 }
