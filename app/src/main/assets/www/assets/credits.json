@@ -514,5 +514,47 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Dos posiciones de ejemplo para muñecas y hombros; no representan la rutina completa ni demuestran movimiento o duración. Comprimida sin recorte."
+  },
+  "ex-cal-subidas-tuck-planche-ia": {
+    "title": "Subidas a tuck planche",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo la posición elevada de tuck planche; no demuestra la subida ni el control del movimiento. Comprimida sin recorte."
+  },
+  "ex-cal-movilidad-global-ia": {
+    "title": "Movilidad global (flujo completo)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Dos posturas de ejemplo de movilidad; no representan el flujo completo ni demuestran movimiento o duración. Comprimida sin recorte."
+  },
+  "ex-cal-comando-ia": {
+    "title": "Dominadas comando",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo una posición alta a un lado de la barra; no demuestra la alternancia de lados. Comprimida sin recorte."
+  },
+  "ex-cal-negativa-frontlever-5s-ia": {
+    "title": "Negativa de front lever (unos 5 s)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo una posición intermedia de front lever; no demuestra la bajada ni su duración. Comprimida sin recorte."
+  },
+  "ex-cal-muscleup-negativo-inicio-ia": {
+    "title": "Muscle up negativo (bajada lenta)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo la posición inicial por encima de la barra; no demuestra la bajada lenta ni la transición. Comprimida sin recorte."
+  },
+  "ex-cal-transicion-pies-ia": {
+    "title": "Transición con pies apoyados",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo la posición tras el giro, con los pies apoyados; no demuestra la transición completa. Comprimida sin recorte."
   }
 }
