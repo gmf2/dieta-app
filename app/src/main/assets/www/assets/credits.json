@@ -507,5 +507,12 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra una postura de colgado en arco; no demuestra movimiento, duración ni activación muscular. Comprimida sin recorte."
+  },
+  "ex-cal-movilidad-munecas-hombros-ia": {
+    "title": "Movilidad de muñecas y hombros",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Dos posiciones de ejemplo para muñecas y hombros; no representan la rutina completa ni demuestran movimiento o duración. Comprimida sin recorte."
   }
 }
