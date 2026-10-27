@@ -556,5 +556,82 @@
     "license": "Generada por IA",
     "generated_ai": true,
     "changes": "Muestra solo la posición tras el giro, con los pies apoyados; no demuestra la transición completa. Comprimida sin recorte."
+  },
+  "ex-cal-lsit-tuck-ia": {
+    "title": "De L-sit a tuck planche",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo el L-sit inicial; no demuestra la transición a tuck planche. Comprimida sin recorte."
+  },
+  "ex-cal-subidas-advanced-tuck-ia": {
+    "title": "Subidas a advanced tuck",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo la posición elevada; no demuestra la subida. Comprimida sin recorte."
+  },
+  "ex-cal-planchelean-maximo-ia": {
+    "title": "Planche lean máximo controlado",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura de inclinación; no demuestra el esfuerzo máximo ni el control. Comprimida sin recorte."
+  },
+  "ex-cal-subidas-tuck-frontlever-ia": {
+    "title": "Subidas a tuck front lever",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la posición elevada con piernas recogidas; no demuestra la subida. Comprimida sin recorte."
+  },
+  "ex-cal-transicion-goma-ia": {
+    "title": "Transición con goma",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra el apoyo final sobre la barra con goma; no demuestra el giro. Comprimida sin recorte."
+  },
+  "ex-cal-salidas-pino-ia": {
+    "title": "Salidas de pino (práctica 5 min)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la fase final de una salida lateral; no demuestra la salida completa ni la duración. Comprimida sin recorte."
+  },
+  "ex-cal-underswitch-ia": {
+    "title": "Under switch (cambio de apoyo)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra tres fases del cambio de apoyo y giro; no es un movimiento continuo. Comprimida sin recorte."
+  },
+  "ex-cal-dominada-alta-ia": {
+    "title": "Dominada alta con balanceo controlado",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo la posición alta; no demuestra el balanceo. Comprimida sin recorte."
+  },
+  "ex-cal-negativa-tuck-colgado-ia": {
+    "title": "Negativa lenta de tuck a colgado (3-4 s)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra la postura inicial y la final; no demuestra la bajada ni los 3-4 s. Comprimida sin recorte."
+  },
+  "ex-cal-negativa-dominada-frontlever-ia": {
+    "title": "Negativa de dominada a front lever",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra las dos posturas extremas; no demuestra el recorrido entre ellas. Comprimida sin recorte."
+  },
+  "ex-cal-negativa-frontlever-8s-ia": {
+    "title": "Negativa de front lever (8-10 s)",
+    "artist": "Ilustración generada con IA para NutriSport",
+    "license": "Generada por IA",
+    "generated_ai": true,
+    "changes": "Muestra solo una postura horizontal intermedia; no demuestra la bajada ni los 8-10 s. Comprimida sin recorte."
   }
 }
