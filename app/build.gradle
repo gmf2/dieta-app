@@ -10,8 +10,25 @@ android {
         applicationId "com.gabriel.dieta"
         minSdk 24
         targetSdk 34
-        versionCode 1
+        // versionCode monotono por run de ESTE workflow (instalada actual: 1; cada run suma)
+        versionCode Integer.parseInt(System.getenv('GITHUB_RUN_NUMBER') ?: '1') + 1000
         versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('KEYSTORE_FILE'))
+            storePassword System.getenv('KEYSTORE_PASS')
+            keyAlias 'nutrisport'
+            keyPassword System.getenv('KEYSTORE_PASS')
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
     }
 
     compileOptions {
