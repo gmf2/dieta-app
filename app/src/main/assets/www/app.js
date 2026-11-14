@@ -5,7 +5,7 @@
   var PHOTO_CREDITS = {};
   fetch('assets/credits.json').then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
     PHOTO_CREDITS = j;
-    if (location.hash === '#perfil' || !location.hash) { try { renderPerfil(); } catch (e) {} }
+    refresh('perfil');
   }).catch(function () {});
 
   var DEFAULT_PROFILE = { peso: 80, altura: 175, edad: 30, sexo: 'hombre', deporte: 3, objetivo: 'mantener' };
@@ -105,7 +105,7 @@
   function findOption(id) { return MEALS.concat(RECIPES).find(function (o) { return o.id === id; }); }
   function slotTarget(r, slot) { return Math.round(r.target * SLOT_SHARE[slot] / 10) * 10; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  function photoFor(o) { return PHOTO_IDS[o.id] ? 'assets/' + o.id + '.jpg' : null; }
+  function photoFor(o) { return PHOTO_IDS[o.id] ? 'assets/' + o.id + '.webp' : null; }
   function regKcal(v) { return (v && typeof v === 'object') ? v.kcal : v; }
   function quickTag(o) {
     var tp = (o.tiempo || '').split(' · ');
@@ -190,9 +190,10 @@
 
   /* ---------- Perfil ---------- */
   function numField(label, key, min, max, unit) {
+    var dec = key === 'peso';
     return '<div class="field"><div class="f-top"><span>' + label + '</span>' +
-      '<span class="num-wrap"><input class="num-input" type="number" inputmode="numeric" pattern="[0-9]*" min="' + min + '" max="' + max +
-      '" value="' + profile[key] + '" data-key="' + key + '" data-unit="' + unit + '"><span class="num-unit">' + unit + '</span></span></div>' +
+      '<span class="num-wrap"><input class="num-input" type="' + (dec ? 'text' : 'number') + '" inputmode="' + (dec ? 'decimal' : 'numeric') + '"' + (dec ? '' : ' pattern="[0-9]*"') + ' min="' + min + '" max="' + max +
+      '" value="' + String(profile[key]).replace('.', ',') + '" data-key="' + key + '" data-unit="' + unit + '"><span class="num-unit">' + unit + '</span></span></div>' +
       '<input type="range" min="' + min + '" max="' + max + '" value="' + profile[key] + '" data-key="' + key + '" data-unit="' + unit + '"></div>';
   }
   function segField(key, options) {
@@ -459,7 +460,7 @@
               var bc = window.DayPlan.bestCombo(cand.desayuno, cand.comida, cand.cena, r.target, pgoal);
               window.__dayPlanCache = { key: cacheKeyHoy, res: { best: bc.best, combos: bc.combos, cand: cand } };
               window.__dayBuilding = null;
-              renderHoy();
+              refresh('hoy');
             }
           ];
           var runStep = function () {
@@ -997,7 +998,7 @@
   function exThumb(x) {
     var svg = '<div class="ex-svg" role="img" aria-label="Foto pendiente de verificación">' + exSVG(x.p) + '</div>';
     if (!x.img) return '<div class="ex-photo-pending">' + svg + '<small>Foto pendiente</small></div>';
-    return '<img class="ex-thumb" src="assets/ex-' + x.img + '.jpg" alt="' + esc(x.n) + '" loading="lazy" onerror="this.outerHTML=this.dataset.fb" data-fb="' + svg.replace(/"/g, '&quot;') + '">';
+    return '<img class="ex-thumb" src="assets/ex-' + x.img + '.webp" alt="' + esc(x.n) + '" loading="lazy" onerror="this.outerHTML=this.dataset.fb" data-fb="' + svg.replace(/"/g, '&quot;') + '">';
   }
   function renderEntreno() {
     var mIdx = new Date().getMonth();
@@ -1161,38 +1162,90 @@
     document.getElementById('tab-progreso').innerHTML = html;
   }
 
-  function renderAll() { renderHero(); renderPerfil(); renderHoy(); renderRecetas(); renderProgreso(); renderEntreno(); }
+  var currentTab = 'hoy';
+  var dirtyTabs = { perfil: true, hoy: true, recetas: true, progreso: true, entreno: true };
+  var TAB_RENDER = { perfil: renderPerfil, hoy: renderHoy, recetas: renderRecetas, progreso: renderProgreso, entreno: renderEntreno };
+  function paintTab(tab) {
+    if (!dirtyTabs[tab]) return;
+    dirtyTabs[tab] = false;
+    try { TAB_RENDER[tab](); } catch (e) { dirtyTabs[tab] = true; }
+  }
+  function refresh(tab) { dirtyTabs[tab] = true; if (tab === currentTab) paintTab(tab); }
+  function renderAll() {
+    renderHero();
+    Object.keys(dirtyTabs).forEach(function (t) { dirtyTabs[t] = true; });
+    paintTab(currentTab);
+  }
 
   /* ---------- Eventos ---------- */
-  function onProfileChange(key, val) {
-    val = parseInt(val, 10);
-    if (isNaN(val)) return;
-    var lim = { peso: [40, 150], altura: [140, 210], edad: [16, 90], deporte: [0, 7] }[key];
+  var FIELD_LIMS = { peso: [40, 150], altura: [140, 210], edad: [16, 90], deporte: [0, 7] };
+  function normVal(key, val) {
+    var lim = FIELD_LIMS[key];
     if (lim) val = Math.min(lim[1], Math.max(lim[0], val));
-    profile[key] = val;
+    return key === 'peso' ? Math.round(val * 10) / 10 : Math.round(val);
+  }
+  function repaintLater(includePerfil) {
+    clearTimeout(window.__rt);
+    window.__rt = setTimeout(function () {
+      if (includePerfil) refresh('perfil');
+      refresh('hoy'); refresh('recetas'); refresh('progreso'); refresh('entreno');
+    }, 400);
+  }
+  function onProfileChange(key, val) {
+    if (isNaN(val)) return;
+    profile[key] = normVal(key, val);
     save('dieta.perfil.v1', profile);
     renderHero();
-    clearTimeout(window.__rt);
-    window.__rt = setTimeout(function () { renderPerfil(); renderHoy(); renderRecetas(); renderProgreso(); renderEntreno(); }, 400);
+    repaintLater(true);
   }
 
   document.addEventListener('input', function (e) {
     var key = e.target.getAttribute && e.target.getAttribute('data-key');
     if (!key) return;
-    onProfileChange(key, e.target.value);
     if (e.target.type === 'range') {
+      onProfileChange(key, parseFloat(e.target.value));
       var inp = document.querySelector('.num-input[data-key="' + key + '"]');
-      if (inp) inp.value = e.target.value;
-    } else {
-      var rng = document.querySelector('input[type=range][data-key="' + key + '"]');
-      if (rng) rng.value = e.target.value;
+      if (inp) inp.value = String(profile[key]).replace('.', ',');
+      return;
     }
+    /* Campo numerico a mano: mientras se escribe se admiten estados intermedios
+       (vacio, "7" camino de "75", decimales con coma o punto) sin guardar ni
+       repintar la pantalla; el valor se confirma al salir del campo. */
+    var raw = String(e.target.value).trim();
+    if (raw === '') return;
+    var val = parseFloat(raw.replace(',', '.'));
+    if (isNaN(val)) return;
+    var lim = FIELD_LIMS[key];
+    if (lim && (val < lim[0] || val > lim[1])) return;
+    if (key !== 'peso' && !Number.isInteger(val)) return;
+    profile[key] = normVal(key, val);
+    save('dieta.perfil.v1', profile);
+    renderHero();
+    var rng = document.querySelector('input[type=range][data-key="' + key + '"]');
+    if (rng) rng.value = profile[key];
+    repaintLater(false);
+  });
+
+  document.addEventListener('change', function (e) {
+    var key = e.target.getAttribute && e.target.getAttribute('data-key');
+    if (!key || e.target.type === 'range') return;
+    var raw = String(e.target.value).trim();
+    var val = parseFloat(raw.replace(',', '.'));
+    if (raw === '' || isNaN(val)) {
+      e.target.value = String(profile[key]).replace('.', ',');
+      return;
+    }
+    profile[key] = normVal(key, val);
+    save('dieta.perfil.v1', profile);
+    e.target.value = String(profile[key]).replace('.', ',');
+    renderHero();
+    repaintLater(true);
   });
 
   function openLightbox(src, alt) {
     var ov = document.createElement('div');
     ov.className = 'lb-overlay';
-    var photoKey = src.split('/').pop().replace(/\.jpg$/, '');
+    var photoKey = src.split('/').pop().replace(/\.(jpg|jpeg|png|webp)$/, '');
     var credit = PHOTO_CREDITS[photoKey];
     var mealIllustration = ["d1", "d3", "c2", "d5", "d8", "n7", "n13", "n14", "n16", "r-feb-n", "r-mar-n", "r-may-n", "r-jul-n", "r-oct-c", "r-nov-n", "r-dic-d", "r-dic-c"].indexOf(photoKey) !== -1;
     var creditHtml = credit ? '<div class="lb-credit">' + esc(credit.artist || '') + (credit.url ? ' · <a href="' + credit.url + '" target="_blank" rel="noopener">' + esc(credit.license || '') + '</a>' : ' · ' + esc(credit.license || '')) + (credit.license_url ? ' · <a href="' + credit.license_url + '" target="_blank" rel="noopener">Licencia</a>' : '') + (credit.changes ? '<br>' + esc(credit.changes) : '') + '</div>' : (mealIllustration ? '<div class="lb-credit">Imagen ilustrativa generada. Ingredientes según la receta; cantidades de la foto no equivalen a la ración calculada.</div>' : '');
@@ -1207,7 +1260,9 @@
     if (nav) {
       document.querySelectorAll('nav.tabs button').forEach(function (b) { b.classList.toggle('active', b === nav); });
       document.querySelectorAll('section.tab').forEach(function (s) { s.classList.remove('active'); });
-      document.getElementById('tab-' + nav.getAttribute('data-tab')).classList.add('active');
+      currentTab = nav.getAttribute('data-tab');
+      document.getElementById('tab-' + currentTab).classList.add('active');
+      paintTab(currentTab);
       window.scrollTo(0, 0);
       return;
     }
@@ -1220,16 +1275,16 @@
     if (eqBtn) {
       equipo = eqBtn.getAttribute('data-equipo');
       save('dieta.equipo.v1', equipo);
-      renderEntreno();
+      refresh('entreno');
       return;
     }
-    if (t.closest && t.closest('[data-tut]')) { tutOpen = !tutOpen; renderEntreno(); return; }
+    if (t.closest && t.closest('[data-tut]')) { tutOpen = !tutOpen; refresh('entreno'); return; }
     var hoyT = t.closest && t.closest('[data-hoy-toggle]');
     if (hoyT) {
       var hs = hoyT.getAttribute('data-hoy-toggle');
       hoyOpen[hs] = !hoyOpen[hs];
       save('dieta.hoyopen.v1', hoyOpen);
-      renderHoy();
+      refresh('hoy');
       return;
     }
     var sesT = t.closest && t.closest('[data-ses-toggle]');
@@ -1237,18 +1292,18 @@
       var sk = sesT.getAttribute('data-ses-toggle');
       sesOpen[sk] = !sesOpen[sk];
       save('dieta.sesopen.v1', sesOpen);
-      renderEntreno();
+      refresh('entreno');
       return;
     }
     var startS = t.closest && t.closest('[data-start-session]');
-    if (startS) { entrenoActivo = startS.getAttribute('data-start-session'); window.__exChecks = {}; renderEntreno(); return; }
+    if (startS) { entrenoActivo = startS.getAttribute('data-start-session'); window.__exChecks = {}; refresh('entreno'); return; }
     var cancelS = t.closest && t.closest('[data-cancel-session]');
-    if (cancelS) { entrenoActivo = null; renderEntreno(); return; }
+    if (cancelS) { entrenoActivo = null; refresh('entreno'); return; }
     var exChk = t.closest && t.closest('[data-ex-check]');
     if (exChk) {
       var j = exChk.getAttribute('data-ex-check');
       window.__exChecks[j] = !window.__exChecks[j];
-      renderEntreno();
+      refresh('entreno');
       return;
     }
     var compS = t.closest && t.closest('[data-complete-session]');
@@ -1256,7 +1311,7 @@
       sesiones[todayIso()] = compS.getAttribute('data-complete-session');
       save('dieta.sesiones.v1', sesiones);
       entrenoActivo = null;
-      renderEntreno();
+      refresh('entreno');
       return;
     }
     var seg = t.closest && t.closest('.seg button');
@@ -1275,7 +1330,7 @@
         picks[kv[0]] = kv[1];
       });
       save('dieta.picks.v1', picks);
-      renderHoy();
+      refresh('hoy');
       return;
     }
     var revertPicks = t.closest && t.closest('[data-revert-picks]');
@@ -1284,7 +1339,7 @@
         picks = window.__prevPicks;
         window.__prevPicks = null;
         save('dieta.picks.v1', picks);
-        renderHoy();
+        refresh('hoy');
       }
       return;
     }
@@ -1292,7 +1347,7 @@
     if (card) {
       picks[card.getAttribute('data-slot')] = card.getAttribute('data-id');
       save('dieta.picks.v1', picks);
-      renderHoy();
+      refresh('hoy');
       return;
     }
     var doneBtn = t.closest && t.closest('[data-done]');
@@ -1314,14 +1369,14 @@
       }
       registro[tIso] = dayLog;
       save('dieta.registro.v1', registro);
-      renderHoy(); renderRecetas(); renderProgreso();
+      refresh('hoy'); refresh('recetas'); refresh('progreso');
       return;
     }
     var use = t.closest && t.closest('[data-use]');
     if (use) {
       picks[use.getAttribute('data-slot')] = use.getAttribute('data-use');
       save('dieta.picks.v1', picks);
-      renderHoy(); renderRecetas();
+      refresh('hoy'); refresh('recetas');
       return;
     }
     var hm = t.closest && t.closest('[data-hm]');
@@ -1342,8 +1397,8 @@
       document.getElementById('photoInput').click();
       return;
     }
-    if (t.id === 'mPrev') { viewM--; if (viewM < 0) { viewM = 11; viewY--; } renderRecetas(); return; }
-    if (t.id === 'mNext') { viewM++; if (viewM > 11) { viewM = 0; viewY++; } renderRecetas(); return; }
+    if (t.id === 'mPrev') { viewM--; if (viewM < 0) { viewM = 11; viewY--; } refresh('recetas'); return; }
+    if (t.id === 'mNext') { viewM++; if (viewM > 11) { viewM = 0; viewY++; } refresh('recetas'); return; }
     if (t.id === 'btnCheckin') {
       var iso = todayIso();
       var rr2 = compute(profile);
@@ -1352,10 +1407,10 @@
         deporte: profile.deporte, objetivo: profile.objetivo, sexo: profile.sexo,
         target: rr2.target, bmr: rr2.bmr, tdee: rr2.tdee, prot: proteinGoal(profile) });
       save('dieta.revisiones.v1', checkins);
-      renderPerfil(); renderProgreso();
+      refresh('perfil'); refresh('progreso');
       return;
     }
-    if (t.id === 'btnUndoCheckin') { checkins.pop(); save('dieta.revisiones.v1', checkins); renderPerfil(); renderProgreso(); return; }
+    if (t.id === 'btnUndoCheckin') { checkins.pop(); save('dieta.revisiones.v1', checkins); refresh('perfil'); refresh('progreso'); return; }
   });
 
   document.getElementById('photoInput').addEventListener('change', function (e) {
@@ -1383,7 +1438,7 @@
             delete fotos[ks[0]];
           }
         }
-        renderProgreso();
+        refresh('progreso');
       };
       img.src = rd.result;
     };
@@ -1392,7 +1447,8 @@
   });
 
   var initial = (location.hash || '').replace('#', '');
-  if (['perfil', 'hoy', 'recetas', 'historial', 'progreso', 'entreno'].indexOf(initial) >= 0) {
+  if (['perfil', 'hoy', 'recetas', 'progreso', 'entreno'].indexOf(initial) >= 0 && document.getElementById('tab-' + initial)) {
+    currentTab = initial;
     document.querySelectorAll('nav.tabs button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === initial); });
     document.querySelectorAll('section.tab').forEach(function (s) { s.classList.remove('active'); });
     document.getElementById('tab-' + initial).classList.add('active');
