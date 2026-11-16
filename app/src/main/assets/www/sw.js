@@ -1,10 +1,10 @@
-/* NutriSport SW v12: shell precargado minimo + fotos en cache persistente bajo demanda.
+/* NutriSport SW v13: shell precargado minimo + fotos en cache persistente bajo demanda.
    Antes: precache de TODAS las fotos (~24 MB) en la primera visita y en cada version.
    Ahora: primera visita ~0,4 MB; cada foto se descarga solo cuando se ve y queda
    guardada entre versiones (IMG_CACHE no se borra al actualizar). */
-const SHELL_CACHE = "nutrisport-shell-v12-20261114";
+const SHELL_CACHE = "nutrisport-shell-v13-20261116";
 const IMG_CACHE = "nutrisport-img-v1";
-const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./data.js", "./dayplan.js", "./manifest.webmanifest", "./icon-192.png", "./icon-180.png", "./icon-512.png", "./assets/hero.webp", "./assets/credits.json"];
+const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./data.js", "./dayplan.js", "./solver-worker.js", "./manifest.webmanifest", "./icon-192.png", "./icon-180.png", "./icon-512.png", "./assets/hero.webp", "./assets/credits.json"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(SHELL_CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
