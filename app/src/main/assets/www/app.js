@@ -154,7 +154,8 @@
 
   function ingredientHTML(option, targetKcal, dayTarget, protOverride) {
     var protSlot = protOverride || Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
-    var plan = computePlan(option, targetKcal, protSlot);
+    var plan = requestRecipePlan(option, targetKcal, protSlot);
+    if (!plan) return '<div class="ing"><div class="cap js-pending">' + (planErrors[option.id+'|'+targetKcal+'|'+protSlot] ? 'No se pudo calcular. Cambia de pantalla para reintentar.' : 'Calculando cantidades…') + '</div></div>';
     var rows = plan.items.map(function (it) {
       var g = it.grams;
       var kcal = Math.round(ING[it.name].k * g / 100);
@@ -168,11 +169,6 @@
       ' kcal y ~' + plan.protein + ' g de proteína. Las piezas van enteras.' +
               avisoHTML(plan) +
       ' Pesos en crudo salvo que ponga «cocido»: el arroz y las legumbres secas casi triplican su volumen al cocerse. Valores de composición del USDA.</div></div>';
-  }
-
-  function optionProtein(option, targetKcal, dayTarget) {
-    var protSlot = Math.round(proteinGoal(profile) * targetKcal / (dayTarget || 1));
-    return computePlan(option, targetKcal, protSlot).protein;
   }
 
   /* ---------- Hero ---------- */
@@ -273,6 +269,70 @@
     document.getElementById('tab-perfil').innerHTML = html + creditsHtml;
   }
 
+
+  // All nutrition searches run off the UI thread, including cached recipe details.
+  var solverWorker, solverSeq = 0, solverPending = {}, solverContext = '';
+  var planCache = {}, planWaiting = {}, planErrors = {};
+  function startSolver() {
+    var url = URL.createObjectURL(new Blob(['(' + window.NutriSolverSource.toString() + ')();'], {type:'text/javascript'}));
+    solverWorker = new Worker(url);
+    URL.revokeObjectURL(url);
+    solverWorker.onmessage = function(e) {
+      var pending = solverPending[e.data.id];
+      if (!pending) return;
+      delete solverPending[e.data.id];
+      if (e.data.error) pending.reject(new Error(e.data.error)); else pending.resolve(e.data.result);
+    };
+    solverWorker.onerror = function() {
+      Object.keys(solverPending).forEach(function(id) { solverPending[id].reject(new Error('No se pudo calcular. Vuelve a intentarlo.')); });
+      solverPending = {}; solverWorker.terminate(); solverWorker = null;
+    };
+  }
+  function solverRequest(type, args) {
+    return new Promise(function(resolve, reject) {
+      try {
+        if (!solverWorker) startSolver();
+        var id = ++solverSeq;
+        solverPending[id] = {resolve:resolve,reject:reject};
+        solverWorker.postMessage({id:id,type:type,args:args});
+      } catch(e) { reject(e); }
+    });
+  }
+  function cancelOldSolver(key) {
+    if (solverContext === key) return;
+    solverContext = key;
+    if (solverWorker) solverWorker.terminate();
+    solverWorker = null;
+    Object.keys(solverPending).forEach(function(id) { solverPending[id].reject(new Error('superseded')); });
+    solverPending = {}; planWaiting = {};
+    window.__fitRunning = null; window.__dayBuilding = null;
+  }
+  function solverOptions(m) {
+    var options = {};
+    ['desayuno','comida','cena'].forEach(function(slot) {
+      options[slot] = classicsFor(m, slot).map(function(o) { return o.id; });
+      var mr=RECIPES.find(function(o) { return o.month===m && o.slot===slot; });
+      if(mr) options[slot].push(mr.id);
+    });
+    return options;
+  }
+  function requestRecipePlan(option, sk, sp) {
+    var key = option.id + '|' + sk + '|' + sp;
+    if (planCache[key]) return planCache[key];
+    if (planErrors[key]) return null;
+    if (!planWaiting[key]) {
+      planWaiting[key] = true;
+      solverRequest('plan',{id:option.id,sk:sk,sp:sp}).then(function(plan) {
+        planCache[key] = plan; delete planWaiting[key];
+        clearTimeout(window.__recipePaint);
+        window.__recipePaint = setTimeout(function() { refresh('recetas'); }, 80);
+      }).catch(function(e) {
+        delete planWaiting[key];
+        if(e.message!=='superseded') { planErrors[key]=true; refresh('recetas'); }
+      });
+    }
+    return null;
+  }
   /* ---------- Hoy ---------- */
 
   /* Clasificacion asincrona de tarjetas: pinta primero y etiqueta despues,
@@ -300,7 +360,8 @@
         window.__markTags = performance.now(); // prototipo: medir fin de etiquetas
         return;
       }
-      var ev = window.__dayEval(item.slot, item.o);
+      solverRequest('eval', {slot:item.slot,id:item.o.id,picks:Object.assign({},picks),ctx:window.__ctx}).then(function(ev) {
+      if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKey) return;
       var entry;
       if (Math.abs(ev.dk) > 150 || Math.abs(ev.dp) > 35 || ev.plan.vol > 1200)
         entry = { rank: 2, html: '<div class="m-tag nofit">No cierra tu día: quedaría a ' + desv(ev.dk, ev.dp) + '</div>', dk: ev.dk, dp: ev.dp, vol: ev.plan.vol };
@@ -315,6 +376,7 @@
         if (entry.html) btn.insertAdjacentHTML('afterbegin', entry.html);
       }
       setTimeout(step, 0);
+      }).catch(function(e) { if(e.message!=='superseded') console.error(e); });
     };
     setTimeout(step, 0);
   }
@@ -353,31 +415,9 @@
     if (!dia) return;
     if (Math.abs(dia.dk) <= 70 && Math.abs(dia.dp) <= 10) return; // dia ajustado: sin propuesta
     var ctx = window.__ctx;
-    var slots = ['desayuno', 'comida', 'cena'];
     var labels = { desayuno: 'Desayuno', comida: 'Comida', cena: 'Cena' };
-    var optsBySlot = {};
-    slots.forEach(function (slot) {
-      var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
-      var options = classicsFor(month, slot);
-      if (monthRecipe) options = options.concat([monthRecipe]);
-      optsBySlot[slot] = options.filter(function (o) { return o.id !== picks[slot]; });
-    });
-    var best = null;
-    for (var i = 0; i < 3; i++) for (var j = i + 1; j < 3; j++) {
-      var si = slots[i], sj = slots[j], sk2 = slots[3 - i - j];
-      optsBySlot[si].forEach(function (oA) {
-        var cA = window.__candOf(oA, si);
-        optsBySlot[sj].forEach(function (oB) {
-          var cB = window.__candOf(oB, sj);
-          var cd = si === 'desayuno' ? cA : (sj === 'desayuno' ? cB : window.__candOf(findOption(picks.desayuno), 'desayuno'));
-          var cc = si === 'comida' ? cA : (sj === 'comida' ? cB : window.__candOf(findOption(picks.comida), 'comida'));
-          var cn = si === 'cena' ? cA : (sj === 'cena' ? cB : window.__candOf(findOption(picks.cena), 'cena'));
-          var b = window.DayPlan.bestCombo(cd, cc, cn, ctx.target, ctx.pgoal).best;
-          var e = Math.abs(b.dk) + 3 * Math.abs(b.dp);
-          if (!best || e < best.e - 1e-9) best = { e: e, dk: b.dk, dp: b.dp, si: si, sj: sj, oA: oA, oB: oB, volOK: b.desayuno.vol <= 1200 && b.comida.vol <= 1200 && b.cena.vol <= 1200 };
-        });
-      });
-    }
+    solverRequest('joint',{picks:Object.assign({},picks),ctx:ctx,options:solverOptions(month)}).then(function(best) {
+    if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKey) return;
     var html;
     if (best && best.volOK && Math.abs(best.dk) <= 70 && Math.abs(best.dp) <= 10) {
       html = '<div class="note">Con dos cambios se ajusta: ' + labels[best.si] + ' → <b>' + esc(best.oA.name) + '</b> y ' + labels[best.sj] + ' → <b>' + esc(best.oB.name) + '</b> (tu día quedaría a ' + (best.dk > 0 ? '+' : '') + best.dk + ' kcal y ' + (best.dp > 0 ? '+' : '') + best.dp + ' g de proteína).</div>' +
@@ -388,6 +428,7 @@
     window.__fitCache[cacheKey].__joint = html || '';
     var box = document.getElementById('jointProp');
     if (box) box.innerHTML = html || '';
+    }).catch(function(e) { if(e.message!=='superseded') console.error(e); });
   }
 
   function renderHoy() {
@@ -402,77 +443,34 @@
        marcados y con alternativa verificada contra el día completo. */
     var pgoal = proteinGoal(profile);
     var psh = PSHARE[profile.objetivo] || PSHARE.mantener;
-    // Validar picks ANTES de precomputar planes: un pick obsoleto (otro mes)
-    // dibujaba la ficha de un plato y el detalle de otro.
-    ['desayuno', 'comida', 'cena'].forEach(function (slot) {
-      var opts0 = classicsFor(month, slot);
-      var mr0 = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
-      if (mr0) opts0 = opts0.concat([mr0]);
-      if (!opts0.some(function (o) { return o.id === picks[slot]; })) {
-        /* Pick por defecto: la opcion que mejor cuadra con el objetivo del perfil
-           (antes era siempre la primera del mes, pudiera quedar muy desviada). */
-        var sk0 = slotTarget(r, slot), sp0 = Math.round(pgoal * psh[slot]);
-        var bestO = opts0[0], bestE = Infinity;
-        opts0.forEach(function (o) {
-          var pl0 = computePlan(o, sk0, sp0);
-          var e0 = Math.abs(pl0.dk) + 3 * Math.abs(pl0.dp);
-          if (e0 < bestE - 1e-9) { bestE = e0; bestO = o; }
-        });
-        picks[slot] = bestO.id;
-      }
-    });
-    // Ajuste a nivel de dia (prototipo exp-ajuste-diario): los platos elegidos
-    // nunca cambian; solo se compensan las CANTIDADES entre comidas para cerrar
-    // el dia. Cacheado por perfil+picks+mes para no recalcular en cada render.
     var dayPlans = {};
     var dayReady = false;
     var cacheKeyHoy = JSON.stringify({ t: r.target, p: pgoal, pk: picks, m: month });
+    cancelOldSolver(cacheKeyHoy);
     (function () {
-      // Candidatos por opcion memoizados por objetivo: NO dependen de los picks,
-      // asi que cambiar de plato solo recalcula la combinacion del dia.
-      var tgtKey = r.target + '|' + pgoal;
-      if (!window.__candCache || window.__candCache.key !== tgtKey) window.__candCache = { key: tgtKey, byOpt: {} };
-      var KSH = window.DayPlan.KSH;
-      window.__candOf = function (o, slot) {
-        var hit = window.__candCache.byOpt[o.id];
-        if (!hit) {
-          hit = window.DayPlan.slotCandidates(o, ING, PROT_ANCHORS, computePlan,
-            Math.round(r.target * KSH[slot] / 10) * 10, Math.round(pgoal * KSH[slot]));
-          window.__candCache.byOpt[o.id] = hit;
-        }
-        return hit;
-      };
       if (!window.__dayPlanCache || window.__dayPlanCache.key !== cacheKeyHoy) {
-        // Construccion asincrona por pasos: la interfaz pinta el esqueleto ya
-        // (sin cantidades ni etiquetas definitivas) y el calculo no la bloquea.
         if (window.__dayBuilding !== cacheKeyHoy) {
           window.__dayBuilding = cacheKeyHoy;
-          var steps = [
-            function () { window.__candOf(findOption(picks.desayuno), 'desayuno'); },
-            function () { window.__candOf(findOption(picks.comida), 'comida'); },
-            function () { window.__candOf(findOption(picks.cena), 'cena'); },
-            function () {
-              var cand = {
-                desayuno: window.__candOf(findOption(picks.desayuno), 'desayuno'),
-                comida: window.__candOf(findOption(picks.comida), 'comida'),
-                cena: window.__candOf(findOption(picks.cena), 'cena')
-              };
-              var bc = window.DayPlan.bestCombo(cand.desayuno, cand.comida, cand.cena, r.target, pgoal);
-              window.__dayPlanCache = { key: cacheKeyHoy, res: { best: bc.best, combos: bc.combos, cand: cand } };
-              window.__dayBuilding = null;
-              refresh('hoy');
-            }
-          ];
-          var runStep = function () {
-            if (window.__dayBuilding !== cacheKeyHoy) return; // obsoleto: otro render manda
-            var s = steps.shift();
-            if (!s) return;
-            s();
-            if (steps.length) setTimeout(runStep, 0);
-          };
-          setTimeout(runStep, 0);
+          var targets={}, proteins={};
+          ['desayuno','comida','cena'].forEach(function(slot) { targets[slot]=slotTarget(r,slot); proteins[slot]=Math.round(pgoal*psh[slot]); });
+          solverRequest('day',{picks:Object.assign({},picks),options:solverOptions(month),targets:targets,proteins:proteins,ctx:{target:r.target,pgoal:pgoal}}).then(function(res) {
+            if (window.__dayBuilding !== cacheKeyHoy) return;
+            var liveKey=JSON.stringify({t:compute(profile).target,p:proteinGoal(profile),pk:picks,m:month});
+            if(liveKey!==cacheKeyHoy) { window.__dayBuilding=null; return; }
+            picks = res.picks;
+            var resolvedKey = JSON.stringify({ t:r.target,p:pgoal,pk:picks,m:month });
+            solverContext = resolvedKey;
+            window.__dayPlanCache = {key:resolvedKey,res:res};
+            window.__dayBuilding = null;
+            refresh('hoy');
+          }).catch(function(e) {
+            if(e.message==='superseded') return;
+            window.__dayBuilding = null;
+            document.querySelectorAll('#tab-hoy .js-pending').forEach(function(box) { box.textContent='No se pudo calcular. Cambia de pantalla para reintentar.'; });
+            dirtyTabs.hoy=true;
+          });
         }
-        return; // esqueleto provisional
+        return;
       }
       dayReady = true;
       var best = window.__dayPlanCache.res.best;
@@ -494,27 +492,12 @@
     if (!window.__fitCache) window.__fitCache = {};
     if (!window.__fitCache[cacheKeyHoy]) window.__fitCache[cacheKeyHoy] = {};
 
-    // Evalua una opcion con el criterio del DIA (las otras franjas conservan
-    // su plato elegido): asi las tarjetas se clasifican como el ajuste actua.
-    // Solo con el dia calculado (en el esqueleto provisional no hay cache).
-    if (dayReady) {
-      var __candDay = window.__dayPlanCache.res.cand;
-      window.__dayEval = function (slot, o) {
-        var cO = window.__candOf(o, slot);
-        var cd = slot === 'desayuno' ? cO : __candDay.desayuno;
-        var cc = slot === 'comida' ? cO : __candDay.comida;
-        var cn = slot === 'cena' ? cO : __candDay.cena;
-        var b = window.DayPlan.bestCombo(cd, cc, cn, r.target, pgoal).best;
-        return { dk: b.dk, dp: b.dp, plan: b[slot] };
-      };
-    }
-
     ['desayuno', 'comida', 'cena'].forEach(function (slot) {
       var target = slotTarget(r, slot);
       var monthRecipe = RECIPES.find(function (x) { return x.month === month && x.slot === slot; });
       var options = classicsFor(month, slot);
       if (monthRecipe) options = options.concat([monthRecipe]);
-      if (!options.some(function (o) { return o.id === picks[slot]; })) picks[slot] = options[0].id;
+
       var selected = findOption(picks[slot]) || options[0];
       var done = !!dayLog[slot];
 
@@ -572,7 +555,7 @@
       })() : (dayReady
         ? ingredientHTML(selected, target, r.target)
         : '<div class="ing"><div class="cap js-pending">Calculando cantidades para tu día…</div></div>'));
-      html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '">' +
+      html += '<button class="btn ' + (done ? 'done' : 'soft') + '" data-done="' + slot + '"' + (!dayReady && !done ? ' disabled' : '') + '>' +
         (done ? '✓ ' + SLOT_LABEL[slot] + ' hecha (' + regKcal(dayLog[slot]) + ' kcal)' : 'Marcar ' + SLOT_LABEL[slot].toLowerCase() + ' como hecha') + '</button>';
       html += '</div>';
     });
@@ -743,7 +726,9 @@
       });
     });
     html += '</div>';
+    var expanded=Array.from(document.querySelectorAll('#tab-recetas .hist-meal-detail:not([hidden])')).map(function(el){return el.id;});
     document.getElementById('tab-recetas').innerHTML = html;
+    expanded.forEach(function(id){var el=document.getElementById(id);if(el) el.hidden=false;});
   }
 
   /* ---------- Entrenamiento ---------- */
@@ -1261,6 +1246,7 @@
       document.querySelectorAll('nav.tabs button').forEach(function (b) { b.classList.toggle('active', b === nav); });
       document.querySelectorAll('section.tab').forEach(function (s) { s.classList.remove('active'); });
       currentTab = nav.getAttribute('data-tab');
+      if(currentTab==='recetas' && Object.keys(planErrors).length) { planErrors={}; dirtyTabs.recetas=true; }
       document.getElementById('tab-' + currentTab).classList.add('active');
       paintTab(currentTab);
       window.scrollTo(0, 0);
@@ -1364,7 +1350,7 @@
           dayLog[slot] = { kcal: dp2.plan.kcal, prot: dp2.plan.protein, id: opt2.id, name: opt2.name,
             items: dp2.plan.items.map(function (it) { return { n: it.name, g: it.grams }; }) };
         } else {
-          dayLog[slot] = slotTarget(rr, slot);
+          return; // Never log invented calories while the actual quantities are pending.
         }
       }
       registro[tIso] = dayLog;
